@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<plugindata owner="com.ajr.framework.AJRFoundation" version="1">
+
+    <extension-point name="aie-library" class="AIExplorer.AIELibrary" registrySelector="registerLibrary:properties:">
+        <attribute name="class" type="class" required="true" />
+        <attribute name="name" type="string" required="true" />
+        <attribute name="id" type="string" required="true" />
+        <attribute name="url" type="url" />
+    </extension-point>
+
+    <draw-filter class="AIExplorer.AIEFilter">
+        <readType type="nn" />
+        <readType type="com.ajr.neuralnet" />
+        <writeType type="nn" />
+        <writeType type="com.ajr.neuralnet" />
+    </draw-filter>
+
+    <draw-tool-set class="AIExplorer.AIEToolSet" id="neuralNet" name="Neural Net" icon="toolSetNeuralNet" />
+
+    <draw-tool class="AIExplorer.AIEIOTool" name="I/O" id="io" toolset="neuralNet" displayPriority="0">
+        <action title="Audio I/O" icon="toolAudioIO" tag="1" graphicClass="AIExplorer.AIEAudioIO" />
+        <action title="Image I/O" icon="toolImageIO" tag="0" graphicClass="AIExplorer.AIEImageIO" />
+        <action title="Knowledge Graph I/O" icon="toolKnowledgeGraphIO" tag="3" graphicClass="AIExplorer.AIEKnowledgeGraphIO" />
+        <action title="Text I/O" icon="toolTextIO" tag="2" graphicClass="AIExplorer.AIETextIO" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIEActivationTool" name="Activation" id="activation" toolset="neuralNet" displayPriority="1">
+        <action title="Activation" icon="toolActivation" tag="0" graphicClass="AIExplorer.AIEActivation" />
+        <action title="Multihead Attention" icon="toolMultiheadAttention" tag="1" graphicClass="AIExplorer.AIEMultiheadAttention" />
+        <action title="Softmax" icon="toolSoftmax" tag="2" graphicClass="AIExplorer.AIESoftmax" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIEMathTool" name="Math" id="math" toolset="neuralNet" displayPriority="2">
+        <action title="Arithmetic" icon="toolArithmetic" tag="0" graphicClass="AIExplorer.AIEArithmetic" />
+        <action title="Reduction" icon="toolReduction" tag="1" graphicClass="AIExplorer.AIEReduction" />
+        <action title="Matrix Multiplication" icon="toolMatrixMultiplication" tag="2" graphicClass="AIExplorer.AIEMatrixMultiplication" />
+        <action title="Fully Connected" icon="toolFullyConnected" tag="3" graphicClass="AIExplorer.AIEFullyConnected" />
+        <action title="Gram Matrix" icon="toolGramMatrix" tag="4" graphicClass="AIExplorer.AIEGramMatrix" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIETransformationTool" name="Transformation" id="transformation" toolset="neuralNet" displayPriority="3">
+        <action title="Transpose" icon="toolTranspose" tag="0" graphicClass="AIExplorer.AIETranspose" />
+        <action title="Concatenation" icon="toolConcatenation" tag="1" graphicClass="AIExplorer.AIEConcatenation" />
+        <action title="Reshape" icon="toolReshape" tag="2" graphicClass="AIExplorer.AIEReshape" />
+        <action title="Slice" icon="toolSlice" tag="3" graphicClass="AIExplorer.AIESlice" />
+        <action title="Split" icon="toolSplit" tag="4" graphicClass="AIExplorer.AIESplit" />
+        <action title="Padding" icon="toolPadding" tag="5" graphicClass="AIExplorer.AIEPadding" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIENormalizationTool" name="Normalization" id="normalization" toolset="neuralNet" displayPriority="4">
+        <action title="Layer Normalization" icon="toolLayerNormalization" tag="0" graphicClass="AIExplorer.AIELayerNormalization" />
+        <action title="Batch Normalization" icon="toolBatchNormalization" tag="1" graphicClass="AIExplorer.AIEBatchNormalization" />
+        <action title="Group Normalization" icon="toolGroupNormalization" tag="2" graphicClass="AIExplorer.AIEGroupNormalization" />
+        <action title="Instance Normalization" icon="toolInstanceNormalization" tag="3" graphicClass="AIExplorer.AIEInstanceNormalization" />
+        <action title="Dropout Layer" icon="toolDropout" tag="4" graphicClass="AIExplorer.AIEDropout" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIEConvolutionTool" name="Convolutions" id="convolutions" toolset="neuralNet" displayPriority="5">
+        <action title="Convolution Layer" icon="toolConvolution" tag="0" graphicClass="AIExplorer.AIEConvolution" />
+        <action title="LSTM Layer" icon="toolLSTM" tag="1" graphicClass="AIExplorer.AIELSTM" />
+        <action title="Pooling Layer" icon="toolPooling" tag="2" graphicClass="AIExplorer.AIEPooling" />
+        <action title="Upsample Layer" icon="toolUpsample" tag="3" graphicClass="AIExplorer.AIEUpsample" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIELossTool" name="Loss" id="loss" toolset="neuralNet" displayPriority="6">
+        <action title="Loss" icon="toolLoss" tag="0" graphicClass="AIExplorer.AIELoss" />
+        <action title="YOLO Loss" icon="toolYOLOLoss" tag="1" graphicClass="AIExplorer.AIEYOLOLoss" />
+    </draw-tool>
+
+    <aie-library name="Tesseract" id="tesseract" class="AIExplorer.AIETesseract" url="https://www.tensorflow.org" />
+    <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute" />
+
+</plugindata>
