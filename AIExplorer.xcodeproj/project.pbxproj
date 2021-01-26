@@ -128,6 +128,7 @@
 		FA8E368225BF8D0000EB554F /* AIELibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELibrary.swift; sourceTree = "<group>"; };
 		FA8E368825BF8DE900EB554F /* AIETesseract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETesseract.swift; sourceTree = "<group>"; };
 		FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLCompute.swift; sourceTree = "<group>"; };
+		FA8E36CC25C0C4FB00EB554F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AIExplorer.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +220,7 @@
 		FA18B48E25AEA256000DEF0C = {
 			isa = PBXGroup;
 			children = (
+				FA8E36CC25C0C4FB00EB554F /* README.md */,
 				FA18B49A25AEA257000DEF0C /* AIExplorer */,
 				FA18B4A525AEA257000DEF0C /* AIExplorerTests */,
 				FA18B49925AEA257000DEF0C /* Products */,
