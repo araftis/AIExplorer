@@ -27,7 +27,7 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
 }
 
 /**
- Defines the superclass of libaries used by AI Explorer. A library represents a AI toolkit, such as Tesseract or Apple's own ML Compute.
+ Defines the superclass of libaries used by AI Explorer. A library represents a AI toolkit, such as TensorFlow or Apple's own ML Compute.
  */
 @objcMembers
 open class AIELibrary: NSObject {

@@ -57,7 +57,7 @@
 		FA18B51325AEA375000DEF0C /* Draw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51225AEA375000DEF0C /* Draw.framework */; };
 		FA18B52325AEA433000DEF0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B52225AEA433000DEF0C /* Cocoa.framework */; };
 		FA8E368325BF8D0000EB554F /* AIELibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368225BF8D0000EB554F /* AIELibrary.swift */; };
-		FA8E368925BF8DE900EB554F /* AIETesseract.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368825BF8DE900EB554F /* AIETesseract.swift */; };
+		FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */; };
 		FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */; };
 		FAD9250525AEA5ED00079DAB /* AIExplorer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */; };
 /* End PBXBuildFile section */
@@ -126,7 +126,7 @@
 		FA18B51225AEA375000DEF0C /* Draw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Draw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B52225AEA433000DEF0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FA8E368225BF8D0000EB554F /* AIELibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELibrary.swift; sourceTree = "<group>"; };
-		FA8E368825BF8DE900EB554F /* AIETesseract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETesseract.swift; sourceTree = "<group>"; };
+		FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlow.swift; sourceTree = "<group>"; };
 		FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLCompute.swift; sourceTree = "<group>"; };
 		FA8E36CC25C0C4FB00EB554F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AIExplorer.xcassets; sourceTree = "<group>"; };
@@ -318,17 +318,17 @@
 			children = (
 				FA8E368225BF8D0000EB554F /* AIELibrary.swift */,
 				FA8E368F25BF8DF100EB554F /* ML Compute */,
-				FA8E368C25BF8DEC00EB554F /* Tesseract */,
+				FA8E368C25BF8DEC00EB554F /* TensorFlow */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
 		};
-		FA8E368C25BF8DEC00EB554F /* Tesseract */ = {
+		FA8E368C25BF8DEC00EB554F /* TensorFlow */ = {
 			isa = PBXGroup;
 			children = (
-				FA8E368825BF8DE900EB554F /* AIETesseract.swift */,
+				FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */,
 			);
-			path = Tesseract;
+			path = TensorFlow;
 			sourceTree = "<group>";
 		};
 		FA8E368F25BF8DF100EB554F /* ML Compute */ = {
@@ -483,7 +483,7 @@
 				FA02BF8D25B7AABA001EFBBA /* AIETranspose.swift in Sources */,
 				FA02BFA625B7AC13001EFBBA /* AIENormalizationTool.swift in Sources */,
 				FA02BFBA25B7AC66001EFBBA /* AIEInstanceNormalization.swift in Sources */,
-				FA8E368925BF8DE900EB554F /* AIETesseract.swift in Sources */,
+				FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */,
 				FA02BF9D25B7AAF6001EFBBA /* AIESplit.swift in Sources */,
 				FA02BFAC25B7AC2F001EFBBA /* AIELayerNormalization.swift in Sources */,
 				FA18B4E225AEA305000DEF0C /* AIEConvolution.swift in Sources */,

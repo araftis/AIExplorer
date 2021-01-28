@@ -67,7 +67,7 @@
         <action title="YOLO Loss" icon="toolYOLOLoss" tag="1" graphicClass="AIExplorer.AIEYOLOLoss" />
     </draw-tool>
 
-    <aie-library name="Tesseract" id="tesseract" class="AIExplorer.AIETesseract" url="https://www.tensorflow.org" />
+    <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org" />
     <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute" />
 
 </plugindata>
