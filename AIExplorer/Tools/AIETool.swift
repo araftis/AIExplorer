@@ -6,6 +6,7 @@
 //
 
 import Draw
+import AJRFoundation
 
 @objcMembers
 open class AIETool: DrawTool {
@@ -15,6 +16,7 @@ open class AIETool: DrawTool {
 
         if let graphicClass = currentAction.graphicClass as? AIEGraphic.Type {
             graphic = graphicClass.init(frame: NSRect(origin: point, size: .zero))
+            graphic.title = currentAction.title
             
             let stroke = DrawStroke(graphic: graphic)
             stroke.width = 2.0;
@@ -29,6 +31,7 @@ open class AIETool: DrawTool {
             graphic.addAspect(text)
         } else {
             graphic = AIEGraphic(frame: .zero)
+            graphic.title = "ERROR"
 
             let stroke = DrawStroke(graphic: graphic)
             stroke.width = 2.0;

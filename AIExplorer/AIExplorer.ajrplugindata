@@ -6,6 +6,12 @@
         <attribute name="name" type="string" required="true" />
         <attribute name="id" type="string" required="true" />
         <attribute name="url" type="url" />
+        <element name="code-generator" key="codeGenerators" type="array">
+            <attribute name="class" type="class" required="true" />
+            <element name="language" key="languages" type="array" required="true">
+                <attribute name="name" type="string" required="true" />
+            </element>
+        </element>
     </extension-point>
 
     <draw-filter class="AIExplorer.AIEFilter">
@@ -67,7 +73,18 @@
         <action title="YOLO Loss" icon="toolYOLOLoss" tag="1" graphicClass="AIExplorer.AIEYOLOLoss" />
     </draw-tool>
 
-    <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org" />
-    <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute" />
+    <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org">
+        <code-generator class="AIExplorer.AIETensorFlowCodeGenerator">
+            <language name="python" />
+            <language name="c" />
+            <language name="c++" />
+        </code-generator>
+    </aie-library>
+    <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute">
+        <code-generator class="AIExplorer.AIEMLComputeCodeGenerator">
+            <language name="swift" />
+            <language name="obj-c" />
+        </code-generator>
+    </aie-library>
 
 </plugindata>

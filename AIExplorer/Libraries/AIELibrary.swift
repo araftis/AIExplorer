@@ -49,6 +49,10 @@ open class AIELibrary: NSObject {
         }
     }
 
+    open class func library(for id: AIELibraryIndentifier) -> AIELibrary? {
+        return librariesById[id]
+    }
+
     // MARK: - Properties
 
     open var identifier : AIELibraryIndentifier
@@ -61,6 +65,24 @@ open class AIELibrary: NSObject {
         self.identifier = id
         self.name = name
         self.url = url
+    }
+
+    // MARK: - Source Code Generation
+
+    open func codeGenerator(for language: String, root: AIEGraphic) -> AIECodeGenerator? {
+        if let rawGenerators = AJRPlugInManager.shared.extensionPoint(forName: "aie-library")?.value(forProperty: "codeGenerators", onExtensionFor: type(of: self)) as? [[String:Any]] {
+            for rawGenerator in rawGenerators {
+                if let languages = rawGenerator["languages"] as? [[String:String]],
+                   languages.contains(where: { (entry) -> Bool in
+                    return entry["name"] == language
+                   }),
+                   let generatorClass = rawGenerator["class"] as? AIECodeGenerator.Type {
+                    return generatorClass.init(for: language, root: root)
+                }
+            }
+        }
+
+        return nil
     }
 
 }

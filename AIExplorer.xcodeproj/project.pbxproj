@@ -59,8 +59,27 @@
 		FA8E368325BF8D0000EB554F /* AIELibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368225BF8D0000EB554F /* AIELibrary.swift */; };
 		FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */; };
 		FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */; };
+		FABD163D25C78722000294E3 /* AIECodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD163C25C78722000294E3 /* AIECodeGenerator.swift */; };
+		FABD164125C7874B000294E3 /* AIEMLComputeCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD164025C7874B000294E3 /* AIEMLComputeCodeGenerator.swift */; };
+		FABD164525C78761000294E3 /* AIETensorFlowCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD164425C78761000294E3 /* AIETensorFlowCodeGenerator.swift */; };
 		FAD9250525AEA5ED00079DAB /* AIExplorer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		FABD163925C78665000294E3 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.ajrplugindata";
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+				"$(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/$(INPUT_FILE_BASE).ajrplugindata",
+			);
+			script = "Tools/CopyAndValidatePlugInData\n";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
 		FA18B4A325AEA257000DEF0C /* PBXContainerItemProxy */ = {
@@ -129,6 +148,9 @@
 		FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlow.swift; sourceTree = "<group>"; };
 		FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLCompute.swift; sourceTree = "<group>"; };
 		FA8E36CC25C0C4FB00EB554F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FABD163C25C78722000294E3 /* AIECodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIECodeGenerator.swift; sourceTree = "<group>"; };
+		FABD164025C7874B000294E3 /* AIEMLComputeCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeCodeGenerator.swift; sourceTree = "<group>"; };
+		FABD164425C78761000294E3 /* AIETensorFlowCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlowCodeGenerator.swift; sourceTree = "<group>"; };
 		FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AIExplorer.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -316,6 +338,7 @@
 		FA8E368125BF8CE100EB554F /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FABD163C25C78722000294E3 /* AIECodeGenerator.swift */,
 				FA8E368225BF8D0000EB554F /* AIELibrary.swift */,
 				FA8E368F25BF8DF100EB554F /* ML Compute */,
 				FA8E368C25BF8DEC00EB554F /* TensorFlow */,
@@ -327,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */,
+				FABD164425C78761000294E3 /* AIETensorFlowCodeGenerator.swift */,
 			);
 			path = TensorFlow;
 			sourceTree = "<group>";
@@ -335,6 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */,
+				FABD164025C7874B000294E3 /* AIEMLComputeCodeGenerator.swift */,
 			);
 			path = "ML Compute";
 			sourceTree = "<group>";
@@ -363,6 +388,7 @@
 				FA18B49625AEA257000DEF0C /* Resources */,
 			);
 			buildRules = (
+				FABD163925C78665000294E3 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -478,6 +504,7 @@
 				FA02BF7025B7A796001EFBBA /* AIEArithmetic.swift in Sources */,
 				FA18B4DD25AEA305000DEF0C /* AIETextIO.swift in Sources */,
 				FA18B4DF25AEA305000DEF0C /* AIEUpsample.swift in Sources */,
+				FABD164525C78761000294E3 /* AIETensorFlowCodeGenerator.swift in Sources */,
 				FA18B4E325AEA305000DEF0C /* AIEDropout.swift in Sources */,
 				FA18B4E425AEA305000DEF0C /* AIELSTM.swift in Sources */,
 				FA02BF8D25B7AABA001EFBBA /* AIETranspose.swift in Sources */,
@@ -486,6 +513,8 @@
 				FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */,
 				FA02BF9D25B7AAF6001EFBBA /* AIESplit.swift in Sources */,
 				FA02BFAC25B7AC2F001EFBBA /* AIELayerNormalization.swift in Sources */,
+				FABD163D25C78722000294E3 /* AIECodeGenerator.swift in Sources */,
+				FABD164125C7874B000294E3 /* AIEMLComputeCodeGenerator.swift in Sources */,
 				FA18B4E225AEA305000DEF0C /* AIEConvolution.swift in Sources */,
 				FA02BFC125B7ADC6001EFBBA /* AIELossTool.swift in Sources */,
 				FA02BF5925B78527001EFBBA /* AIESoftmax.swift in Sources */,
@@ -662,6 +691,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = AIExplorer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
