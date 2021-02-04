@@ -29,7 +29,7 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
 /**
  This is a small contained class to describe a programming language. This is a class rather than a struct for Obj-C interoperability.
  */
-@objcMembers public class AIELanguage : NSObject, Comparable {
+@objcMembers public class AIELanguage : NSObject, Comparable, AJRInspectorChoiceTitleProvider {
 
     public var name : String
     public var identifier : String
@@ -72,13 +72,20 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
         }
         return false
     }
+
+    // MARK: - Inspection
+
+    public var titleForInspector: String? { return name }
+
+    public var imageForInspector: NSImage? { return nil }
+
 }
 
 /**
  Defines the superclass of libaries used by AI Explorer. A library represents a AI toolkit, such as TensorFlow or Apple's own ML Compute.
  */
 @objcMembers
-open class AIELibrary: NSObject {
+open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
 
     // MARK: - Factory
 
@@ -99,6 +106,13 @@ open class AIELibrary: NSObject {
 
     open class func library(for id: AIELibraryIndentifier) -> AIELibrary? {
         return librariesById[id]
+    }
+
+    /** All the libraries sorted by their name. */
+    open class var orderedLibraries : [AIELibrary] {
+        return librariesById.values.sorted { (lhs, rhs) -> Bool in
+            return lhs.name < rhs.name
+        }
     }
 
     // MARK: - Properties
@@ -179,5 +193,11 @@ open class AIELibrary: NSObject {
         }
         return nil
     }
+
+    // MARK: - Inspection
+
+    public var titleForInspector: String? { return name }
+
+    public var imageForInspector: NSImage? { return nil }
 
 }

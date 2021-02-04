@@ -2,7 +2,7 @@
 <inspector>
     <group title="AI Explorer">
         <group title="Library">
-            <slice type="color" label="Color" valueKeyPath="controller.selection.paperColor" />
+            <slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.aiLibrary" />
         </group>
     </group>
 </inspector>

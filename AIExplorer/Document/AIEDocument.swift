@@ -43,6 +43,15 @@ open class AIEDocument: DrawDocument {
         return identifiers
     }
 
+    // MARK: - Inspection
+
+    /**
+     Used to provide the list of libraies to the document inspector. Basically a pass through for AIELibrari.orderedLibraries.
+     */
+    open var allLibraries : [AIELibrary] {
+        return AIELibrary.orderedLibraries
+    }
+
     // MARK: - AI Objects
 
     /**
