@@ -11,7 +11,7 @@ import AJRFoundation
 @objcMembers
 open class AIECodeGenerator: NSObject {
 
-    open var language : String
+    open var language : AIELanguage
     open var root : AIEGraphic
 
     // MARK: - Creation
@@ -19,7 +19,7 @@ open class AIECodeGenerator: NSObject {
     /**
      Creates a new code generated based on `language` rooted on `root`.
      */
-    public required init(for language: String, root: AIEGraphic) {
+    public required init(for language: AIELanguage, root: AIEGraphic) {
         self.language = language
         self.root = root
         super.init()

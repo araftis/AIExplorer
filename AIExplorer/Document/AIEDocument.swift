@@ -1,0 +1,68 @@
+//
+//  AIEDocument.swift
+//  AIExplorer
+//
+//  Created by AJ Raftis on 2/2/21.
+//
+
+import Draw
+
+public extension AJRInspectorIdentifier {
+
+    static var aiDocument = AJRInspectorIdentifier("aiDocument")
+
+}
+
+@objcMembers
+open class AIEDocument: DrawDocument {
+
+    // MARK: - Properties
+
+    open var aiStorage : AIEDocumentStorage {
+        return storage as! AIEDocumentStorage
+    }
+
+    open var aiLibrary : AIELibrary {
+        get {
+            return aiStorage.aiLibrary
+        }
+        set(newValue) {
+            aiStorage.aiLibrary = newValue
+        }
+    }
+
+    // MARK: - DrawDocument
+
+    open override class var storageClass: AnyClass {
+        return AIEDocumentStorage.self
+    }
+
+    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
+        var identifiers = super.inspectorIdentifiers
+        identifiers.append(AJRInspectorIdentifier.aiDocument)
+        return identifiers
+    }
+
+    // MARK: - AI Objects
+
+    /**
+     Returns all graphics that represent "origin" obejcts in the canvas. An origin object is an object that may have outgoing to links to other layers, it has no incoming layers.
+
+     NOTE: This may not be sufficient, because you could "loop" back to a start point. For now I'm going to go with this, but we just need to keep in mind that this might need to be revisited. In the very least, we may need to combine it with a mechanism where the user can flag a graphic as a "start" node. That being said, because the start node will often be an input type, and those won't be looped back into, I think this'll work most of the time.
+     */
+    var rootObjects : [AIEGraphic] {
+        var rootObjects = [AIEGraphic]()
+        for page in pages {
+            for layer in layers {
+                for graphic in page.graphics(for: layer) {
+                    if let graphic = graphic as? AIEGraphic,
+                       graphic.sourceObjects.count == 0 {
+                        rootObjects.append(graphic)
+                    }
+                }
+            }
+        }
+        return rootObjects
+    }
+
+}

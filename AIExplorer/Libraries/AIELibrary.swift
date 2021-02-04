@@ -27,6 +27,54 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
 }
 
 /**
+ This is a small contained class to describe a programming language. This is a class rather than a struct for Obj-C interoperability.
+ */
+@objcMembers public class AIELanguage : NSObject, Comparable {
+
+    public var name : String
+    public var identifier : String
+
+    public init(name: String, identifier: String) {
+        self.name = name
+        self.identifier = identifier
+        super.init()
+    }
+
+    public convenience init?(properties: [String:String]) {
+        if let name = properties["name"], let identifier = properties["identifier"] {
+            self.init(name: name, identifier: identifier)
+        } else {
+            return nil
+        }
+    }
+
+    // MARK: - Comparable
+
+    public static func < (lhs: AIELanguage, rhs: AIELanguage) -> Bool {
+        return lhs.name < rhs.name
+    }
+
+    // MARK: - CustomStringConvertible
+
+    public override var description: String {
+        return "<\(descriptionPrefix): \(name)>"
+    }
+
+    // MARK: - Hashable
+
+    public override var hash: Int { return identifier.hash }
+
+    // MARK: - Equatable
+
+    public override func isEqual(_ object: Any?) -> Bool {
+        if let object = object as? AIELanguage {
+            return self.identifier == object.identifier
+        }
+        return false
+    }
+}
+
+/**
  Defines the superclass of libaries used by AI Explorer. A library represents a AI toolkit, such as TensorFlow or Apple's own ML Compute.
  */
 @objcMembers
@@ -69,19 +117,66 @@ open class AIELibrary: NSObject {
 
     // MARK: - Source Code Generation
 
-    open func codeGenerator(for language: String, root: AIEGraphic) -> AIECodeGenerator? {
-        if let rawGenerators = AJRPlugInManager.shared.extensionPoint(forName: "aie-library")?.value(forProperty: "codeGenerators", onExtensionFor: type(of: self)) as? [[String:Any]] {
-            for rawGenerator in rawGenerators {
-                if let languages = rawGenerator["languages"] as? [[String:String]],
-                   languages.contains(where: { (entry) -> Bool in
-                    return entry["name"] == language
-                   }),
-                   let generatorClass = rawGenerator["class"] as? AIECodeGenerator.Type {
-                    return generatorClass.init(for: language, root: root)
-                }
+    open func language(for identifier: String) -> AIELanguage? {
+        for language in supportedLanguagesForCodeGeneration {
+            if language.identifier == identifier {
+                return language
+            }
+        }
+        return nil
+    }
+
+    open var supportedLanguagesForCodeGeneration : [AIELanguage] {
+        var allLanguages = Set<AIELanguage>()
+
+        for codeGenerator in codeGenerators {
+            for language in codeGenerator.languages {
+                allLanguages.insert(language)
             }
         }
 
+        return allLanguages.sorted()
+    }
+
+    internal struct CodeGenerator {
+        var generatorClass : AIECodeGenerator.Type
+        var languages : [AIELanguage]
+    }
+
+    private var _codeGenerators : [CodeGenerator]? = nil
+    /**
+     All of the code generators supported by the library.
+     */
+    internal var codeGenerators : [CodeGenerator] {
+        if _codeGenerators == nil {
+            _codeGenerators = [CodeGenerator]()
+            if let rawGenerators = AJRPlugInManager.shared.extensionPoint(forName: "aie-library")?.value(forProperty: "codeGenerators", onExtensionFor: type(of: self)) as? [[String:Any]] {
+                for rawGenerator in rawGenerators {
+                    if let generatorClass = rawGenerator["class"] as? AIECodeGenerator.Type,
+                       let rawLanguages = rawGenerator["languages"] as? [[String:String]] {
+                        var languages = [AIELanguage]()
+                        for rawLanguage in rawLanguages {
+                            if let language = AIELanguage(properties: rawLanguage) {
+                                languages.append(language)
+                            }
+                        }
+                        _codeGenerators!.append(CodeGenerator(generatorClass: generatorClass, languages: languages))
+                    }
+                }
+            }
+        }
+        return _codeGenerators!
+    }
+
+    /**
+     A code generator for a specific language.
+     */
+    open func codeGenerator(for language: AIELanguage, root: AIEGraphic) -> AIECodeGenerator? {
+        for codeGenerator in codeGenerators {
+            if codeGenerator.languages.contains(language) {
+                return codeGenerator.generatorClass.init(for: language, root: root)
+            }
+        }
         return nil
     }
 

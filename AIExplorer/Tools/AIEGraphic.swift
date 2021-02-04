@@ -93,6 +93,23 @@ open class AIEGraphic: DrawGraphic {
 
     // MARK: - Graph Traversal
 
+    open var sourceObjects : [AIEGraphic] {
+        var sourceObjects = [AIEGraphic]()
+        for related in self.relatedGraphics {
+            if let drawLink = related as? DrawLink {
+                if (drawLink.destination === self && drawLink.sourceCap == nil
+                        && drawLink.destinationCap != nil), let source = drawLink.source as? AIEGraphic {
+                    if drawLink.document == nil {
+                        // We've got a delete issue, so we're going to "clean" our document here, along with a warning. We will, obviously, want to fix this. This is probably happening because when a link is deleted, it's not deleting itself from it's related graphics.
+                        AJRLog.warning("Graphic \(drawLink) in \(self) is no longer a member of the document.")
+                    } else {
+                        sourceObjects.append(source)
+                    }
+                }
+            }
+        }
+        return sourceObjects
+    }
     /**
      Returns an array of related objects from this graphic.
 

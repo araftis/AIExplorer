@@ -9,6 +9,7 @@
         <element name="code-generator" key="codeGenerators" type="array">
             <attribute name="class" type="class" required="true" />
             <element name="language" key="languages" type="array" required="true">
+                <attribute name="identifier" type="string" required="true" />
                 <attribute name="name" type="string" required="true" />
             </element>
         </element>
@@ -21,7 +22,12 @@
         <writeType type="com.ajr.neuralnet" />
     </draw-filter>
 
-    <draw-tool-set class="AIExplorer.AIEToolSet" id="neuralNet" name="Neural Net" icon="toolSetNeuralNet" />
+    <draw-tool-set class="AIExplorer.AIEToolSet" id="neuralNet" name="Neural Net" icon="toolSetNeuralNet">
+        <accessory identifier="aiSourceCode" title="Source Code" icon="accessorySourceCode" controllerClass="AIExplorer.AIESourceCodeAccessory" />
+        <accessory identifier="aiTraining" title="Training" icon="accessoryTraining" controllerClass="AIExplorer.AIETrainingAccessory" />
+        <accessory identifier="aiValidation" title="Validation" icon="accessoryValidation" controllerClass="AIExplorer.AIEValidationAccessory" />
+        <accessory identifier="aiTesting" title="Testing" icon="accessoryTesting" controllerClass="AIExplorer.AIETestingAccessory" />
+    </draw-tool-set>
 
     <draw-tool class="AIExplorer.AIEIOTool" name="I/O" id="io" toolset="neuralNet" displayPriority="0">
         <action title="Audio I/O" icon="toolAudioIO" tag="1" graphicClass="AIExplorer.AIEAudioIO" />
@@ -75,16 +81,18 @@
 
     <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org">
         <code-generator class="AIExplorer.AIETensorFlowCodeGenerator">
-            <language name="python" />
-            <language name="c" />
-            <language name="c++" />
+            <language identifier="python" name="Python" />
+            <language identifier="c" name="C" />
+            <language identifier="c++" name="C++" />
         </code-generator>
     </aie-library>
     <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute">
         <code-generator class="AIExplorer.AIEMLComputeCodeGenerator">
-            <language name="swift" />
-            <language name="obj-c" />
+            <language identifier="swift" name="Swift" />
+            <language identifier="obj-c" name="Obj-C" />
         </code-generator>
     </aie-library>
+
+    <ajr_inspector xml="AIEDocument" identifier="aiDocument" />
 
 </plugindata>
