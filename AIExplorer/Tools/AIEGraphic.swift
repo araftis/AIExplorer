@@ -7,6 +7,10 @@
 
 import Draw
 
+public extension AJRInspectorIdentifier {
+    static var aiGraphic = AJRInspectorIdentifier("aiGraphic")
+}
+
 @objcMembers
 open class AIEGraphic: DrawGraphic {
 
@@ -68,6 +72,14 @@ open class AIEGraphic: DrawGraphic {
                 updatePath()
             }
         }
+    }
+
+    // MARK: - AJRInspector
+
+    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
+        var identifiers = super.inspectorIdentifiers
+        identifiers.append(.aiGraphic)
+        return identifiers
     }
 
     // MARK: - AJRXMLCoding

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector>
+    <group title="AI Object">
+        <group title="Properties">
+            <slice type="string" label="Title" valueKeyPath="controller.selection.title" />
+        </group>
+    </group>
+</inspector>

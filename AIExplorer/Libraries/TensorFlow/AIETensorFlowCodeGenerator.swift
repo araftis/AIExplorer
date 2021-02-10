@@ -7,6 +7,31 @@
 
 import Cocoa
 
+public protocol AIETensorFlowCodeWriter {
+
+    func generateCode(to outputStream: OutputStream) throws -> Void
+
+}
+
+extension AIEConvolution : AIETensorFlowCodeWriter {
+
+    public func generateCode(to outputStream: OutputStream) throws {
+        try outputStream.write("# We're writing a convolution layer.")
+    }
+
+}
+
+
+extension AIEImageIO : AIETensorFlowCodeWriter {
+
+    public func generateCode(to outputStream: OutputStream) throws {
+        try outputStream.write("# Image IO Layer")
+        //try outputStream.write("# Width: \(self.width ?? "<any>"), height: \(self.height ?? "<any>"), depth: \(self.depth ?? "<any>")")
+    }
+
+}
+
+
 @objcMembers
 open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
@@ -15,7 +40,12 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             visited.insert(object)
 
             try outputStream.write("\n")
-            try outputStream.write("# Generating: \(object.title)\n")
+
+            if let object = object as? AIETensorFlowCodeWriter {
+                try object.generateCode(to: outputStream)
+            } else {
+                try outputStream.write("# Generating: \(object.title)\n")
+            }
 
             for child in object.destinationObjects {
                 try generateCode(for: child, visited: &visited, to: outputStream)

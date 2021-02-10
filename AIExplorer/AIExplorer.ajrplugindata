@@ -94,5 +94,7 @@
     </aie-library>
 
     <ajr_inspector xml="AIEDocument" identifier="aiDocument" />
+    <ajr_inspector xml="AIEGraphic" identifier="aiGraphic" />
+    <ajr_inspector xml="AIEImageIO" identifier="aiImageIO" />
 
 </plugindata>
