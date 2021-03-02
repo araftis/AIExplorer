@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector>
+    <group title="Fully Connected">
+        <group title="Dimentions">
+            <slice type="integer" label="Size" subtitle="Out Dimension" valueKeyPath="controller.selection.dimension" />
+        </group>
+    </group>
+</inspector>
+

@@ -14,6 +14,7 @@ public enum AIEConvolutionTag : Int {
     case upsample = 3
 }
 
+
 @objcMembers
 open class AIEConvolutionTool: AIETool {
 
@@ -22,3 +23,5 @@ open class AIEConvolutionTool: AIETool {
     }
 
 }
+
+

@@ -15,7 +15,6 @@ public extension AJRInspectorIdentifier {
 open class AIEImageIO: AIEGraphic {
 
     // MARK: - Properties
-
     open var width : Int = 0
     open var height : Int = 0
     open var depth : Int = 0

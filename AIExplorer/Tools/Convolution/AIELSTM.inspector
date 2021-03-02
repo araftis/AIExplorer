@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector>
+    <group title="LTSM">
+        <group title="Dimentions">
+            <slice type="integer" subtitle="units" valueKeyPath="controller.selection.units" />
+            
+        </group>
+    </group>
+</inspector>

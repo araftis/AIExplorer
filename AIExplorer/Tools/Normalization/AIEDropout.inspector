@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector>
+    <group title="Dropout">
+        <group title="Dimentions">
+            <slice type="integer" label="HiperParam" subtitle="Rate" valueKeyPath="controller.selection.rate" />
+            
+        </group>
+    </group>
+</inspector>
+
+

@@ -5,7 +5,22 @@
 //  Created by AJ Raftis on 1/31/21.
 //
 
+
+
+//decode and encode float value, look at batch nromalization file, loss=learning_rate
+
 import Cocoa
+
+func prePrint(to outputStream: OutputStream) throws {
+    try outputStream.write("model.add(")
+}
+
+func postPrint(to outputStream: OutputStream) throws {
+    try outputStream.write(")")
+}
+
+
+
 
 public protocol AIETensorFlowCodeWriter {
 
@@ -13,23 +28,188 @@ public protocol AIETensorFlowCodeWriter {
 
 }
 
-extension AIEConvolution : AIETensorFlowCodeWriter {
-
-    public func generateCode(to outputStream: OutputStream) throws {
-        try outputStream.write("# We're writing a convolution layer.")
-    }
-
-}
-
-
 extension AIEImageIO : AIETensorFlowCodeWriter {
 
     public func generateCode(to outputStream: OutputStream) throws {
-        try outputStream.write("# Image IO Layer")
-        //try outputStream.write("# Width: \(self.width ?? "<any>"), height: \(self.height ?? "<any>"), depth: \(self.depth ?? "<any>")")
+        //try outputStream.write("# Image IO Layer\n")
+        
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.Input(shape=(\(self.height), \(self.width), \(self.depth))")
+        try postPrint(to: outputStream)
     }
-
 }
+
+
+extension AIEConvolution : AIETensorFlowCodeWriter {
+
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
+
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.Conv2D(\(self.depth), (\(self.height), \(self.width)), \(self.step))")
+        try postPrint(to: outputStream)
+    }
+}
+
+
+extension AIELSTM : AIETensorFlowCodeWriter {
+
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
+
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.LTSM(units = \(self.units))")
+        try postPrint(to: outputStream)
+    }
+}
+
+extension AIEUpsample : AIETensorFlowCodeWriter {
+
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
+
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.Conv2DTranspose(\(self.depth), (\(self.height), \(self.width)), \(self.step))")
+        try postPrint(to: outputStream)
+    }
+}
+
+extension AIEPooling : AIETensorFlowCodeWriter {
+
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
+
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.MaxPool2D((\(self.height), \(self.width)), \(self.step))")
+        try postPrint(to: outputStream)
+    }
+}
+
+extension AIEReshape : AIETensorFlowCodeWriter {
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
+
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.Flatten()")
+        try postPrint(to: outputStream)
+    }
+}
+
+extension AIEFullyConnected : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# Fully connected layer")
+        
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.Dense(\(self.dimension))")
+        try postPrint(to: outputStream)
+    }
+}
+
+extension AIELoss : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# Loss layer")
+        
+        //would need to compile the model to add loss
+        try prePrint(to: outputStream)
+        
+        var loss_s: String
+        if (self.loss_type == 0){
+            loss_s = "tf.keras.losses.BinaryCrossentropy(from_logits=True)"
+        }
+        else if (self.loss_type == 1){
+            loss_s = "tf.keras.losses.CategoricalCrossentropy(from_logits=False)"
+        }
+        else {
+            loss_s = "tf.keras.losses.MeanSquaredError()"
+        }
+        
+        
+        var optimizer : String
+        
+        if (self.optimization_type == 0){
+            optimizer = "tf.keras.optimizers.SGD(learning_rate=\(self.learning_rate))"
+        }
+        else if (self.optimization_type == 1){
+            optimizer = "tf.keras.optimizers.Adam(learning_rate=\(self.learning_rate))"
+        }
+        else {
+            optimizer = "tf.keras.optimizers.RMSprop(learning_rate=\(self.learning_rate))"
+        }
+        
+        
+        try outputStream.write("model.compile(loss=\(loss_s), optimizer=\(optimizer))")
+
+        try outputStream.write("# Loss type number: \(self.loss_type)")
+        try postPrint(to: outputStream)
+    }
+}
+
+
+
+extension AIEActivation : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        //try outputStream.write("# Activation layer")
+        
+        try prePrint(to: outputStream)
+        if (self.type == 0){
+            try outputStream.write("tf.keras.layers.Activation('relu')")
+        } else if (self.type == 1){
+            try outputStream.write("tf.keras.layers.Activation('sigmoid')")
+        } else {
+            try outputStream.write("tf.keras.layers.Activation('tanh')")
+        }
+        try postPrint(to: outputStream)
+    }
+}
+
+
+extension AIESoftmax : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.Softmax(axis=-1)")
+        try postPrint(to: outputStream)
+    }
+}
+
+extension AIEBatchNormalization : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.BatchNormalization(momentum = \(self.momentum), epsilon = \(self.epsilon))")
+        try postPrint(to: outputStream)
+    }
+}
+
+
+extension AIELayerNormalization : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.LayerNormalization(epsilon = \(self.epsilon))")
+        try postPrint(to: outputStream)
+    }
+}
+
+
+
+extension AIEDropout : AIETensorFlowCodeWriter{
+    
+    public func generateCode(to outputStream: OutputStream) throws {
+        
+        try prePrint(to: outputStream)
+        try outputStream.write("tf.keras.layers.Dropout(rate = \(self.rate))")
+        try postPrint(to: outputStream)
+    }
+}
+
+
+
 
 
 @objcMembers
@@ -60,7 +240,12 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         try outputStream.write("# Application: \(ProcessInfo.processInfo.processName)\n")
         try outputStream.write("# Creator: \(NSUserName())\n")
         try outputStream.write("# Date: \(Date())\n")
+        
+        //start python code
+        try outputStream.write("model = tf.keras.Sequental()")
         try generateCode(for: root, visited: &visited, to: outputStream)
+        
+        
         try outputStream.write("\n# Code generation complete.\n")
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector>
+    <group title="LayerNorm">
+        <group title="Dimentions">
+            <slice type="float" subtitle="Epsilon" valueKeyPath="controller.selection.epsilon" />
+            
+        </group>
+    </group>
+</inspector>
+
+

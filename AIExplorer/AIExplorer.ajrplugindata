@@ -96,5 +96,17 @@
     <ajr_inspector xml="AIEDocument" identifier="aiDocument" />
     <ajr_inspector xml="AIEGraphic" identifier="aiGraphic" />
     <ajr_inspector xml="AIEImageIO" identifier="aiImageIO" />
+    <ajr_inspector xml="AIEConvolution" identifier="aiConvolution" />
+    <ajr_inspector xml="AIEUpsample" identifier="aiUpsample" />
+    <ajr_inspector xml="AIEPooling" identifier="aiPooling" />
+    <ajr_inspector xml="AIEFullyConnected" identifier="aiFullyConnected" />
+    <ajr_inspector xml="AIELoss" identifier="aiLoss" />
+    <ajr_inspector xml="AIEActivation" identifier="aiActivation" />
+    <ajr_inspector xml="AIEBatchNorm" identifier="aiBatchNormalization" />
+    <ajr_inspector xml="AIEDropout" identifier="aiDropout" />
+    <ajr_inspector xml="AIELSTM" identifier="aiLTSM" />
+    <ajr_inspector xml="AIESoftmax" identifier="aiSoftmax" />
+    <ajr_inspector xml="AIEReduction" identifier="aiSoftmax" />
+
 
 </plugindata>
