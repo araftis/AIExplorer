@@ -27,7 +27,37 @@ open class AIEDocument: DrawDocument {
             return aiStorage.aiLibrary
         }
         set(newValue) {
+            willChangeValue(forKey: "aiLibrary")
             aiStorage.aiLibrary = newValue
+            if let newLanguage = newValue.language(for: aiLanguage.identifier) {
+                aiLanguage = newLanguage
+            } else {
+                aiLanguage = newValue.preferredLanguage
+            }
+            didChangeValue(forKey: "aiLibrary")
+        }
+    }
+
+    // NOTE: Has ai prefix, because language could easily (likely?) become defined on the superclass someday.
+    open var aiLanguage : AIELanguage {
+        get {
+            return aiStorage.aiLanguage
+        }
+        set(newValue) {
+            willChangeValue(forKey: "aiLanguage")
+            aiStorage.aiLanguage = newValue
+            didChangeValue(forKey: "aiLanguage")
+        }
+    }
+
+    open var sourceOutputURL : URL? {
+        get {
+            return aiStorage.sourceOutputURL
+        }
+        set(newValue) {
+            willChangeValue(forKey: "sourceOutputURL")
+            aiStorage.sourceOutputURL = newValue
+            didChangeValue(forKey: "sourceOutputURL")
         }
     }
 

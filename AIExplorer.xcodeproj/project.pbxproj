@@ -380,14 +380,14 @@
 			isa = PBXGroup;
 			children = (
 				25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */,
-				FA18B4D125AEA305000DEF0C /* AIEUpsample.swift */,
-				FA18B4D225AEA305000DEF0C /* AIEConvolutionTool.swift */,
-				FA18B4D325AEA305000DEF0C /* AIEPooling.swift */,
 				FA18B4D425AEA305000DEF0C /* AIEConvolution.swift */,
-				FA18B4D625AEA305000DEF0C /* AIELSTM.swift */,
-				25EC039825D87D11008A4DE4 /* AIEUpsample.inspector */,
-				25EC039E25D882F8008A4DE4 /* AIEPooling.inspector */,
+				FA18B4D225AEA305000DEF0C /* AIEConvolutionTool.swift */,
 				25EC03B625DF0438008A4DE4 /* AIELSTM.inspector */,
+				FA18B4D625AEA305000DEF0C /* AIELSTM.swift */,
+				25EC039E25D882F8008A4DE4 /* AIEPooling.inspector */,
+				FA18B4D325AEA305000DEF0C /* AIEPooling.swift */,
+				25EC039825D87D11008A4DE4 /* AIEUpsample.inspector */,
+				FA18B4D125AEA305000DEF0C /* AIEUpsample.swift */,
 			);
 			path = Convolution;
 			sourceTree = "<group>";

@@ -121,6 +121,13 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
     open var name : String /// Name of the library
     open var url : URL? /// A url that points to the library's homepage.
 
+    // The preferred language of the library. Not very smart right now.
+    open var preferredLanguage : AIELanguage {
+        let language = supportedLanguagesForCodeGeneration.first
+        assert(language != nil, "AIELibraries must support at least one code generation language.")
+        return language!
+    }
+
     // MARK: - Creation
 
     public required init(id: AIELibraryIndentifier, name : String, url : URL?) {

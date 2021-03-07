@@ -11,6 +11,7 @@
             <element name="language" key="languages" type="array" required="true">
                 <attribute name="identifier" type="string" required="true" />
                 <attribute name="name" type="string" required="true" />
+                <attribute name="extension" type="string" required="true" />
             </element>
         </element>
     </extension-point>
@@ -81,15 +82,15 @@
 
     <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org">
         <code-generator class="AIExplorer.AIETensorFlowCodeGenerator">
-            <language identifier="python" name="Python" />
-            <language identifier="c" name="C" />
-            <language identifier="c++" name="C++" />
+            <language identifier="python" name="Python" extension="py" />
+            <language identifier="c" name="C" extension="c" />
+            <language identifier="c++" name="C++" extension="cpp" />
         </code-generator>
     </aie-library>
     <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute">
         <code-generator class="AIExplorer.AIEMLComputeCodeGenerator">
-            <language identifier="swift" name="Swift" />
-            <language identifier="obj-c" name="Obj-C" />
+            <language identifier="swift" name="Swift" extension="swift" />
+            <language identifier="obj-c" name="Obj-C" extension="m" />
         </code-generator>
     </aie-library>
 

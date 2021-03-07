@@ -10,6 +10,7 @@
                 <outlet property="chooseOutputButton" destination="lLl-3W-NhT" id="Msj-gY-A46"/>
                 <outlet property="languagePopUp" destination="z5c-QX-4R4" id="qs0-84-WGg"/>
                 <outlet property="outputPath" destination="6oW-ne-SBZ" id="JRu-yF-e2a"/>
+                <outlet property="sourceTextView" destination="jvg-4Y-VWn" id="rn0-Ai-l9n"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -32,6 +33,9 @@
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <connections>
+                        <action selector="chooseLanguage:" target="-2" id="BYQ-Og-Myt"/>
+                    </connections>
                 </popUpButton>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lLl-3W-NhT">
                     <rect key="frame" x="390" y="240" width="92" height="32"/>
