@@ -71,6 +71,9 @@
 		FA18B51125AEA375000DEF0C /* AJRInterfaceFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51025AEA375000DEF0C /* AJRInterfaceFoundation.framework */; };
 		FA18B51325AEA375000DEF0C /* Draw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51225AEA375000DEF0C /* Draw.framework */; };
 		FA18B52325AEA433000DEF0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B52225AEA433000DEF0C /* Cocoa.framework */; };
+		FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */; };
+		FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */; };
+		FA88825025F5E8FC00DFE50B /* AIEDocumentTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */; };
 		FA8E368325BF8D0000EB554F /* AIELibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368225BF8D0000EB554F /* AIELibrary.swift */; };
 		FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */; };
 		FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */; };
@@ -185,6 +188,9 @@
 		FA18B51025AEA375000DEF0C /* AJRInterfaceFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AJRInterfaceFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B51225AEA375000DEF0C /* Draw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Draw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B52225AEA433000DEF0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplateChooser.swift; sourceTree = "<group>"; };
+		FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooser.xib; sourceTree = "<group>"; };
+		FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplate.swift; sourceTree = "<group>"; };
 		FA8E368225BF8D0000EB554F /* AIELibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELibrary.swift; sourceTree = "<group>"; };
 		FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlow.swift; sourceTree = "<group>"; };
 		FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLCompute.swift; sourceTree = "<group>"; };
@@ -329,6 +335,7 @@
 				FABD168325C9FFCE000294E3 /* Document */,
 				FA8E368125BF8CE100EB554F /* Libraries */,
 				FA18B4C825AEA305000DEF0C /* Tools */,
+				FA88824425F5D76B00DFE50B /* User Interface */,
 				FA18B49B25AEA257000DEF0C /* AIExplorer.h */,
 				FA18B49C25AEA257000DEF0C /* Info.plist */,
 			);
@@ -402,6 +409,16 @@
 				FA18B51225AEA375000DEF0C /* Draw.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FA88824425F5D76B00DFE50B /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */,
+				FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */,
+				FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */,
+			);
+			path = "User Interface";
 			sourceTree = "<group>";
 		};
 		FA8E368125BF8CE100EB554F /* Libraries */ = {
@@ -557,6 +574,7 @@
 				25EC03AF25DEFAED008A4DE4 /* AIEDropout.inspector in Resources */,
 				FABD166F25C8E9BA000294E3 /* AIESourceCodeAccessory.xib in Resources */,
 				FABD167525C8E9D7000294E3 /* AIETrainingAccessory.xib in Resources */,
+				FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */,
 				FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */,
 				FABD166B25C8E947000294E3 /* AIETestingAccessory.xib in Resources */,
 				25EC03B725DF0438008A4DE4 /* AIELSTM.inspector in Resources */,
@@ -594,6 +612,7 @@
 				FA02BF9925B7AAEA001EFBBA /* AIESlice.swift in Sources */,
 				FABD166A25C8E947000294E3 /* AIETestingAccessory.swift in Sources */,
 				FA02BF5D25B78578001EFBBA /* AIEActivationTool.swift in Sources */,
+				FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */,
 				FA02BFB225B7AC4D001EFBBA /* AIEBatchNormalization.swift in Sources */,
 				FA02BF7825B7A7C6001EFBBA /* AIEMatrixMultiplication.swift in Sources */,
 				FA18B4DA25AEA305000DEF0C /* AIEFilter.swift in Sources */,
@@ -619,6 +638,7 @@
 				FA02BF5525B7851C001EFBBA /* AIEMultiheadAttention.swift in Sources */,
 				FA02BFB625B7AC5B001EFBBA /* AIEGroupNormalization.swift in Sources */,
 				FABD16A425CA578C000294E3 /* AIEDocumentStorage.swift in Sources */,
+				FA88825025F5E8FC00DFE50B /* AIEDocumentTemplate.swift in Sources */,
 				FA02BF8725B7AAA4001EFBBA /* AIETransformationTool.swift in Sources */,
 				FA02BF7025B7A796001EFBBA /* AIEArithmetic.swift in Sources */,
 				FA18B4DD25AEA305000DEF0C /* AIETextIO.swift in Sources */,
