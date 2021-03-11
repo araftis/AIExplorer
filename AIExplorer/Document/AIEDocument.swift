@@ -16,6 +16,18 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIEDocument: DrawDocument {
 
+    // MARK: - Creation
+
+    public convenience init(fromTemplateURL url: URL) throws {
+        try self.init(type: "com.ajr.neuralnet")
+
+        let storagePath = url.appendingPathComponent("document").appendingPathExtension("nn")
+        let data = try Data(contentsOf: storagePath)
+        if let storage = try AJRXMLUnarchiver.unarchivedObject(with: data, topLevelClass: Self.storageClass) as? AIEDocumentStorage {
+            self.storage = storage
+        }
+    }
+
     // MARK: - Properties
 
     open var aiStorage : AIEDocumentStorage {

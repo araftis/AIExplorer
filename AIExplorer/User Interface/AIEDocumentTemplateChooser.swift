@@ -7,14 +7,92 @@
 
 import Cocoa
 import AJRFoundation
+import AJRInterface
+
+extension NSUserInterfaceItemIdentifier {
+
+    static var templateItem = NSUserInterfaceItemIdentifier("templateItem")
+    static var headerItem = NSUserInterfaceItemIdentifier("headerItem")
+    static var groupName = NSUserInterfaceItemIdentifier("groupName")
+
+}
+
+open class AIEDocumentTemplateChooserItemView : NSView {
+
+    override public init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    open var isSelected : Bool = false {
+        didSet {
+            self.needsDisplay = true
+        }
+    }
+
+}
+
+open class AIEDocumentTemplateChooserItem : NSCollectionViewItem {
+
+    open override func loadView() {
+        if let nib = NSNib(nibNamed: "AIEDocumentTemplateChooserItem", bundle: Bundle(for: AIEDocumentTemplateChooser.self)) {
+            nib.instantiate(withOwner: self, topLevelObjects: nil)
+        }
+    }
+
+    open override var isSelected: Bool {
+        get {
+            return super.isSelected
+        }
+        set {
+            (view as? AIEDocumentTemplateChooserItemView)?.isSelected = newValue
+            super.isSelected = newValue
+            if isSelected {
+                self.imageView?.layer?.borderWidth = 3.0
+                self.imageView?.layer?.borderColor = NSColor.selectedContentBackgroundColor.cgColor
+                self.imageView?.layer?.cornerRadius = 2.0
+            } else {
+                self.imageView?.layer?.borderWidth = 0.0
+            }
+        }
+    }
+
+}
+
+open class AIEDocumentTemplateChooserHeader : NSView {
+
+    open var title : String = ""
+
+    open override func draw(_ dirtyRect: NSRect) {
+        var frame = self.bounds
+
+        frame = frame.insetBy(dx: 20, dy: 0)
+
+        NSColor.gray.set()
+        AJRBezierPath.strokeLine(from: CGPoint(x: frame.minX, y: frame.minY), to: CGPoint(x: frame.maxX, y: frame.minY))
+
+        let attributes : [NSAttributedString.Key:Any] = [.foregroundColor:NSColor.gray,
+                                                         .font:NSFont.systemFont(ofSize: 14.0, weight: .bold),
+                                                        ]
+        frame.size.height -= 8.0
+        title.draw(in: frame, with: attributes)
+    }
+
+}
 
 @objcMembers
-open class AIEDocumentTemplateChooser: NSWindowController, NSWindowDelegate {
+open class AIEDocumentTemplateChooser: NSWindowController, NSWindowDelegate, NSTableViewDataSource, NSTableViewDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource {
 
     internal var rooted = Set<AIEDocumentTemplateChooser>()
 
     // MARK: - Properties
 
+    @IBOutlet open var groupTable : NSTableView!
+    @IBOutlet open var templateCollection : NSCollectionView!
+    @IBOutlet open var descriptionText : NSTextView!
     @IBOutlet open var okButton : NSButton!
     @IBOutlet open var cancelButton : NSButton!
 
@@ -48,6 +126,16 @@ open class AIEDocumentTemplateChooser: NSWindowController, NSWindowDelegate {
     @IBAction func ok(_ sender: Any?) -> Void {
         window?.orderOut(self)
         rooted.remove(self)
+
+        if let indexPath = templateCollection.selectionIndexPaths.first {
+            let group = AIEDocumentTemplate.groups[indexPath[0]]
+            let template = AIEDocumentTemplate.templates(for: group)[indexPath[1]]
+            if let newDocument = try? AIEDocument(fromTemplateURL: template.url) {
+                NSDocumentController.shared.addDocument(newDocument)
+                newDocument.makeWindowControllers()
+                newDocument.showWindows()
+            }
+        }
     }
 
     @IBAction func cancel(_ sender: Any?) -> Void {
@@ -55,37 +143,98 @@ open class AIEDocumentTemplateChooser: NSWindowController, NSWindowDelegate {
         rooted.remove(self)
     }
 
+    // MARK: - NSWindowController
+
     open func windowWillClose(_ notification: Notification) {
         rooted.remove(self)
     }
 
-    // MARK: - Managing Templates
+    // MARK: - NSNibAwakening
 
-    public static var _templates : [AIEDocumentTemplate]! = nil
-    public static var templates : [AIEDocumentTemplate] {
-        if _templates == nil {
-            _templates = [AIEDocumentTemplate]()
-            let fileFinder = AJRFileFinder(subpath: "AIE Templates", andExtension: "nnt")
-            fileFinder.addAllBundles()
-
-            for path in fileFinder.findFiles() {
-                _templates.append(AIEDocumentTemplate(url: URL(fileURLWithPath: path)))
-            }
-        }
-
-        return _templates
+    open override func awakeFromNib() {
+        groupTable.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        templateCollection.register(AIEDocumentTemplateChooserHeader.self, forSupplementaryViewOfKind: "UICollectionElementKindSectionHeader", withIdentifier: .headerItem)
+        templateCollection.register(AIEDocumentTemplateChooserItem.self, forItemWithIdentifier: .templateItem)
+        let paths : Set<IndexPath> = [IndexPath(indexes: [0, 0])]
+        templateCollection.selectionIndexPaths = paths
+        self.collectionView(templateCollection, didSelectItemsAt: paths)
     }
 
-    public static var templateGroups : [String] {
-        var groups = Set<String>()
+    // MARK: - NSTableViewDataSource
 
-        for template in templates {
-            if let group = template.group {
-                groups.insert(group)
+    public func numberOfRows(in tableView: NSTableView) -> Int {
+        return AIEDocumentTemplate.groups.count + 1
+    }
+
+    public func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        if let view = tableView.makeView(withIdentifier: .groupName, owner: self) as? NSTableCellView {
+            let groups = AIEDocumentTemplate.groups
+            if row == 0 {
+                view.textField?.stringValue = "All"
+            } else {
+                view.textField?.stringValue = groups[row - 1]
             }
+            return view
         }
+        return nil
+    }
 
-        return groups.sorted()
+    // MARK: - NSCollectionViewDataSource
+
+    public func numberOfSections(in collectionView: NSCollectionView) -> Int {
+        return AIEDocumentTemplate.groups.count
+    }
+
+    public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
+        return AIEDocumentTemplate.templates(for: AIEDocumentTemplate.groups[section]).count
+    }
+
+    public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let item = collectionView.makeItem(withIdentifier: .templateItem, for: indexPath)
+        let group = AIEDocumentTemplate.groups[indexPath[0]]
+        let template = AIEDocumentTemplate.templates(for: group)[indexPath[1]]
+
+        item.textField?.stringValue = template.name
+        if let image = template.image {
+            item.imageView?.image = image
+        }
+        item.isSelected = collectionView.selectionIndexPaths.contains(indexPath)
+
+        return item
+    }
+
+    public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
+        print("kind: \(kind)")
+        if let view = collectionView.makeSupplementaryView(ofKind: kind, withIdentifier: .headerItem, for: indexPath) as? AIEDocumentTemplateChooserHeader {
+            view.title = AIEDocumentTemplate.groups[indexPath[0]]
+            return view
+        }
+        // Should never be reached, but we have to return something.
+        return AJRXView()
+    }
+
+    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        if let indexPath = indexPaths.first {
+            let group = AIEDocumentTemplate.groups[indexPath[0]]
+            let template = AIEDocumentTemplate.templates(for: group)[indexPath[1]]
+            let attributedString = NSMutableAttributedString()
+            let plainAttributes : [NSAttributedString.Key:Any] =
+                [
+                    .font : NSFont.systemFont(ofSize: 14, weight: .regular)
+                ]
+            let boldAttributes : [NSAttributedString.Key:Any] =
+                [
+                    .font : NSFont.systemFont(ofSize: 14, weight: .bold)
+                ]
+
+            attributedString.append(NSAttributedString(string: template.name, attributes: boldAttributes))
+            attributedString.append(NSAttributedString(string: "\n\n", attributes: plainAttributes))
+            attributedString.append(NSAttributedString(string: template.templateDescription, attributes: plainAttributes))
+
+            descriptionText.textStorage?.setAttributedString(attributedString)
+        } else {
+            descriptionText.string = ""
+        }
     }
 
 }
@@ -93,8 +242,6 @@ open class AIEDocumentTemplateChooser: NSWindowController, NSWindowDelegate {
 public extension NSObject {
 
     @IBAction func newDocumentFromTemplate(_ sender: Any?) -> Void {
-        print("templates: \(AIEDocumentTemplateChooser.templates)")
-        print("groups: \(AIEDocumentTemplateChooser.templateGroups)")
         AIEDocumentTemplateChooser.chooser.run()
     }
 

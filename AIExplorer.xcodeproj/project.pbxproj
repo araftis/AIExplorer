@@ -74,6 +74,7 @@
 		FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */; };
 		FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */; };
 		FA88825025F5E8FC00DFE50B /* AIEDocumentTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */; };
+		FA88826E25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA88826D25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib */; };
 		FA8E368325BF8D0000EB554F /* AIELibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368225BF8D0000EB554F /* AIELibrary.swift */; };
 		FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */; };
 		FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */; };
@@ -191,6 +192,7 @@
 		FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplateChooser.swift; sourceTree = "<group>"; };
 		FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooser.xib; sourceTree = "<group>"; };
 		FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplate.swift; sourceTree = "<group>"; };
+		FA88826D25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooserItem.xib; sourceTree = "<group>"; };
 		FA8E368225BF8D0000EB554F /* AIELibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELibrary.swift; sourceTree = "<group>"; };
 		FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlow.swift; sourceTree = "<group>"; };
 		FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLCompute.swift; sourceTree = "<group>"; };
@@ -414,9 +416,10 @@
 		FA88824425F5D76B00DFE50B /* User Interface */ = {
 			isa = PBXGroup;
 			children = (
-				FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */,
 				FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */,
+				FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */,
 				FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */,
+				FA88826D25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib */,
 			);
 			path = "User Interface";
 			sourceTree = "<group>";
@@ -532,7 +535,7 @@
 		FA18B48F25AEA256000DEF0C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1230;
+				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					FA18B49725AEA257000DEF0C = {
 						CreatedOnToolsVersion = 12.3;
@@ -577,6 +580,7 @@
 				FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */,
 				FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */,
 				FABD166B25C8E947000294E3 /* AIETestingAccessory.xib in Resources */,
+				FA88826E25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib in Resources */,
 				25EC03B725DF0438008A4DE4 /* AIELSTM.inspector in Resources */,
 				25EC03AB25DE231C008A4DE4 /* AIEReshape.inspector in Resources */,
 				25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */,
@@ -794,6 +798,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
