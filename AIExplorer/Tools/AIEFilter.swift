@@ -1,9 +1,3 @@
-//
-//  DrawNNFilter.swift
-//  NN Explorer
-//
-//  Created by AJ Raftis on 12/20/20.
-//
 
 import Cocoa
 import Draw

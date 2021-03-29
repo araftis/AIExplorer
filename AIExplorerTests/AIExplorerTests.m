@@ -1,9 +1,3 @@
-//
-//  AIExplorerTests.m
-//  AIExplorerTests
-//
-//  Created by AJ Raftis on 1/12/21.
-//
 
 #import <XCTest/XCTest.h>
 

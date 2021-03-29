@@ -1,9 +1,3 @@
-//
-//  AIEGraphic.swift
-//  NN Explorer
-//
-//  Created by AJ Raftis on 1/3/21.
-//
 
 import Draw
 

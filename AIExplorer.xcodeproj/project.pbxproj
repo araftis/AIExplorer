@@ -189,6 +189,7 @@
 		FA18B51025AEA375000DEF0C /* AJRInterfaceFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AJRInterfaceFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B51225AEA375000DEF0C /* Draw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Draw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B52225AEA433000DEF0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		FA2877082611768E00F5BBE8 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplateChooser.swift; sourceTree = "<group>"; };
 		FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooser.xib; sourceTree = "<group>"; };
 		FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplate.swift; sourceTree = "<group>"; };
@@ -311,6 +312,7 @@
 		FA18B48E25AEA256000DEF0C = {
 			isa = PBXGroup;
 			children = (
+				FA2877082611768E00F5BBE8 /* LICENSE.md */,
 				FA8E36CC25C0C4FB00EB554F /* README.md */,
 				FA18B49A25AEA257000DEF0C /* AIExplorer */,
 				FA18B4A525AEA257000DEF0C /* AIExplorerTests */,

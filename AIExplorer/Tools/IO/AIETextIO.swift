@@ -1,9 +1,3 @@
-//
-//  AIETextIO.swift
-//  NN Explorer
-//
-//  Created by AJ Raftis on 1/6/21.
-//
 
 import Cocoa
 

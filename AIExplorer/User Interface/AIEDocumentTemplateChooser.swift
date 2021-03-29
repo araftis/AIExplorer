@@ -1,13 +1,9 @@
-//
-//  AIEDocumentTemplateChooser.swift
-//  AIExplorer
-//
-//  Created by AJ Raftis on 3/7/21.
-//
 
 import Cocoa
 import AJRFoundation
 import AJRInterface
+
+// MARK: - UI Identifiers
 
 extension NSUserInterfaceItemIdentifier {
 
@@ -16,6 +12,8 @@ extension NSUserInterfaceItemIdentifier {
     static var groupName = NSUserInterfaceItemIdentifier("groupName")
 
 }
+
+// MARK: - AIEDocumentTemplateChooserItemView
 
 open class AIEDocumentTemplateChooserItemView : NSView {
 
@@ -34,6 +32,8 @@ open class AIEDocumentTemplateChooserItemView : NSView {
     }
 
 }
+
+// MARK: - AIEDocumentTemplateChooserItem
 
 open class AIEDocumentTemplateChooserItem : NSCollectionViewItem {
 
@@ -62,6 +62,8 @@ open class AIEDocumentTemplateChooserItem : NSCollectionViewItem {
 
 }
 
+// MARK: - AIEDocumentTemplateChooserHeader
+
 open class AIEDocumentTemplateChooserHeader : NSView {
 
     open var title : String = ""
@@ -82,6 +84,8 @@ open class AIEDocumentTemplateChooserHeader : NSView {
     }
 
 }
+
+// MARK: - AIEDocumentTemplateChooser
 
 @objcMembers
 open class AIEDocumentTemplateChooser: NSWindowController, NSWindowDelegate, NSTableViewDataSource, NSTableViewDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource {

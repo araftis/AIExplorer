@@ -1,9 +1,3 @@
-//
-//  AIEDocumentTemplate.swift
-//  AIExplorer
-//
-//  Created by AJ Raftis on 3/7/21.
-//
 
 import Cocoa
 import AJRFoundation

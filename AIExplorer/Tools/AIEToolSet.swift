@@ -1,9 +1,3 @@
-//
-//  AIEToolSet.swift
-//  NN Explorer
-//
-//  Created by AJ Raftis on 12/31/20.
-//
 
 import Draw
 

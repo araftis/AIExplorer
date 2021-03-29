@@ -1,11 +1,3 @@
-//
-//  AIETensorFlowCodeGenerator.swift
-//  AIExplorer
-//
-//  Created by AJ Raftis on 1/31/21.
-//
-
-
 
 //decode and encode float value, look at batch nromalization file, loss=learning_rate
 

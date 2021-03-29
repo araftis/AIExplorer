@@ -1,9 +1,3 @@
-//
-//  AIEDocumentStorage.swift
-//  AIExplorer
-//
-//  Created by AJ Raftis on 2/2/21.
-//
 
 import Draw
 

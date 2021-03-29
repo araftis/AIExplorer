@@ -1,9 +1,3 @@
-//
-//  AIEAudioIO.swift
-//  NN Explorer
-//
-//  Created by AJ Raftis on 1/4/21.
-//
 
 import Draw
 

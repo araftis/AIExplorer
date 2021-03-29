@@ -1,9 +1,3 @@
-//
-//  AIExplorer.h
-//  AIExplorer
-//
-//  Created by AJ Raftis on 1/12/21.
-//
 
 #import <Foundation/Foundation.h>
 
