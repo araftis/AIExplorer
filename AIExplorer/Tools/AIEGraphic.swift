@@ -42,7 +42,7 @@ open class AIEGraphic: DrawGraphic {
     open var title: String {
         get {
             if _title == nil {
-                if let aspect = firstAspect(ofType: DrawText.self, with: DrawText.defaultPriority) as? DrawText {
+                if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? DrawText {
                     _title = aspect.attributedString.string
                 }
             }
@@ -70,16 +70,21 @@ open class AIEGraphic: DrawGraphic {
 
         style.alignment = .center;
 
-        attributes[.font] = NSFont.systemFont(ofSize: 14.0)
+        attributes[.font] = NSFont.systemFont(ofSize: 11.0)
         attributes[.paragraphStyle] = style
         attributes[.foregroundColor] = NSColor.black
 
         return attributes
     }
 
+    internal let cornerRadius : CGFloat = 15.0
+    
     open func updatePath() -> Void {
         path.removeAllPoints()
-        path.appendRoundedRect(frame, xRadius: 8.0, yRadius: 8.0)
+        path.move(to: (frame.minX, frame.maxY))
+        path.appendArc(boundedBy: CGRect(x: frame.minX, y: frame.minY, width: cornerRadius, height: cornerRadius), startAngle: 180, endAngle: 270, clockwise: false)
+        path.appendArc(boundedBy: CGRect(x: frame.maxX - cornerRadius, y: frame.minY, width: cornerRadius, height: cornerRadius), startAngle: 270, endAngle: 0, clockwise: false)
+        path.line(to: (frame.maxX, frame.maxY))
         path.close();
 
         noteBoundsAreDirty()

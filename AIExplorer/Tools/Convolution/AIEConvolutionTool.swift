@@ -43,7 +43,7 @@ public enum AIEConvolutionTag : Int {
 open class AIEConvolutionTool: AIETool {
 
     open override func fillColor(for graphic: AIEGraphic) -> NSColor {
-        return NSColor(displayP3Red: 0.233, green: 0.492, blue: 0.949, alpha: 0.75)
+        return NSColor(displayP3Red: 0.233, green: 0.492, blue: 0.949, alpha: 0.5)
     }
 
 }

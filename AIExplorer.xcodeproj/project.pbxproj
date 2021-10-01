@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FCD9CA27067AD80049E558 /* AIETitle.swift */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
 		25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC039425D7D499008A4DE4 /* AIELoss.inspector */; };
@@ -122,6 +123,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		21FCD9CA27067AD80049E558 /* AIETitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETitle.swift; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
 		25EC039425D7D499008A4DE4 /* AIELoss.inspector */ = {isa = PBXFileReference; lastKnownFileType = text; path = AIELoss.inspector; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 				FA18B4CA25AEA305000DEF0C /* AIEFilter.swift */,
 				FA18B4D725AEA305000DEF0C /* AIEGraphic.swift */,
 				FA0F525E25D38F5900DD0F3D /* AIEGraphic.inspector */,
+				21FCD9CA27067AD80049E558 /* AIETitle.swift */,
 				FA02BF6025B7973B001EFBBA /* AIETool.swift */,
 				FA18B4C925AEA305000DEF0C /* AIEToolSet.swift */,
 			);
@@ -635,6 +638,7 @@
 				FA02BF7425B7A7B3001EFBBA /* AIEReduction.swift in Sources */,
 				FA18B4DC25AEA305000DEF0C /* AIEAudioIO.swift in Sources */,
 				FA02BF6125B7973B001EFBBA /* AIETool.swift in Sources */,
+				21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */,
 				FA02BF4825B783CB001EFBBA /* AIEKnowledgeGraphIO.swift in Sources */,
 				FABD166425C8E931000294E3 /* AIEValidationAccessory.swift in Sources */,
 				FA02BF9125B7AACA001EFBBA /* AIEConcatenation.swift in Sources */,

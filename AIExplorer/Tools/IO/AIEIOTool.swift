@@ -42,7 +42,7 @@ public enum AIEIOTag : Int {
 open class AIEIOTool: AIETool {
 
     open override func fillColor(for graphic: AIEGraphic) -> NSColor {
-        return NSColor(displayP3Red: 1.0, green: 0.502, blue: 0.0, alpha: 0.75)
+        return NSColor(displayP3Red: 1.0, green: 0.502, blue: 0.0, alpha: 0.5)
     }
 
 }

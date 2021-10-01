@@ -43,7 +43,7 @@ public enum AIENormalizationTag : Int {
 open class AIENormalizationTool: AIETool {
 
     open override func fillColor(for graphic: AIEGraphic) -> NSColor {
-        return NSColor(displayP3Red: 0.938, green: 0.673, blue: 0.136, alpha: 0.75)
+        return NSColor(displayP3Red: 0.938, green: 0.673, blue: 0.136, alpha: 0.5)
     }
 
 }
