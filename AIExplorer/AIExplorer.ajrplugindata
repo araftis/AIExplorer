@@ -72,7 +72,7 @@
         <action title="Dropout Layer" icon="toolDropout" tag="4" graphicClass="AIExplorer.AIEDropout" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIEConvolutionTool" name="Convolutions" id="convolutions" toolset="neuralNet" displayPriority="7">
+    <draw-tool class="AIExplorer.AIEConvolutionTool" name="Convolutions" id="convolutions" toolset="neuralNet" displayPriority="7" addsViaDrag="NO" newGraphicSize="{108,108}">
         <action title="Convolution Layer" icon="toolConvolution" tag="0" graphicClass="AIExplorer.AIEConvolution" />
         <action title="LSTM Layer" icon="toolLSTM" tag="1" graphicClass="AIExplorer.AIELSTM" />
         <action title="Pooling Layer" icon="toolPooling" tag="2" graphicClass="AIExplorer.AIEPooling" />
@@ -98,6 +98,9 @@
         </code-generator>
     </aie-library>
 
+    <!-- Draw title inside NN node. -->
+    <draw-aspect class="AIExplorer.AIETitle" id="ai_title" name="Title" priority="afterBackground" />
+
     <ajr_inspector xml="AIEDocument" identifier="aiDocument" />
     <ajr_inspector xml="AIEGraphic" identifier="aiGraphic" />
     <ajr_inspector xml="AIEImageIO" identifier="aiImageIO" />
@@ -112,6 +115,5 @@
     <ajr_inspector xml="AIELSTM" identifier="aiLTSM" />
     <ajr_inspector xml="AIESoftmax" identifier="aiSoftmax" />
     <ajr_inspector xml="AIEReduction" identifier="aiSoftmax" />
-
 
 </plugindata>
