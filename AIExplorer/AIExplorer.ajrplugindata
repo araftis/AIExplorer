@@ -23,7 +23,7 @@
         <writeType type="com.ajr.neuralnet" />
     </draw-filter>
 
-    <draw-tool-set class="AIExplorer.AIEToolSet" id="neuralNet" name="Neural Net" icon="toolSetNeuralNet">
+    <draw-tool-set class="AIExplorer.AIEToolSet" id="neuralNet" name="Neural Net" activationKey="N" icon="toolSetNeuralNet">
         <accessory identifier="aiSourceCode" title="Source Code" icon="accessorySourceCode" controllerClass="AIExplorer.AIESourceCodeAccessory" />
         <accessory identifier="aiTraining" title="Training" icon="accessoryTraining" controllerClass="AIExplorer.AIETrainingAccessory" />
         <accessory identifier="aiValidation" title="Validation" icon="accessoryValidation" controllerClass="AIExplorer.AIEValidationAccessory" />
@@ -72,7 +72,7 @@
         <action title="Dropout Layer" icon="toolDropout" tag="4" graphicClass="AIExplorer.AIEDropout" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIEConvolutionTool" name="Convolutions" id="convolutions" toolset="neuralNet" displayPriority="7" addsViaDrag="NO" newGraphicSize="{108,108}">
+    <draw-tool class="AIExplorer.AIEConvolutionTool" name="Convolutions" id="convolutions" toolset="neuralNet" displayPriority="7" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="c">
         <action title="Convolution Layer" icon="toolConvolution" tag="0" graphicClass="AIExplorer.AIEConvolution" />
         <action title="LSTM Layer" icon="toolLSTM" tag="1" graphicClass="AIExplorer.AIELSTM" />
         <action title="Pooling Layer" icon="toolPooling" tag="2" graphicClass="AIExplorer.AIEPooling" />
