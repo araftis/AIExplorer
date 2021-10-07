@@ -34,20 +34,20 @@
     <draw-tool name="Link" alias="graphics:link" framework="com.ajr.framework.Draw" id="ai-link" toolset="neuralNet">
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIEIOTool" name="I/O" id="io" toolset="neuralNet" displayPriority="2">
+    <draw-tool class="AIExplorer.AIEIOTool" name="I/O" id="io" toolset="neuralNet" displayPriority="2" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="i">
         <action title="Audio I/O" icon="toolAudioIO" tag="1" graphicClass="AIExplorer.AIEAudioIO" />
         <action title="Image I/O" icon="toolImageIO" tag="0" graphicClass="AIExplorer.AIEImageIO" />
         <action title="Knowledge Graph I/O" icon="toolKnowledgeGraphIO" tag="3" graphicClass="AIExplorer.AIEKnowledgeGraphIO" />
         <action title="Text I/O" icon="toolTextIO" tag="2" graphicClass="AIExplorer.AIETextIO" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIEActivationTool" name="Activation" id="activation" toolset="neuralNet" displayPriority="3">
+    <draw-tool class="AIExplorer.AIEActivationTool" name="Activation" id="activation" toolset="neuralNet" displayPriority="3" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="a">
         <action title="Activation" icon="toolActivation" tag="0" graphicClass="AIExplorer.AIEActivation" />
         <action title="Multihead Attention" icon="toolMultiheadAttention" tag="1" graphicClass="AIExplorer.AIEMultiheadAttention" />
         <action title="Softmax" icon="toolSoftmax" tag="2" graphicClass="AIExplorer.AIESoftmax" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIEMathTool" name="Math" id="math" toolset="neuralNet" displayPriority="4">
+    <draw-tool class="AIExplorer.AIEMathTool" name="Math" id="math" toolset="neuralNet" displayPriority="4" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="m">
         <action title="Arithmetic" icon="toolArithmetic" tag="0" graphicClass="AIExplorer.AIEArithmetic" />
         <action title="Reduction" icon="toolReduction" tag="1" graphicClass="AIExplorer.AIEReduction" />
         <action title="Matrix Multiplication" icon="toolMatrixMultiplication" tag="2" graphicClass="AIExplorer.AIEMatrixMultiplication" />
@@ -55,7 +55,7 @@
         <action title="Gram Matrix" icon="toolGramMatrix" tag="4" graphicClass="AIExplorer.AIEGramMatrix" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIETransformationTool" name="Transformation" id="transformation" toolset="neuralNet" displayPriority="5">
+    <draw-tool class="AIExplorer.AIETransformationTool" name="Transformation" id="transformation" toolset="neuralNet" displayPriority="5" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="t">
         <action title="Transpose" icon="toolTranspose" tag="0" graphicClass="AIExplorer.AIETranspose" />
         <action title="Concatenation" icon="toolConcatenation" tag="1" graphicClass="AIExplorer.AIEConcatenation" />
         <action title="Reshape" icon="toolReshape" tag="2" graphicClass="AIExplorer.AIEReshape" />
@@ -64,7 +64,7 @@
         <action title="Padding" icon="toolPadding" tag="5" graphicClass="AIExplorer.AIEPadding" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIENormalizationTool" name="Normalization" id="normalization" toolset="neuralNet" displayPriority="6">
+    <draw-tool class="AIExplorer.AIENormalizationTool" name="Normalization" id="normalization" toolset="neuralNet" displayPriority="6" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="n">
         <action title="Layer Normalization" icon="toolLayerNormalization" tag="0" graphicClass="AIExplorer.AIELayerNormalization" />
         <action title="Batch Normalization" icon="toolBatchNormalization" tag="1" graphicClass="AIExplorer.AIEBatchNormalization" />
         <action title="Group Normalization" icon="toolGroupNormalization" tag="2" graphicClass="AIExplorer.AIEGroupNormalization" />
@@ -79,7 +79,7 @@
         <action title="Upsample Layer" icon="toolUpsample" tag="3" graphicClass="AIExplorer.AIEUpsample" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIELossTool" name="Loss" id="loss" toolset="neuralNet" displayPriority="8">
+    <draw-tool class="AIExplorer.AIELossTool" name="Loss" id="loss" toolset="neuralNet" displayPriority="8" addsViaDrag="NO" newGraphicSize="{108,108}" activationKey="s">
         <action title="Loss" icon="toolLoss" tag="0" graphicClass="AIExplorer.AIELoss" />
         <action title="YOLO Loss" icon="toolYOLOLoss" tag="1" graphicClass="AIExplorer.AIEYOLOLoss" />
     </draw-tool>
