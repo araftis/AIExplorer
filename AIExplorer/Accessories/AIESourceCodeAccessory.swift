@@ -88,7 +88,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     @IBAction open func chooseOutputPath(_ sender: Any?) -> Void {
         let savePanel = NSSavePanel.init()
         if let document = self.document as? AIEDocument,
-           let url = document.sourceOutputURL {
+           let url = document.code.last?.outputURL {
             savePanel.directoryURL = url.deletingLastPathComponent()
             savePanel.nameFieldStringValue = url.lastPathComponent
         } else {
@@ -98,7 +98,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         savePanel.beginSheetModal(for: languagePopUp.window!) { (response) in
             if response == .OK {
                 if let document = self.document as? AIEDocument {
-                    document.sourceOutputURL = savePanel.url
+                    document.code.last?.outputURL = savePanel.url
                     self.regenerateCode()
                 }
                 UserDefaults[.outputSavePanelPath] = savePanel.directoryURL
@@ -109,7 +109,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     @IBAction open func chooseLanguage(_ sender: Any?) -> Void {
         if let language = languagePopUp.selectedItem?.representedObject as? AIELanguage,
            let document = document as? AIEDocument {
-            document.aiLanguage = language
+            document.code.last?.language = language
         }
     }
 
@@ -117,28 +117,30 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func updateLibrary() -> Void {
         if let document = self.document as? AIEDocument {
-            let library = document.aiLibrary
-            let languages = library.supportedLanguagesForCodeGeneration
-            languagePopUp.removeAllItems()
-            for language in languages {
-                languagePopUp.addItem(withTitle: language.name)
-                if let item = languagePopUp.lastItem {
-                    // We do this, because eventually we many add translations, so we want to make sure we can map back to the language
-                    item.representedObject = language
+            if let library = document.code.last?.library {
+                let languages = library.supportedLanguagesForCodeGeneration
+                languagePopUp.removeAllItems()
+                for language in languages {
+                    languagePopUp.addItem(withTitle: language.name)
+                    if let item = languagePopUp.lastItem {
+                        // We do this, because eventually we many add translations, so we want to make sure we can map back to the language
+                        item.representedObject = language
+                    }
                 }
+                regenerateCode()
             }
-            regenerateCode()
         }
     }
 
     open func updateLanguage() -> Void {
         if let document = document as? AIEDocument {
-            let language = document.aiLanguage
-            for (index, childItem) in languagePopUp.itemArray.enumerated() {
-                if (childItem.representedObject as? AIELanguage) == language {
-                    languagePopUp.selectItem(at: index)
-                    regenerateCode()
-                    break
+            if let language = document.code.last?.language {
+                for (index, childItem) in languagePopUp.itemArray.enumerated() {
+                    if (childItem.representedObject as? AIELanguage) == language {
+                        languagePopUp.selectItem(at: index)
+                        regenerateCode()
+                        break
+                    }
                 }
             }
         }
@@ -146,7 +148,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func updateSourceOutputURL() -> Void {
         if let document = document as? AIEDocument {
-            if let url = document.sourceOutputURL {
+            if let url = document.code.last?.outputURL {
                 outputPath.stringValue = url.path
             } else {
                 outputPath.stringValue = ""
@@ -155,7 +157,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     }
 
     open var sourceOutputURL : URL? {
-        return (document as? AIEDocument)?.sourceOutputURL
+        return (document as? AIEDocument)?.code.last?.outputURL
     }
 
     open func write(code: String, to url: URL) throws -> Void {
@@ -171,8 +173,9 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func regenerateCode() -> Void {
         if let document = self.document as? AIEDocument,
-           let language = languagePopUp.selectedItem?.representedObject as? AIELanguage {
-            let library = document.aiLibrary
+           let code = document.code.last,
+           let language = languagePopUp.selectedItem?.representedObject as? AIELanguage,
+           let library = code.library {
             for object in document.rootObjects {
                 if let generator = library.codeGenerator(for: language, root: object) {
                     let outputStream = OutputStream.toMemory()

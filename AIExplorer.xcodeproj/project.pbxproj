@@ -94,6 +94,7 @@
 		FABD16A425CA578C000294E3 /* AIEDocumentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD16A325CA578C000294E3 /* AIEDocumentStorage.swift */; };
 		FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FABD16A725CA59CB000294E3 /* AIEDocument.inspector */; };
 		FAD9250525AEA5ED00079DAB /* AIExplorer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */; };
+		FADD1CFF270FD5B9000C49DA /* AIECode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD1CFE270FD5B9000C49DA /* AIECode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -215,6 +216,7 @@
 		FABD16A325CA578C000294E3 /* AIEDocumentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentStorage.swift; sourceTree = "<group>"; };
 		FABD16A725CA59CB000294E3 /* AIEDocument.inspector */ = {isa = PBXFileReference; lastKnownFileType = text; path = AIEDocument.inspector; sourceTree = "<group>"; };
 		FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AIExplorer.xcassets; sourceTree = "<group>"; };
+		FADD1CFE270FD5B9000C49DA /* AIECode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIECode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -432,6 +434,7 @@
 		FA8E368125BF8CE100EB554F /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FADD1CFE270FD5B9000C49DA /* AIECode.swift */,
 				FABD163C25C78722000294E3 /* AIECodeGenerator.swift */,
 				FA8E368225BF8D0000EB554F /* AIELibrary.swift */,
 				FA8E368F25BF8DF100EB554F /* ML Compute */,
@@ -641,6 +644,7 @@
 				21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */,
 				FA02BF4825B783CB001EFBBA /* AIEKnowledgeGraphIO.swift in Sources */,
 				FABD166425C8E931000294E3 /* AIEValidationAccessory.swift in Sources */,
+				FADD1CFF270FD5B9000C49DA /* AIECode.swift in Sources */,
 				FA02BF9125B7AACA001EFBBA /* AIEConcatenation.swift in Sources */,
 				FA02BF9525B7AAD9001EFBBA /* AIEReshape.swift in Sources */,
 				FA02BFA125B7AAFF001EFBBA /* AIEPadding.swift in Sources */,

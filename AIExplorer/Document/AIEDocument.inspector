@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="AI Explorer">
-        <group title="Library">
-            <slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.aiLibrary" />
+        <group title="Code">
+            <!--<slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.aiLibrary" />-->
         </group>
     </group>
 </inspector>

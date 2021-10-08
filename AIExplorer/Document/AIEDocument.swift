@@ -54,47 +54,14 @@ open class AIEDocument: DrawDocument {
 
     // MARK: - Properties
 
+    /** Retypes the DrawDocumentStorage to our AIE type for easier access. */
     open var aiStorage : AIEDocumentStorage {
         return storage as! AIEDocumentStorage
     }
 
-    open var aiLibrary : AIELibrary {
-        get {
-            return aiStorage.aiLibrary
-        }
-        set(newValue) {
-            willChangeValue(forKey: "aiLibrary")
-            aiStorage.aiLibrary = newValue
-            if let newLanguage = newValue.language(for: aiLanguage.identifier) {
-                aiLanguage = newLanguage
-            } else {
-                aiLanguage = newValue.preferredLanguage
-            }
-            didChangeValue(forKey: "aiLibrary")
-        }
-    }
-
-    // NOTE: Has ai prefix, because language could easily (likely?) become defined on the superclass someday.
-    open var aiLanguage : AIELanguage {
-        get {
-            return aiStorage.aiLanguage
-        }
-        set(newValue) {
-            willChangeValue(forKey: "aiLanguage")
-            aiStorage.aiLanguage = newValue
-            didChangeValue(forKey: "aiLanguage")
-        }
-    }
-
-    open var sourceOutputURL : URL? {
-        get {
-            return aiStorage.sourceOutputURL
-        }
-        set(newValue) {
-            willChangeValue(forKey: "sourceOutputURL")
-            aiStorage.sourceOutputURL = newValue
-            didChangeValue(forKey: "sourceOutputURL")
-        }
+    // NOTE: We don't want this settable on the doucment. The user should call the appropriate add/remove methods below.
+    open var code : [AIECode] {
+        return aiStorage.code
     }
 
     // MARK: - DrawDocument
@@ -116,6 +83,29 @@ open class AIEDocument: DrawDocument {
      */
     open var allLibraries : [AIELibrary] {
         return AIELibrary.orderedLibraries
+    }
+
+    // MARK: - Code
+
+    open func createCodeObject() -> AIECode {
+        let newCode = AIECode()
+
+        addCode(newCode)
+
+        return newCode
+    }
+
+    open func addCode(_ code: AIECode) -> Void {
+        let index = aiStorage.code.count
+        self.willChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "code")
+        aiStorage.code.append(code)
+        self.didChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "code")
+    }
+
+    open func removeCode(at index: Int) -> Void {
+        self.willChange(.removal, valuesAt: IndexSet(integer: index), forKey: "code")
+        aiStorage.code.remove(at: index)
+        self.didChange(.removal, valuesAt: IndexSet(integer: index), forKey: "code")
     }
 
     // MARK: - AI Objects
