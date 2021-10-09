@@ -36,7 +36,7 @@ open class AIEDocumentStorage: DrawDocumentStorage {
 
     // MARK: - Properties
 
-    open var code = [AIECode]()
+    open var codeDefinitions = [AIECodeDefinition]()
     open var aiLibrary : AIELibrary
     open var aiLanguage : AIELanguage
     open var sourceOutputURL : URL? = nil {

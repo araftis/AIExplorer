@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="AI Explorer">
-        <group title="Code">
-            <!--<slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.aiLibrary" />-->
+        <group title="Code Definition">
+            <slice type="table" valuesKeyPath="controller.selection.codeDefinitions" hasTitles="true" actionTargetKeyPath="controller.selectedObjects" addAction="createCodeDefintion" removeAction="removeCodeDefinition:" usesAlternatingRowBackgroundColors="false">
+                <column type="string" valueKeyPath="name" editable="true" />
+            </slice>
         </group>
     </group>
 </inspector>

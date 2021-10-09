@@ -11,7 +11,8 @@ import AJRFoundation
 /**
  Defines a relationship from document for a source code generator. The is basically on container the library, language, and output path which can then be used to instantiate an AIECodeGenerator. Documents can have multiple AIECode objects.
  */
-open class AIECode: NSObject, AJRXMLCoding {
+@objcMembers
+open class AIECodeDefinition: NSObject, AJRXMLCoding {
 
     /* NOTE: All of these properties are nullable, but the object won't really be useable until they're defined. They're nullable in order to allow the user to populate them via the UI. */
 

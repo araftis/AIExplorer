@@ -88,7 +88,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     @IBAction open func chooseOutputPath(_ sender: Any?) -> Void {
         let savePanel = NSSavePanel.init()
         if let document = self.document as? AIEDocument,
-           let url = document.code.last?.outputURL {
+           let url = document.codeDefinitions.last?.outputURL {
             savePanel.directoryURL = url.deletingLastPathComponent()
             savePanel.nameFieldStringValue = url.lastPathComponent
         } else {
@@ -98,7 +98,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         savePanel.beginSheetModal(for: languagePopUp.window!) { (response) in
             if response == .OK {
                 if let document = self.document as? AIEDocument {
-                    document.code.last?.outputURL = savePanel.url
+                    document.codeDefinitions.last?.outputURL = savePanel.url
                     self.regenerateCode()
                 }
                 UserDefaults[.outputSavePanelPath] = savePanel.directoryURL
@@ -109,7 +109,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     @IBAction open func chooseLanguage(_ sender: Any?) -> Void {
         if let language = languagePopUp.selectedItem?.representedObject as? AIELanguage,
            let document = document as? AIEDocument {
-            document.code.last?.language = language
+            document.codeDefinitions.last?.language = language
         }
     }
 
@@ -117,7 +117,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func updateLibrary() -> Void {
         if let document = self.document as? AIEDocument {
-            if let library = document.code.last?.library {
+            if let library = document.codeDefinitions.last?.library {
                 let languages = library.supportedLanguagesForCodeGeneration
                 languagePopUp.removeAllItems()
                 for language in languages {
@@ -134,7 +134,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func updateLanguage() -> Void {
         if let document = document as? AIEDocument {
-            if let language = document.code.last?.language {
+            if let language = document.codeDefinitions.last?.language {
                 for (index, childItem) in languagePopUp.itemArray.enumerated() {
                     if (childItem.representedObject as? AIELanguage) == language {
                         languagePopUp.selectItem(at: index)
@@ -148,7 +148,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func updateSourceOutputURL() -> Void {
         if let document = document as? AIEDocument {
-            if let url = document.code.last?.outputURL {
+            if let url = document.codeDefinitions.last?.outputURL {
                 outputPath.stringValue = url.path
             } else {
                 outputPath.stringValue = ""
@@ -157,7 +157,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     }
 
     open var sourceOutputURL : URL? {
-        return (document as? AIEDocument)?.code.last?.outputURL
+        return (document as? AIEDocument)?.codeDefinitions.last?.outputURL
     }
 
     open func write(code: String, to url: URL) throws -> Void {
@@ -173,9 +173,9 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
 
     open func regenerateCode() -> Void {
         if let document = self.document as? AIEDocument,
-           let code = document.code.last,
+           let codeDefinition = document.codeDefinitions.last,
            let language = languagePopUp.selectedItem?.representedObject as? AIELanguage,
-           let library = code.library {
+           let library = codeDefinition.library {
             for object in document.rootObjects {
                 if let generator = library.codeGenerator(for: language, root: object) {
                     let outputStream = OutputStream.toMemory()

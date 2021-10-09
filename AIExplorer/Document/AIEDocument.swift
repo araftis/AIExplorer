@@ -60,8 +60,8 @@ open class AIEDocument: DrawDocument {
     }
 
     // NOTE: We don't want this settable on the doucment. The user should call the appropriate add/remove methods below.
-    open var code : [AIECode] {
-        return aiStorage.code
+    open var codeDefinitions : [AIECodeDefinition] {
+        return aiStorage.codeDefinitions
     }
 
     // MARK: - DrawDocument
@@ -87,25 +87,63 @@ open class AIEDocument: DrawDocument {
 
     // MARK: - Code
 
-    open func createCodeObject() -> AIECode {
-        let newCode = AIECode()
+    open func createCodeDefintion() -> AIECodeDefinition {
+        let newCode = AIECodeDefinition()
 
-        addCode(newCode)
+        addCodeDefinition(newCode)
 
         return newCode
     }
 
-    open func addCode(_ code: AIECode) -> Void {
-        let index = aiStorage.code.count
-        self.willChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "code")
-        aiStorage.code.append(code)
-        self.didChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "code")
+    open func addCodeDefinition(_ codeDefinition: AIECodeDefinition) -> Void {
+        let index = aiStorage.codeDefinitions.count
+        self.willChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+        aiStorage.codeDefinitions.append(codeDefinition)
+        self.didChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
     }
 
-    open func removeCode(at index: Int) -> Void {
-        self.willChange(.removal, valuesAt: IndexSet(integer: index), forKey: "code")
-        aiStorage.code.remove(at: index)
-        self.didChange(.removal, valuesAt: IndexSet(integer: index), forKey: "code")
+    /**
+     Removes the code definition at `index`. If `index` is  &lt; 0 or &gt;= codeDefinitions.count, an exception will be thrown.
+
+     - parameter index: The index of the code definition to remove.
+     */
+    open func removeCodeDefinition(at index: Int) -> Void {
+        self.willChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+        if aiStorage.codeDefinitions[index] == selectedCodeDefinition {
+            selectedCodeDefinition = nil
+        }
+        aiStorage.codeDefinitions.remove(at: index)
+        self.didChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+    }
+
+    /**
+     Removes the specified code definition.
+
+     - parameter codeDefiniton: The Code definition to remove.
+     */
+    open func removeCodeDefinition(_ codeDefinition: AIECodeDefinition) -> Void {
+        if let index = aiStorage.codeDefinitions.firstIndex(of: codeDefinition) {
+            removeCodeDefinition(at: index)
+        }
+    }
+
+    /**
+     Short hand for self.removeCodeDefinition(self.selectedCodeDefinition).
+     */
+    open func removeSlectedCodeDefinition() -> Void {
+        if let codeDefinition = selectedCodeDefinition {
+            removeCodeDefinition(codeDefinition)
+        }
+    }
+
+    /** Mostly used by the UI to indicate which code definition is currently selected in the UI. */
+    open var selectedCodeDefinition : AIECodeDefinition? {
+        willSet {
+            willChangeValue(forKey: "selectedCodeDefinition")
+        }
+        didSet {
+            didChangeValue(forKey: "selectedCodeDefinition")
+        }
     }
 
     // MARK: - AI Objects
