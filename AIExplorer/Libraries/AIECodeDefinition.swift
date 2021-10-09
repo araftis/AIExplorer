@@ -14,6 +14,20 @@ import AJRFoundation
 @objcMembers
 open class AIECodeDefinition: NSObject, AJRXMLCoding {
 
+    public enum Role : CaseIterable {
+        case deployment
+        case training
+        case deploymentAndTraining
+        
+        init?(string: String) {
+            if let found = Self.allCases.first(where: { string == "\($0)" }) {
+                self = found
+            } else {
+                return nil
+            }
+        }
+    }
+
     /* NOTE: All of these properties are nullable, but the object won't really be useable until they're defined. They're nullable in order to allow the user to populate them via the UI. */
 
     /** Defines a name. This is mostly useful for the user to track what they've created the code object for. */
@@ -37,6 +51,8 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
     open var library : AIELibrary?
     /** A language supported by library. */
     open var language : AIELanguage?
+    /** What type of code should be generated. */
+    open var role : AIECodeDefinition.Role = .deploymentAndTraining
 
     // MARK: - Creation
 
@@ -60,6 +76,9 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
         if let url = outputURL {
             coder.encodeURLBookmark(url, forKey: "outputURL")
         }
+        if role != .deploymentAndTraining {
+            coder.encode("\(role)", forKey: "role")
+        }
     }
 
     open func decode(with coder: AJRXMLCoder) {
@@ -80,7 +99,41 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
         coder.decodeURLBookmark(forKey: "outputURL") { (url) in
             self.outputURL = url
         }
+        self.role = .deploymentAndTraining // Set to default, and then override if present.
+        coder.decodeString(forKey: "role") { value in
+            self.role = Role(string: value) ?? .deploymentAndTraining
+        }
     }
 
+    // MARK: - Inspection
+    
+    // These methods are needed because Swift doesn't necessarily play well with UI in all cases.
+    
+    open class func keyPathsForValuesAffectingInspectedRole() -> Set<String> {
+        return ["role"]
+    }
+    
+    open var inspectedRole : String {
+        get {
+            switch role {
+            case .deploymentAndTraining:
+                return "Both"
+            case .deployment:
+                return "Deployment"
+            case .training:
+                return "Training"
+            }
+        }
+        set {
+            if newValue == "Both" {
+                role = .deploymentAndTraining
+            } else if newValue == "Deployment" {
+                role = .deployment
+            } else if newValue == "Training" {
+                role = .training
+            }
+        }
+    }
+    
 
 }

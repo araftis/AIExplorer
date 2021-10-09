@@ -99,6 +99,7 @@ open class AIEDocument: DrawDocument {
         let index = aiStorage.codeDefinitions.count
         self.willChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
         aiStorage.codeDefinitions.append(codeDefinition)
+        codeDefinition.name = aiStorage.codeDefinitions.nextTitle(forKey: "name", basename: "Untitled")
         self.didChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
     }
 
@@ -107,13 +108,15 @@ open class AIEDocument: DrawDocument {
 
      - parameter index: The index of the code definition to remove.
      */
-    open func removeCodeDefinition(at index: Int) -> Void {
-        self.willChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+    open func removeCodeDefinition(at index: Int) -> AIECodeDefinition? {
         if aiStorage.codeDefinitions[index] == selectedCodeDefinition {
             selectedCodeDefinition = nil
         }
+        let codeDefinition = aiStorage.codeDefinitions[index]
+        self.willChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
         aiStorage.codeDefinitions.remove(at: index)
         self.didChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+        return codeDefinition
     }
 
     /**
@@ -121,19 +124,21 @@ open class AIEDocument: DrawDocument {
 
      - parameter codeDefiniton: The Code definition to remove.
      */
-    open func removeCodeDefinition(_ codeDefinition: AIECodeDefinition) -> Void {
+    open func removeCodeDefinition(_ codeDefinition: AIECodeDefinition) -> AIECodeDefinition? {
         if let index = aiStorage.codeDefinitions.firstIndex(of: codeDefinition) {
-            removeCodeDefinition(at: index)
+            return removeCodeDefinition(at: index)
         }
+        return nil
     }
 
     /**
      Short hand for self.removeCodeDefinition(self.selectedCodeDefinition).
      */
-    open func removeSlectedCodeDefinition() -> Void {
+    open func removeSlectedCodeDefinition() -> AIECodeDefinition? {
         if let codeDefinition = selectedCodeDefinition {
-            removeCodeDefinition(codeDefinition)
+            return removeCodeDefinition(codeDefinition)
         }
+        return nil
     }
 
     /** Mostly used by the UI to indicate which code definition is currently selected in the UI. */

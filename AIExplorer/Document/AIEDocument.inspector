@@ -2,9 +2,17 @@
 <inspector>
     <group title="AI Explorer">
         <group title="Code Definition">
-            <slice type="table" valuesKeyPath="controller.selection.codeDefinitions" hasTitles="false" actionTargetKeyPath="controller.selectedObjects" addAction="createCodeDefintion" removeAction="removeCodeDefinition:" usesAlternatingRowBackgroundColors="false" hasVerticalGrid="false">
+            <slice type="table" valuesKeyPath="controller.selection.codeDefinitions" hasTitles="false" actionTargetKeyPath="controller.selectedObjects" addAction="createCodeDefintion" removeAction="removeCodeDefinition:" usesAlternatingRowBackgroundColors="false" hasVerticalGrid="false" selectedObjectKeyPath="controller.selection.selectedCodeDefinition">
                 <column type="string" valueKeyPath="name" editable="true" />
             </slice>
+            <slice type="string" valueKeyPath="controller.selection.selectedCodeDefinition.name" label="Name" />
+            <slice type="choice" style="popUp" label="Role" valueType="string" valueKeyPath="controller.selection.selectedCodeDefinition.inspectedRole">
+                <choice title="Both" value="Both" />
+                <choice title="Deployment" value="Deployment" />
+                <choice title="Training" value="Training" />
+            </slice>
+            <slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.selectedCodeDefinition.library" />
+            <slice type="choice" valueType="object" label="Language" objectsKeyPath="controller.selection.selectedCodeDefinition.library.supportedLanguagesForCodeGeneration" valueKeyPath="controller.selection.selectedCodeDefinition.language" />
         </group>
     </group>
 </inspector>
