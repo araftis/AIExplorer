@@ -11,7 +11,10 @@
             <element name="language" key="languages" type="array" required="true">
                 <attribute name="identifier" type="string" required="true" />
                 <attribute name="name" type="string" required="true" />
-                <attribute name="extension" type="string" required="true" />
+                <element name="extension" key="extensions" type="array" required="true">
+                    <attribute name="extension" type="string" required="true" />
+                    <attribute name="uti" type="string" required="false" />
+                </element>
             </element>
         </element>
     </extension-point>
@@ -86,15 +89,26 @@
 
     <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org">
         <code-generator class="AIExplorer.AIETensorFlowCodeGenerator">
-            <language identifier="python" name="Python" extension="py" />
-            <language identifier="c" name="C" extension="c" />
-            <language identifier="c++" name="C++" extension="cpp" />
+            <language identifier="python" name="Python">
+                <extension extension="py" uti="public.python-script" />
+            </language>
+            <language identifier="c" name="C">
+                <extension extension="c" uti="public.c-source" />
+            </language>
+            <language identifier="c++" name="C++">
+                <extension extension="cpp" uti="public.c-plus-plus-source" />
+                <extension extension="cc" uti="public.c-plus-plus-source" />
+            </language>
         </code-generator>
     </aie-library>
     <aie-library name="ML Compute" id="mlCompute" class="AIExplorer.AIEMLCompute">
         <code-generator class="AIExplorer.AIEMLComputeCodeGenerator">
-            <language identifier="swift" name="Swift" extension="swift" />
-            <language identifier="obj-c" name="Obj-C" extension="m" />
+            <language identifier="swift" name="Swift">
+                <extension extension="swift" uti="public.swift-source" />
+            </language>
+            <language identifier="obj-c" name="Obj-C">
+                <extension extension="m" uti="public.objective-c-source" />
+            </language>
         </code-generator>
     </aie-library>
 

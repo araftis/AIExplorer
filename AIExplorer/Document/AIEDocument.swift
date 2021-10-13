@@ -143,10 +143,12 @@ open class AIEDocument: DrawDocument {
 
     /** Mostly used by the UI to indicate which code definition is currently selected in the UI. */
     open var selectedCodeDefinition : AIECodeDefinition? {
-        willSet {
-            willChangeValue(forKey: "selectedCodeDefinition")
+        get {
+            return aiStorage.selectedCodeDefinition
         }
-        didSet {
+        set {
+            willChangeValue(forKey: "selectedCodeDefinition")
+            aiStorage.selectedCodeDefinition = newValue
             didChangeValue(forKey: "selectedCodeDefinition")
         }
     }

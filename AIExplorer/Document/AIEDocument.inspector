@@ -5,7 +5,8 @@
             <slice type="table" valuesKeyPath="controller.selection.codeDefinitions" hasTitles="false" actionTargetKeyPath="controller.selectedObjects" addAction="createCodeDefintion" removeAction="removeCodeDefinition:" usesAlternatingRowBackgroundColors="false" hasVerticalGrid="false" selectedObjectKeyPath="controller.selection.selectedCodeDefinition">
                 <column type="string" valueKeyPath="name" editable="true" />
             </slice>
-            <slice type="string" valueKeyPath="controller.selection.selectedCodeDefinition.name" label="Name" />
+            <slice type="string" valueKeyPath="controller.selection.selectedCodeDefinition.name" label="Name" nullPlaceholder="No Name" />
+            <slice type="file" urlKeyPath="controller.selection.selectedCodeDefinition.outputURL" label="Full Path" editable="false" utisKeyPath="controller.selection.selectedCodeDefinition.language.fileUTIs" defaultsKey="codeGeneratorSavePanelPath" />
             <slice type="choice" style="popUp" label="Role" valueType="string" valueKeyPath="controller.selection.selectedCodeDefinition.inspectedRole">
                 <choice title="Both" value="Both" />
                 <choice title="Deployment" value="Deployment" />

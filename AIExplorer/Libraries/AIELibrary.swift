@@ -50,6 +50,28 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
     static var unknown = AIELibraryIndentifier("unknown")
 }
 
+@objcMembers
+public class AIEFileType : NSObject {
+    
+    public var `extension` : String
+    public var uti : String
+    
+    public init(extension: String, uti: String) {
+        self.extension = `extension`
+        self.uti = uti
+    }
+    
+    public convenience init?(properties : [String:String]) {
+        if let ext = properties["extension"],
+           let uti = properties["uti"] {
+            self.init(extension: ext, uti: uti)
+        } else {
+            return nil
+        }
+    }
+    
+}
+
 /**
  This is a small contained class to describe a programming language. This is a class rather than a struct for Obj-C interoperability.
  */
@@ -57,16 +79,34 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
 
     public var name : String
     public var identifier : String
+    public var fileTypes : [AIEFileType]
+    public var fileExtensions : [String] {
+        return fileTypes.map { $0.extension }
+    }
+    public var fileUTIs : [String] {
+        return fileTypes.map { $0.uti }
+    }
 
-    public init(name: String, identifier: String) {
+    public init(name: String, identifier: String, fileTypes: [AIEFileType]) {
         self.name = name
         self.identifier = identifier
+        self.fileTypes = fileTypes
         super.init()
     }
 
-    public convenience init?(properties: [String:String]) {
-        if let name = properties["name"], let identifier = properties["identifier"] {
-            self.init(name: name, identifier: identifier)
+    public convenience init?(properties: [String:Any]) {
+        if let name = properties["name"] as? String,
+           let identifier = properties["identifier"] as? String,
+           let rawFileTypes = properties["extensions"] as? [[String:String]] {
+            var fileTypes = [AIEFileType]()
+            for rawFileType in rawFileTypes {
+                if let fileType = AIEFileType(properties: rawFileType) {
+                    fileTypes.append(fileType)
+                } else {
+                    AJRLog.error("Failed to create a file type from the properties: \(rawFileType)")
+                }
+            }
+            self.init(name: name, identifier: identifier, fileTypes: fileTypes)
         } else {
             return nil
         }
@@ -198,7 +238,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
             if let rawGenerators = AJRPlugInManager.shared.extensionPoint(forName: "aie-library")?.value(forProperty: "codeGenerators", onExtensionFor: type(of: self)) as? [[String:Any]] {
                 for rawGenerator in rawGenerators {
                     if let generatorClass = rawGenerator["class"] as? AIECodeGenerator.Type,
-                       let rawLanguages = rawGenerator["languages"] as? [[String:String]] {
+                       let rawLanguages = rawGenerator["languages"] as? [[String:Any]] {
                         var languages = [AIELanguage]()
                         for rawLanguage in rawLanguages {
                             if let language = AIELanguage(properties: rawLanguage) {

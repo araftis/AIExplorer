@@ -547,6 +547,7 @@
 				TargetAttributes = {
 					FA18B49725AEA257000DEF0C = {
 						CreatedOnToolsVersion = 12.3;
+						LastSwiftMigration = 1300;
 					};
 					FA18B4A025AEA257000DEF0C = {
 						CreatedOnToolsVersion = 12.3;
@@ -817,6 +818,7 @@
 		FA18B4AD25AEA257000DEF0C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -833,6 +835,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ajr.application.AIExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -840,6 +843,7 @@
 		FA18B4AE25AEA257000DEF0C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -857,6 +861,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ajr.application.AIExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

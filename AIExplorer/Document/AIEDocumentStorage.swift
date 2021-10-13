@@ -37,28 +37,11 @@ open class AIEDocumentStorage: DrawDocumentStorage {
     // MARK: - Properties
 
     open var codeDefinitions = [AIECodeDefinition]()
-    open var aiLibrary : AIELibrary
-    open var aiLanguage : AIELanguage
-    open var sourceOutputURL : URL? = nil {
-        willSet {
-            if let current = sourceOutputURL {
-                current.stopAccessingSecurityScopedResource()
-            }
-        }
-        didSet {
-            if let current = sourceOutputURL {
-                if !current.startAccessingSecurityScopedResource() {
-                    AJRLog.warning("Failed to get security access to: \(current)")
-                }
-            }
-        }
-    }
+    open var selectedCodeDefinition : AIECodeDefinition?
 
     // MARK: - Initialization
 
     public override init() {
-        aiLibrary = AIELibrary.library(for: .tensorflow)!
-        aiLanguage = aiLibrary.preferredLanguage
         super.init()
     }
 
@@ -66,31 +49,23 @@ open class AIEDocumentStorage: DrawDocumentStorage {
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
-        coder.encode(aiLibrary.identifier.rawValue, forKey: "library")
-        coder.encode(aiLanguage.identifier, forKey: "aiLanguage")
-        if let url = sourceOutputURL {
-            coder.encodeURLBookmark(url, forKey: "sourceOutputURL")
+        coder.encode(codeDefinitions, forKey: "codeDefinitions")
+        if let selectedCodeDefinition = selectedCodeDefinition {
+            coder.encode(selectedCodeDefinition, forKey: "selectedCodeDefinition")
         }
     }
 
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
-        coder.decodeString(forKey: "library") { (identifier) in
-            if let library = AIELibrary.library(for: AIELibraryIndentifier(identifier)) {
-                self.aiLibrary = library
-            } else {
-                self.aiLibrary = AIELibrary.library(for: .tensorflow)!
+        coder.decodeObject(forKey: "codeDefinitions") { definitions in
+            if let definitions = definitions as? [AIECodeDefinition] {
+                self.codeDefinitions = definitions
             }
         }
-        coder.decodeString(forKey: "aiLanguage") { (identifier) in
-            if let language = self.aiLibrary.language(for: identifier) {
-                self.aiLanguage = language
-            } else {
-                self.aiLanguage = self.aiLibrary.preferredLanguage
+        coder.decodeObject(forKey: "selectedCodeDefinition") { codeDefinition in
+            if let codeDefinition = codeDefinition as? AIECodeDefinition {
+                self.selectedCodeDefinition = codeDefinition
             }
-        }
-        coder.decodeURLBookmark(forKey: "sourceOutputURL") { (url) in
-            self.sourceOutputURL = url
         }
     }
 

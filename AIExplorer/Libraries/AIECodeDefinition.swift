@@ -35,6 +35,7 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
     /** The output path. */
     open var outputURL : URL? {
         willSet {
+            self.willChangeValue(forKey: "outputURL")
             if let current = outputURL {
                 current.stopAccessingSecurityScopedResource()
             }
@@ -45,6 +46,7 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
                     AJRLog.warning("Failed to get security access to: \(current)")
                 }
             }
+            self.didChangeValue(forKey: "outputURL")
         }
     }
     /** The library to use. */
@@ -62,11 +64,14 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
 
     // MARK: - XML Coding
 
-    open override var ajr_nameForXMLArchiving: String {
-        return "code";
+    open override class var ajr_nameForXMLArchiving: String {
+        return "codeDefinition";
     }
 
     open func encode(with coder: AJRXMLCoder) {
+        if let name = name {
+            coder.encode(name, forKey: "name")
+        }
         if let library = library {
             coder.encode(library.identifier.rawValue, forKey: "library")
         }
@@ -82,6 +87,10 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
     }
 
     open func decode(with coder: AJRXMLCoder) {
+        coder.decodeObject(forKey: "name") { value in
+            // Typecast should never fail, but since this is coming from an external file, let's be safe, just in case.
+            self.name = value as? String
+        }
         coder.decodeString(forKey: "library") { (identifier) in
             if let library = AIELibrary.library(for: AIELibraryIndentifier(identifier)) {
                 self.library = library
