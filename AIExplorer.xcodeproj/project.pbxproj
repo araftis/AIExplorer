@@ -95,6 +95,7 @@
 		FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FABD16A725CA59CB000294E3 /* AIEDocument.inspector */; };
 		FAD9250525AEA5ED00079DAB /* AIExplorer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */; };
 		FADD1CFF270FD5B9000C49DA /* AIECodeDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD1CFE270FD5B9000C49DA /* AIECodeDefinition.swift */; };
+		FAF2664A2719051700EC0A19 /* AIEMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF266492719051700EC0A19 /* AIEMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -217,6 +218,7 @@
 		FABD16A725CA59CB000294E3 /* AIEDocument.inspector */ = {isa = PBXFileReference; lastKnownFileType = text; path = AIEDocument.inspector; sourceTree = "<group>"; };
 		FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AIExplorer.xcassets; sourceTree = "<group>"; };
 		FADD1CFE270FD5B9000C49DA /* AIECodeDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIECodeDefinition.swift; sourceTree = "<group>"; };
+		FAF266492719051700EC0A19 /* AIEMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -482,6 +484,7 @@
 				FABD168825CA5556000294E3 /* AIEDocument.swift */,
 				FABD16A725CA59CB000294E3 /* AIEDocument.inspector */,
 				FABD16A325CA578C000294E3 /* AIEDocumentStorage.swift */,
+				FAF266492719051700EC0A19 /* AIEMessage.swift */,
 			);
 			path = Document;
 			sourceTree = "<group>";
@@ -664,6 +667,7 @@
 				FABD165F25C8E918000294E3 /* AIETrainingAccessory.swift in Sources */,
 				FA02BF8D25B7AABA001EFBBA /* AIETranspose.swift in Sources */,
 				FA02BFA625B7AC13001EFBBA /* AIENormalizationTool.swift in Sources */,
+				FAF2664A2719051700EC0A19 /* AIEMessage.swift in Sources */,
 				FA02BFBA25B7AC66001EFBBA /* AIEInstanceNormalization.swift in Sources */,
 				FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */,
 				FA02BF9D25B7AAF6001EFBBA /* AIESplit.swift in Sources */,

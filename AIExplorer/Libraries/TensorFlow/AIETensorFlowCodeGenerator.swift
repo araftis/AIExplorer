@@ -255,7 +255,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         }
     }
 
-    open override func generate(to outputStream: OutputStream) throws {
+    public override func generate(to outputStream: OutputStream, accumulatingMessages message: inout [AIEMessage]) throws -> Void {
         var visited = Set<AIEGraphic>()
 
         try outputStream.write("# Look ma! We're generating code.\n")

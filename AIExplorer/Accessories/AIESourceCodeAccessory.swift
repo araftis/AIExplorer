@@ -80,98 +80,50 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         if let document = document as? AIEDocument {
             observationTokens.append(document.addObserver(self, forKeyPath: "codeDefinitions", options: [], block: { (document, key, change) in
                 AJRLog.debug(in: AIECodeGenerationDomain, "Code definitions changed.")
-                weakSelf?.generateCode()
             }))
-            print("block: \(observationTokens.last!)")
+            // These are probably all going to move onto the code definition.
             for codeDefinition in document.codeDefinitions {
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "name", options: [], block: { codeDefinition, key, change in
                     if let codeDefinition = codeDefinition as? AIECodeDefinition {
                         AJRLog.debug(in: AIECodeGenerationDomain, "Name changed: \(codeDefinition.name ?? "No Name")")
-                        weakSelf?.generateCode(for: codeDefinition)
                     }
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "language", options: [], block: { codeDefinition, key, change in
                     if let codeDefinition = codeDefinition as? AIECodeDefinition {
                         AJRLog.debug(in: AIECodeGenerationDomain, "Language changed: \(codeDefinition.language?.name ?? "No Language")")
-                        weakSelf?.generateCode(for: codeDefinition)
                     }
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "library", options: [], block: { codeDefinition, key, change in
                     if let codeDefinition = codeDefinition as? AIECodeDefinition {
                         AJRLog.debug(in: AIECodeGenerationDomain, "Library changed: \(codeDefinition.library?.name ?? "No Library")")
-                        weakSelf?.generateCode(for: codeDefinition)
                     }
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "role", options: [], block: { codeDefinition, key, change in
                     if let codeDefinition = codeDefinition as? AIECodeDefinition {
                         AJRLog.debug(in: AIECodeGenerationDomain, "Role changed: \(codeDefinition.inspectedRole)")
-                        weakSelf?.generateCode(for: codeDefinition)
                     }
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "outputURL", options: [], block: { codeDefinition, key, change in
                     if let codeDefinition = codeDefinition as? AIECodeDefinition {
                         AJRLog.debug(in: AIECodeGenerationDomain, "Output URL changed: \(codeDefinition.outputURL?.path ?? "No Output Path")")
-                        weakSelf?.generateCode(for: codeDefinition)
                     }
                 }))
             }
             observationTokens.append(document.addObserver(self, forKeyPath: "selectedCodeDefinition", options: [], block: { document, key, change in
                 AJRLog.debug(in: AIECodeGenerationDomain, "Selected definition changed.")
-                weakSelf?.generateCode()
             }))
         }
     }
 
     // MARK: - UI
 
-    open func write(code: String, to url: URL) throws -> Void {
-        let manager = FileManager.default
-
-        try manager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-        if let data = code.data(using: .utf8) {
-            try data.write(to: url, options: [.atomic])
-        } else {
-            throw AIESourceCodeGeneratorError.failedToWrite(message: "Couldn't convert source code to UTF-8")
-        }
-    }
-
-    open func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL) -> Void {
-        if let document = self.document as? AIEDocument {
-            for object in document.rootObjects {
-                if let generator = library.codeGenerator(for: language, root: object) {
-                    let outputStream = OutputStream.toMemory()
-                    outputStream.open()
-                    do {
-                        try generator.generate(to: outputStream)
-                    } catch let error as NSError {
-                        AJRLog.warning("Error generating code: \(error.localizedDescription)")
-                    }
-                    if let string = outputStream.dataAsString(using: .utf8) {
-                        sourceTextView.textStorage?.setAttributedString(NSAttributedString(string: string, attributes: [.font:NSFont.userFixedPitchFont(ofSize: 13.0)!]))
-                        do {
-                            try write(code: string, to: url)
-                        } catch {
-                            // TODO: This should present in the UI somehow.
-                            AJRLog.error("Failed to write code to \(url.path): \(error)")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    open func generateCode(for codeDefinition: AIECodeDefinition) -> Void {
-        if let library = codeDefinition.library,
-           let language = codeDefinition.language,
-           let url = codeDefinition.outputURL {
-            generateCode(for: library, language: language, to: url)
-        }
-    }
-    
+    /**
+     Generates code for every code definition in the current document. This can be a little heavy handed at times, but should always be fast enough that that doesn't matter. For example, if a code definition is added, this method might be called and new code will be generated for all definitions, not just the newly added one.
+     */
     open func generateCode() -> Void {
         if let document = self.document as? AIEDocument {
             for codeDefinition in document.codeDefinitions {
-                generateCode(for: codeDefinition)
+                codeDefinition.generateCode()
             }
         }
     }
@@ -179,8 +131,11 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     // MARK: - DrawGraphicObserver
 
     open func graphic(_ graphic: DrawGraphic, didEditKeys keys: Set<String>) {
-        print("change: \(graphic): \(keys)")
-        self.generateCode()
+        // We only need to generate code if the changed object was a neural network note.
+        if graphic is AIEGraphic {
+            print("change: \(graphic): \(keys)")
+            self.generateCode()
+        }
     }
     
 }

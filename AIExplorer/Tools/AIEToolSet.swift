@@ -98,8 +98,9 @@ open class AIEToolSet: DrawToolSet {
            let codeGenerator = library.codeGenerator(for: language, root: root) {
             let outputStream = OutputStream.toMemory()
             outputStream.open()
+            var messages = [AIEMessage]()
             do {
-                try codeGenerator.generate(to: outputStream)
+                try codeGenerator.generate(to: outputStream, accumulatingMessages: &messages)
             } catch let error as NSError {
                 AJRLog.warning("Error generating code: \(error.localizedDescription)")
             }

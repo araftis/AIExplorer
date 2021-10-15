@@ -12,7 +12,7 @@ import AJRFoundation
  Defines a relationship from document for a source code generator. The is basically on container the library, language, and output path which can then be used to instantiate an AIECodeGenerator. Documents can have multiple AIECode objects.
  */
 @objcMembers
-open class AIECodeDefinition: NSObject, AJRXMLCoding {
+open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
 
     public enum Role : CaseIterable {
         case deployment
@@ -55,11 +55,17 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
     open var language : AIELanguage?
     /** What type of code should be generated. */
     open var role : AIECodeDefinition.Role = .deploymentAndTraining
+    /** Keeps a back pointer to our document. */
+    open weak var document : AIEDocument? = nil
+
+    /** The generated code. This is simple a cache for display purposes, but it's possible that could be expanded in the future. It's never archived. **/
+    open var code : String?
 
     // MARK: - Creation
 
-    public override init() {
+    public init(in document: AIEDocument) {
         self.name = "Untitled";
+        self.document = document
     }
 
     // MARK: - XML Coding
@@ -144,5 +150,63 @@ open class AIECodeDefinition: NSObject, AJRXMLCoding {
         }
     }
     
+
+    // MARK: - Code Generation
+
+    // NOTE: I Think it makes a little more sense to have this code here, now, since we actually have a definition. This code was originally on the AIESourceCodeAccessory, which isn't bad, but doesn't seem quite a logical in a world with multiple source code definitions.
+
+    /**
+     Writes the string ot the URL.
+     */
+    internal func write(code: String, to url: URL) throws -> Void {
+        let manager = FileManager.default
+
+        try manager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+        if let data = code.data(using: .utf8) {
+            try data.write(to: url, options: [.atomic])
+        } else {
+            throw AIESourceCodeGeneratorError.failedToWrite(message: "Couldn't convert source code to UTF-8")
+        }
+    }
+
+    /**
+     Generates the source code and caches is on `code`. Also writes it to disk. This method is called by `generateCode()` once all nullable objects have been resolved, which is why it isn't public. The public API is to just call `generateCode()`.
+     */
+    internal func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL) -> Void {
+        if let document = self.document {
+            for object in document.rootObjects {
+                if let generator = library.codeGenerator(for: language, root: object) {
+                    let outputStream = OutputStream.toMemory()
+                    outputStream.open()
+                    var messages = [AIEMessage]()
+                    do {
+                        try generator.generate(to: outputStream, accumulatingMessages: &messages)
+                    } catch let error as NSError {
+                        AJRLog.warning("Error generating code: \(error.localizedDescription)")
+                    }
+                    if let string = outputStream.dataAsString(using: .utf8) {
+                        code = string
+                        do {
+                            try write(code: string, to: url)
+                        } catch {
+                            // TODO: This should present in the UI somehow.
+                            AJRLog.error("Failed to write code to \(url.path): \(error)")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     If the receiver is in a state that can validly generate code, this method will generate the code and write it to the outputURL. The generated code will be cached, for display convenience, on `code`.
+     */
+    open func generateCode() -> Void {
+        if let library = library,
+           let language = language,
+           let url = outputURL {
+            generateCode(for: library, language: language, to: url)
+        }
+    }
 
 }

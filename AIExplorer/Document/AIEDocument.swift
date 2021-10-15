@@ -88,19 +88,27 @@ open class AIEDocument: DrawDocument {
     // MARK: - Code
 
     open func createCodeDefintion() -> AIECodeDefinition {
-        let newCode = AIECodeDefinition()
+        let newCode = AIECodeDefinition(in: self)
 
         addCodeDefinition(newCode)
 
         return newCode
     }
 
-    open func addCodeDefinition(_ codeDefinition: AIECodeDefinition) -> Void {
+    open func addCodeDefinition(_ codeDefinition: AIECodeDefinition, at index: Int) -> Void {
         let index = aiStorage.codeDefinitions.count
         self.willChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
         aiStorage.codeDefinitions.append(codeDefinition)
         codeDefinition.name = aiStorage.codeDefinitions.nextTitle(forKey: "name", basename: "Untitled")
         self.didChange(.insertion, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+        addObject(toEditingContext: codeDefinition)
+        self.registerUndo(target: self) { target in
+            target.removeCodeDefinition(at: index)
+        }
+    }
+
+    open func addCodeDefinition(_ codeDefinition: AIECodeDefinition) -> Void {
+        self.addCodeDefinition(codeDefinition, at: codeDefinitions.count)
     }
 
     /**
@@ -108,6 +116,7 @@ open class AIEDocument: DrawDocument {
 
      - parameter index: The index of the code definition to remove.
      */
+    @discardableResult
     open func removeCodeDefinition(at index: Int) -> AIECodeDefinition? {
         if aiStorage.codeDefinitions[index] == selectedCodeDefinition {
             selectedCodeDefinition = nil
@@ -116,6 +125,10 @@ open class AIEDocument: DrawDocument {
         self.willChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
         aiStorage.codeDefinitions.remove(at: index)
         self.didChange(.removal, valuesAt: IndexSet(integer: index), forKey: "codeDefinitions")
+        removeObject(fromEditingContext: codeDefinition)
+        self.registerUndo(target: self) { target in
+            target.addCodeDefinition(codeDefinition, at: index)
+        }
         return codeDefinition
     }
 
@@ -124,6 +137,7 @@ open class AIEDocument: DrawDocument {
 
      - parameter codeDefiniton: The Code definition to remove.
      */
+    @discardableResult
     open func removeCodeDefinition(_ codeDefinition: AIECodeDefinition) -> AIECodeDefinition? {
         if let index = aiStorage.codeDefinitions.firstIndex(of: codeDefinition) {
             return removeCodeDefinition(at: index)
@@ -173,6 +187,72 @@ open class AIEDocument: DrawDocument {
             }
         }
         return rootObjects
+    }
+
+    // MARK: - Message Reporting
+
+    open var messages = [AIEMessage]()
+
+    open func clearMessages() -> Void {
+        messages.removeAll()
+        updateMessageDisplay()
+    }
+
+    open func addMessage(_ message: AIEMessage) -> Void {
+        let index = IndexSet(integer: messages.count)
+        self.willChange(.insertion, valuesAt: index, forKey: "messages")
+        messages.append(message)
+        self.didChange(.insertion, valuesAt: index, forKey: "messages")
+    }
+
+    open func removeMessage(_ message: AIEMessage) -> Void {
+        if let index = messages.index(ofObjectIdenticalTo: message) {
+            let indexSet = IndexSet(integer: index)
+            self.willChange(.removal, valuesAt: indexSet, forKey: "messages")
+            messages.remove(at: index)
+            self.didChange(.removal, valuesAt: indexSet, forKey: "messages")
+        }
+    }
+
+    open func replaceMessages(_ newMessages : [AIEMessage]) -> Void {
+        var addIndexes = IndexSet()
+        var insertIndex = messages.count
+        var messagesToAdd = [AIEMessage]()
+        for message in newMessages {
+            if !messages.contains(message) {
+                addIndexes.insert(insertIndex)
+                messagesToAdd.append(message)
+                insertIndex += 1
+            }
+        }
+        self.willChange(.insertion, valuesAt: addIndexes, forKey: "messages")
+        messages.append(contentsOf: messagesToAdd)
+        self.didChange(.insertion, valuesAt: addIndexes, forKey: "messages")
+
+        var removeIndexes = IndexSet()
+        var messagesToRemove = [AIEMessage]()
+        for message in messages {
+            if let index = newMessages.firstIndex(of: message) {
+                removeIndexes.insert(index)
+                messagesToRemove.append(message)
+            }
+        }
+        self.willChange(.removal, valuesAt: removeIndexes, forKey: "messages")
+        messages.remove(at: removeIndexes)
+        self.didChange(.removal, valuesAt: removeIndexes, forKey: "messages")
+    }
+
+    open func updateMessageDisplay() -> Void {
+    }
+
+    // MARK: - Object Edits
+
+    open override func editingContext(_ editingContext: AJREditingContext!, didObserveEditsForKeys keys: Set<AnyHashable>!, on object: Any!) {
+        if let object = object as? AIECodeDefinition {
+            object.generateCode()
+        } else {
+            super.editingContext(editingContext, didObserveEditsForKeys: keys, on: object)
+        }
     }
 
 }
