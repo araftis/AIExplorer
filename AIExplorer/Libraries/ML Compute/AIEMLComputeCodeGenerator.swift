@@ -34,4 +34,10 @@ import Cocoa
 @objcMembers
 open class AIEMLComputeCodeGenerator: AIECodeGenerator {
 
+    override open func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+        try outputStream.write("// This is where we'll generate some code, but for now, we're faking it.\n\n")
+        try outputStream.write("class <Class_name> {\n")
+        try outputStream.write("}\n")
+    }
+
 }

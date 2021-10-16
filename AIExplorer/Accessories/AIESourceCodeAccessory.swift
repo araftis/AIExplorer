@@ -52,8 +52,18 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     // MARK: - Properties
 
     @IBOutlet var sourceTextView : NSTextView!
+    @IBOutlet var nameLabel : NSTextField!
+    @IBOutlet var libraryLabel : NSTextField!
+    @IBOutlet var languageLabel : NSTextField!
+    @IBOutlet var roleLabel : NSTextField!
+    @IBOutlet var pathLabel : NSTextField!
 
     internal var observationTokens = [AJRInvalidation]()
+    
+    open var aiDocument : AIEDocument {
+        // This is harsh, but if we ever belong to a plain document, the world is pretty muc borked anyways.
+        return document as! AIEDocument
+    }
 
     deinit {
         observationTokens.invalidateObjects()
@@ -70,6 +80,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     open override func documentDidLoad(_ document: DrawDocument) {
         updateObservations()
         document.addGraphicObserver(self)
+        updateUI(for: aiDocument.selectedCodeDefinition)
     }
     
     open func updateObservations() -> Void {
@@ -84,33 +95,27 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
             // These are probably all going to move onto the code definition.
             for codeDefinition in document.codeDefinitions {
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "name", options: [], block: { codeDefinition, key, change in
-                    if let codeDefinition = codeDefinition as? AIECodeDefinition {
-                        AJRLog.debug(in: AIECodeGenerationDomain, "Name changed: \(codeDefinition.name ?? "No Name")")
-                    }
+                    weakSelf?.updateNameLabel(for: codeDefinition as? AIECodeDefinition)
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "language", options: [], block: { codeDefinition, key, change in
-                    if let codeDefinition = codeDefinition as? AIECodeDefinition {
-                        AJRLog.debug(in: AIECodeGenerationDomain, "Language changed: \(codeDefinition.language?.name ?? "No Language")")
-                    }
+                    weakSelf?.updateLanguageLabel(for: codeDefinition as? AIECodeDefinition)
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "library", options: [], block: { codeDefinition, key, change in
-                    if let codeDefinition = codeDefinition as? AIECodeDefinition {
-                        AJRLog.debug(in: AIECodeGenerationDomain, "Library changed: \(codeDefinition.library?.name ?? "No Library")")
-                    }
+                    weakSelf?.updateLibraryLabel(for: codeDefinition as? AIECodeDefinition)
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "role", options: [], block: { codeDefinition, key, change in
-                    if let codeDefinition = codeDefinition as? AIECodeDefinition {
-                        AJRLog.debug(in: AIECodeGenerationDomain, "Role changed: \(codeDefinition.inspectedRole)")
-                    }
+                    weakSelf?.updateRoleLabel(for: codeDefinition as? AIECodeDefinition)
                 }))
                 observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "outputURL", options: [], block: { codeDefinition, key, change in
-                    if let codeDefinition = codeDefinition as? AIECodeDefinition {
-                        AJRLog.debug(in: AIECodeGenerationDomain, "Output URL changed: \(codeDefinition.outputURL?.path ?? "No Output Path")")
-                    }
+                    weakSelf?.updatePathLabel(for: codeDefinition as? AIECodeDefinition)
+                }))
+                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "code", options: [], block: { codeDefinition, key, change in
+                    weakSelf?.updateCode(for: codeDefinition as? AIECodeDefinition)
                 }))
             }
             observationTokens.append(document.addObserver(self, forKeyPath: "selectedCodeDefinition", options: [], block: { document, key, change in
                 AJRLog.debug(in: AIECodeGenerationDomain, "Selected definition changed.")
+                weakSelf?.updateUI(for: weakSelf?.aiDocument.selectedCodeDefinition)
             }))
         }
     }
@@ -126,6 +131,75 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
                 codeDefinition.generateCode()
             }
         }
+    }
+    
+    open func update(field: NSTextField, value: String?, defaultValue: String, for codeDefinition: AIECodeDefinition?) -> Void {
+        if codeDefinition == aiDocument.selectedCodeDefinition {
+            if let value = value {
+                field.stringValue = value
+                field.textColor = .controlTextColor
+            } else {
+                field.stringValue = defaultValue
+                field.textColor = .disabledControlTextColor
+            }
+        } else if aiDocument.selectedCodeDefinition == nil {
+            field.stringValue = "No Selection"
+            field.textColor = .disabledControlTextColor
+        }
+    }
+    
+    open func updateNameLabel(for codeDefinition: AIECodeDefinition?) -> Void {
+        update(field: nameLabel, value: codeDefinition?.name, defaultValue: "No Name", for: codeDefinition)
+    }
+    
+    open func updateLibraryLabel(for codeDefinition: AIECodeDefinition?) -> Void {
+        update(field: libraryLabel, value: codeDefinition?.library?.name, defaultValue: "No Library", for: codeDefinition)
+    }
+    
+    open func updateLanguageLabel(for codeDefinition: AIECodeDefinition?) -> Void {
+        update(field: languageLabel, value: codeDefinition?.language?.name, defaultValue: "No Language", for: codeDefinition)
+    }
+    
+    open func updateRoleLabel(for codeDefinition: AIECodeDefinition?) -> Void {
+        if let role = codeDefinition?.role {
+            let roleString : String
+            switch role {
+            case .deployment:
+                roleString = "Deployment"
+            case .training:
+                roleString = "Training"
+            case .deploymentAndTraining:
+                roleString = "Both"
+            }
+            update(field: roleLabel, value: roleString, defaultValue: "", for: codeDefinition)
+        } else {
+            update(field: roleLabel, value: nil, defaultValue: "No Role", for: codeDefinition)
+        }
+    }
+    
+    open func updatePathLabel(for codeDefinition: AIECodeDefinition?) -> Void {
+        update(field: pathLabel, value: codeDefinition?.outputURL?.path, defaultValue: "No Path", for: codeDefinition)
+    }
+    
+    open func updateCode(for codeDefinition: AIECodeDefinition?) -> Void {
+        if codeDefinition == aiDocument.selectedCodeDefinition {
+            if let value = codeDefinition?.code {
+                sourceTextView.textStorage?.mutableString.setString(value)
+            } else {
+                sourceTextView.textStorage?.mutableString.setString("")
+            }
+        } else if aiDocument.selectedCodeDefinition == nil {
+            sourceTextView.textStorage?.mutableString.setString("")
+        }
+    }
+    
+    open func updateUI(for codeDefinition: AIECodeDefinition?) -> Void {
+        updateNameLabel(for: codeDefinition)
+        updateLibraryLabel(for: codeDefinition)
+        updateLanguageLabel(for: codeDefinition)
+        updateRoleLabel(for: codeDefinition)
+        updatePathLabel(for: codeDefinition)
+        updateCode(for: codeDefinition)
     }
 
     // MARK: - DrawGraphicObserver

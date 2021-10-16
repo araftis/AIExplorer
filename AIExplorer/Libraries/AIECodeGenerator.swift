@@ -56,7 +56,7 @@ open class AIECodeGenerator: NSObject {
 
      This method both accumulates errors into `messages` as well as throws. When overriding and implementing this method, you should use `messages` for errors, warning, and info (rarely) issues with the object model. For example, incorrectly initialized nodes in the neural network or nonsense connections between notes. On the other hand, you should throw an error when something critically bad happens, like failing to write to the output stream.
      */
-    public func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+    open func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
     }
 
 }

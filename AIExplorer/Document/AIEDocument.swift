@@ -75,6 +75,21 @@ open class AIEDocument: DrawDocument {
         identifiers.append(AJRInspectorIdentifier.aiDocument)
         return identifiers
     }
+    
+    open override var storage: DrawDocumentStorage {
+        get {
+            return super.storage
+        }
+        set {
+            super.storage = newValue
+            
+            // We need to make our code definitions points to us, as well as make sure they're in our editing context.
+            for codeDefinition in codeDefinitions {
+                codeDefinition.document = self
+                addObject(toEditingContext: codeDefinition)
+            }
+        }
+    }
 
     // MARK: - Inspection
 

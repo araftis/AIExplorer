@@ -31,7 +31,11 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     /* NOTE: All of these properties are nullable, but the object won't really be useable until they're defined. They're nullable in order to allow the user to populate them via the UI. */
 
     /** Defines a name. This is mostly useful for the user to track what they've created the code object for. */
-    open var name : String?
+    open var name : String? {
+        didSet {
+            scheduleCodeUpdate()
+        }
+    }
     /** The output path. */
     open var outputURL : URL? {
         willSet {
@@ -47,22 +51,49 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
                 }
             }
             self.didChangeValue(forKey: "outputURL")
+            scheduleCodeUpdate()
         }
     }
     /** The library to use. */
-    open var library : AIELibrary?
+    open var library : AIELibrary? {
+        didSet {
+            scheduleCodeUpdate()
+        }
+    }
     /** A language supported by library. */
-    open var language : AIELanguage?
+    open var language : AIELanguage? {
+        didSet {
+            scheduleCodeUpdate()
+        }
+    }
     /** What type of code should be generated. */
-    open var role : AIECodeDefinition.Role = .deploymentAndTraining
+    open var role : AIECodeDefinition.Role = .deploymentAndTraining {
+        didSet {
+            scheduleCodeUpdate()
+        }
+    }
     /** Keeps a back pointer to our document. */
     open weak var document : AIEDocument? = nil
 
-    /** The generated code. This is simple a cache for display purposes, but it's possible that could be expanded in the future. It's never archived. **/
-    open var code : String?
+    /** The generated code. This is simple a cache for display purposes, but it's possible that could be expanded in the future. It's never archived. */
+    open var code : String? {
+        willSet {
+            willChangeValue(forKey: "code")
+        }
+        didSet {
+            didChangeValue(forKey: "code")
+        }
+    }
 
     // MARK: - Creation
 
+    /**
+     This initialization is needed by XML unarchiving, and generally speaking, it's not the init you want to call.
+     */
+    public override init() {
+        self.name = "Untitled"
+    }
+    
     public init(in document: AIEDocument) {
         self.name = "Untitled";
         self.document = document
@@ -172,7 +203,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     /**
      Generates the source code and caches is on `code`. Also writes it to disk. This method is called by `generateCode()` once all nullable objects have been resolved, which is why it isn't public. The public API is to just call `generateCode()`.
      */
-    internal func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL) -> Void {
+    internal func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL?) -> Void {
         if let document = self.document {
             for object in document.rootObjects {
                 if let generator = library.codeGenerator(for: language, root: object) {
@@ -186,11 +217,13 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
                     }
                     if let string = outputStream.dataAsString(using: .utf8) {
                         code = string
-                        do {
-                            try write(code: string, to: url)
-                        } catch {
-                            // TODO: This should present in the UI somehow.
-                            AJRLog.error("Failed to write code to \(url.path): \(error)")
+                        if let url = url {
+                            do {
+                                try write(code: string, to: url)
+                            } catch {
+                                // TODO: This should present in the UI somehow.
+                                AJRLog.error("Failed to write code to \(url.path): \(error)")
+                            }
                         }
                     }
                 }
@@ -203,10 +236,28 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
      */
     open func generateCode() -> Void {
         if let library = library,
-           let language = language,
-           let url = outputURL {
-            generateCode(for: library, language: language, to: url)
+           let language = language {
+            generateCode(for: library, language: language, to: outputURL)
         }
+    }
+    
+    internal var updateTimer : Timer? = nil
+    
+    /**
+     Schedules that an update to the code probably needs to occur. This may seem strange, but it's quite likely that more than one property will change at a time. When that happens, we don't want to generate the code over and over again with each changing property. This allows us to just note that a change has occurred, and when that happens, we'll schedule ourself to update in the run loop when we return to it. In effect, we'll only update our code once.
+     */
+    open func scheduleCodeUpdate() -> Void {
+        if let timer = updateTimer {
+            timer.invalidate()
+            self.updateTimer = nil
+        }
+        // NOTE: We're not worried about a retain cycle here, because we're going to clean up as soon as we fire.
+        updateTimer = Timer(fire: Date(timeIntervalSinceNow: 0.0001), interval: 0.0, repeats: false, block: { timer in
+            self.generateCode()
+            self.updateTimer?.invalidate()
+            self.updateTimer = nil
+        })
+        RunLoop.current.add(updateTimer!, forMode: .default)
     }
 
 }
