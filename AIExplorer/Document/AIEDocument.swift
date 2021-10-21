@@ -82,7 +82,8 @@ open class AIEDocument: DrawDocument {
         }
         set {
             super.storage = newValue
-            
+            selectedCodeDefinition = (newValue as! AIEDocumentStorage).selectedCodeDefinition
+
             // We need to make our code definitions points to us, as well as make sure they're in our editing context.
             for codeDefinition in codeDefinitions {
                 codeDefinition.document = self
@@ -176,10 +177,26 @@ open class AIEDocument: DrawDocument {
             return aiStorage.selectedCodeDefinition
         }
         set {
-            willChangeValue(forKey: "selectedCodeDefinition")
-            aiStorage.selectedCodeDefinition = newValue
-            didChangeValue(forKey: "selectedCodeDefinition")
+            if newValue !== aiStorage.selectedCodeDefinition {
+                willChangeValue(forKey: "selectedCodeDefinition")
+                aiStorage.selectedCodeDefinition = newValue
+                didChangeValue(forKey: "selectedCodeDefinition")
+            }
         }
+//        get {
+//            return aiStorage.selectedCodeDefinition
+//        }
+//        willSet {
+//            willChangeValue(forKey: "selectedCodeDefinition")
+//        }
+//        set {
+//            willChangeValue(forKey: "selectedCodeDefinition")
+//            aiStorage.selectedCodeDefinition = newValue
+//            didChangeValue(forKey: "selectedCodeDefinition")
+//        }
+//        didSet {
+//            didChangeValue(forKey: "selectedCodeDefinition")
+//        }
     }
 
     // MARK: - AI Objects

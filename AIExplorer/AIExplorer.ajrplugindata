@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <plugindata owner="com.ajr.framework.AJRFoundation" version="1">
 
+    <!-- Defines the libraries support by the framework, as such, use this extension point to add a new library. -->
     <extension-point name="aie-library" class="AIExplorer.AIELibrary" registrySelector="registerLibrary:properties:">
         <attribute name="class" type="class" required="true" />
         <attribute name="name" type="string" required="true" />
@@ -8,6 +9,7 @@
         <attribute name="url" type="url" />
         <element name="code-generator" key="codeGenerators" type="array">
             <attribute name="class" type="class" required="true" />
+            <!-- The list of languages supported by the code generator. Note that order matters a little bit, as the first entry will be considered the language's primary language. -->
             <element name="language" key="languages" type="array" required="true">
                 <attribute name="identifier" type="string" required="true" />
                 <attribute name="name" type="string" required="true" />

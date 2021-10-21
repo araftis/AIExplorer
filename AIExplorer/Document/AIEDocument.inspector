@@ -6,14 +6,14 @@
                 <column type="string" valueKeyPath="name" editable="true" />
             </slice>
             <slice type="string" valueKeyPath="controller.selection.selectedCodeDefinition.name" label="Name" nullPlaceholder="No Name" />
-            <slice type="file" urlKeyPath="controller.selection.selectedCodeDefinition.outputURL" label="Full Path" editable="false" utisKeyPath="controller.selection.selectedCodeDefinition.language.fileUTIs" defaultsKey="codeGeneratorSavePanelPath" />
+            <slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.selectedCodeDefinition.library" />
+            <slice type="choice" valueType="object" label="Language" objectsKeyPath="controller.selection.selectedCodeDefinition.library.supportedLanguagesForCodeGeneration" valueKeyPath="controller.selection.selectedCodeDefinition.language" />
             <slice type="choice" style="popUp" label="Role" valueType="string" valueKeyPath="controller.selection.selectedCodeDefinition.inspectedRole">
                 <choice title="Both" value="Both" />
                 <choice title="Deployment" value="Deployment" />
                 <choice title="Training" value="Training" />
             </slice>
-            <slice type="choice" valueType="object" label="Library" objectsKeyPath="controller.selection.allLibraries" valueKeyPath="controller.selection.selectedCodeDefinition.library" />
-            <slice type="choice" valueType="object" label="Language" objectsKeyPath="controller.selection.selectedCodeDefinition.library.supportedLanguagesForCodeGeneration" valueKeyPath="controller.selection.selectedCodeDefinition.language" />
+            <slice type="file" urlKeyPath="controller.selection.selectedCodeDefinition.outputURL" label="Full Path" editable="false" utisKeyPath="controller.selection.selectedCodeDefinition.language.fileUTIs" defaultsKey="codeGeneratorSavePanelPath" />
         </group>
     </group>
 </inspector>

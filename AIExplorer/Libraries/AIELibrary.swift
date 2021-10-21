@@ -187,7 +187,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
 
     // The preferred language of the library. Not very smart right now.
     open var preferredLanguage : AIELanguage {
-        let language = supportedLanguagesForCodeGeneration.first
+        let language = codeGenerators.first?.languages.first
         assert(language != nil, "AIELibraries must support at least one code generation language.")
         return language!
     }
@@ -221,6 +221,10 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
         }
 
         return allLanguages.sorted()
+    }
+
+    open func supportsLanguageForCodeGeneration(_ language: AIELanguage) -> Bool {
+        return supportedLanguagesForCodeGeneration.contains(language)
     }
 
     internal struct CodeGenerator {

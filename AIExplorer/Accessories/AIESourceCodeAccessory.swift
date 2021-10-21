@@ -59,7 +59,8 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     @IBOutlet var pathLabel : NSTextField!
 
     internal var observationTokens = [AJRInvalidation]()
-    
+    internal var definitionObservationTokens = [AJRInvalidation]()
+
     open var aiDocument : AIEDocument {
         // This is harsh, but if we ever belong to a plain document, the world is pretty muc borked anyways.
         return document as! AIEDocument
@@ -82,37 +83,45 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         document.addGraphicObserver(self)
         updateUI(for: aiDocument.selectedCodeDefinition)
     }
+
+    open func updateDefinitionObservations() {
+        definitionObservationTokens.invalidateObjects()
+        definitionObservationTokens.removeAll()
+
+        weak var weakSelf = self
+        for codeDefinition in aiDocument.codeDefinitions {
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "name", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateNameLabel(for: codeDefinition as? AIECodeDefinition)
+            }))
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "language", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateLanguageLabel(for: codeDefinition as? AIECodeDefinition)
+            }))
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "library", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateLibraryLabel(for: codeDefinition as? AIECodeDefinition)
+            }))
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "role", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateRoleLabel(for: codeDefinition as? AIECodeDefinition)
+            }))
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "outputURL", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updatePathLabel(for: codeDefinition as? AIECodeDefinition)
+            }))
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "code", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateCode(for: codeDefinition as? AIECodeDefinition)
+            }))
+        }
+    }
     
     open func updateObservations() -> Void {
         observationTokens.invalidateObjects()
         observationTokens.removeAll()
         
-        weak var weakSelf = self
         if let document = document as? AIEDocument {
+            weak var weakSelf = self
             observationTokens.append(document.addObserver(self, forKeyPath: "codeDefinitions", options: [], block: { (document, key, change) in
                 AJRLog.debug(in: AIECodeGenerationDomain, "Code definitions changed.")
+                weakSelf?.updateDefinitionObservations()
             }))
-            // These are probably all going to move onto the code definition.
-            for codeDefinition in document.codeDefinitions {
-                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "name", options: [], block: { codeDefinition, key, change in
-                    weakSelf?.updateNameLabel(for: codeDefinition as? AIECodeDefinition)
-                }))
-                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "language", options: [], block: { codeDefinition, key, change in
-                    weakSelf?.updateLanguageLabel(for: codeDefinition as? AIECodeDefinition)
-                }))
-                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "library", options: [], block: { codeDefinition, key, change in
-                    weakSelf?.updateLibraryLabel(for: codeDefinition as? AIECodeDefinition)
-                }))
-                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "role", options: [], block: { codeDefinition, key, change in
-                    weakSelf?.updateRoleLabel(for: codeDefinition as? AIECodeDefinition)
-                }))
-                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "outputURL", options: [], block: { codeDefinition, key, change in
-                    weakSelf?.updatePathLabel(for: codeDefinition as? AIECodeDefinition)
-                }))
-                observationTokens.append(codeDefinition.addObserver(self, forKeyPath: "code", options: [], block: { codeDefinition, key, change in
-                    weakSelf?.updateCode(for: codeDefinition as? AIECodeDefinition)
-                }))
-            }
+            updateDefinitionObservations()
             observationTokens.append(document.addObserver(self, forKeyPath: "selectedCodeDefinition", options: [], block: { document, key, change in
                 AJRLog.debug(in: AIECodeGenerationDomain, "Selected definition changed.")
                 weakSelf?.updateUI(for: weakSelf?.aiDocument.selectedCodeDefinition)
@@ -211,5 +220,15 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
             self.generateCode()
         }
     }
-    
+
+    // MARK: - Testing
+
+    @IBAction func selected1(_ sender: Any?) -> Void {
+        aiDocument.selectedCodeDefinition = aiDocument.codeDefinitions[0]
+    }
+
+    @IBAction func selected2(_ sender: Any?) -> Void {
+        aiDocument.selectedCodeDefinition = aiDocument.codeDefinitions[1]
+    }
+
 }

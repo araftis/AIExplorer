@@ -37,14 +37,7 @@ open class AIEDocumentStorage: DrawDocumentStorage {
     // MARK: - Properties
 
     open var codeDefinitions = [AIECodeDefinition]()
-    open var selectedCodeDefinition : AIECodeDefinition? {
-        willSet {
-            print("selectedCodeDefinition willSet")
-        }
-        didSet {
-            print("selectedCodeDefinition didSet")
-        }
-    }
+    open var selectedCodeDefinition : AIECodeDefinition?
 
     // MARK: - Initialization
 

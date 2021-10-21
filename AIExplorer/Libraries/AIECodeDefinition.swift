@@ -32,7 +32,11 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
 
     /** Defines a name. This is mostly useful for the user to track what they've created the code object for. */
     open var name : String? {
+        willSet {
+            self.willChangeValue(forKey: "name")
+        }
         didSet {
+            self.didChangeValue(forKey: "name")
             scheduleCodeUpdate()
         }
     }
@@ -56,19 +60,44 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     }
     /** The library to use. */
     open var library : AIELibrary? {
+        willSet {
+            self.willChangeValue(forKey: "library")
+        }
         didSet {
+            self.didChangeValue(forKey: "library")
             scheduleCodeUpdate()
+//            if let language = language {
+//                if let library = library {
+//                    if !library.supportsLanguageForCodeGeneration(language) {
+//                        self.language = library.preferredLanguage
+//                    }
+//                } else {
+//                    self.language = nil
+//                }
+//            } else {
+//                if let library = library {
+//                    self.language = library.preferredLanguage
+//                }
+//            }
         }
     }
     /** A language supported by library. */
     open var language : AIELanguage? {
+        willSet {
+            self.willChangeValue(forKey: "language")
+        }
         didSet {
+            self.didChangeValue(forKey: "language")
             scheduleCodeUpdate()
         }
     }
     /** What type of code should be generated. */
     open var role : AIECodeDefinition.Role = .deploymentAndTraining {
+        willSet {
+            self.willChangeValue(forKey: "role")
+        }
         didSet {
+            self.didChangeValue(forKey: "role")
             scheduleCodeUpdate()
         }
     }
@@ -149,6 +178,11 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         coder.decodeString(forKey: "role") { value in
             self.role = Role(string: value) ?? .deploymentAndTraining
         }
+    }
+
+    public func finalizeXMLDecoding() throws -> Any {
+        print("<\(descriptionPrefix): \(name ?? "Untitled")>")
+        return self
     }
 
     // MARK: - Inspection
@@ -247,17 +281,17 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
      Schedules that an update to the code probably needs to occur. This may seem strange, but it's quite likely that more than one property will change at a time. When that happens, we don't want to generate the code over and over again with each changing property. This allows us to just note that a change has occurred, and when that happens, we'll schedule ourself to update in the run loop when we return to it. In effect, we'll only update our code once.
      */
     open func scheduleCodeUpdate() -> Void {
-        if let timer = updateTimer {
-            timer.invalidate()
-            self.updateTimer = nil
-        }
-        // NOTE: We're not worried about a retain cycle here, because we're going to clean up as soon as we fire.
-        updateTimer = Timer(fire: Date(timeIntervalSinceNow: 0.0001), interval: 0.0, repeats: false, block: { timer in
-            self.generateCode()
-            self.updateTimer?.invalidate()
-            self.updateTimer = nil
-        })
-        RunLoop.current.add(updateTimer!, forMode: .default)
+//        if let timer = updateTimer {
+//            timer.invalidate()
+//            self.updateTimer = nil
+//        }
+//        // NOTE: We're not worried about a retain cycle here, because we're going to clean up as soon as we fire.
+//        updateTimer = Timer(fire: Date(timeIntervalSinceNow: 0.0001), interval: 0.0, repeats: false, block: { timer in
+//            self.generateCode()
+//            self.updateTimer?.invalidate()
+//            self.updateTimer = nil
+//        })
+//        RunLoop.current.add(updateTimer!, forMode: .default)
     }
 
 }
