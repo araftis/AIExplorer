@@ -44,6 +44,10 @@ public extension AJRUserDefaultsKey {
         return AJRUserDefaultsKey<URL>.key(named: "outputSavePanelPath", defaultValue: AJRDocumentsDirectoryURL())
     }
 
+    static var sourceCodeFont : AJRUserDefaultsKey<NSFont> {
+        return AJRUserDefaultsKey<URL>.key(named: "AIESourceFont", defaultValue: NSFont.userFixedPitchFont(ofSize: NSFont.systemFontSize(for: .regular)))
+    }
+
 }
 
 @objcMembers
@@ -191,14 +195,17 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     }
     
     open func updateCode(for codeDefinition: AIECodeDefinition?) -> Void {
-        if codeDefinition == aiDocument.selectedCodeDefinition {
-            if let value = codeDefinition?.code {
-                sourceTextView.textStorage?.mutableString.setString(value)
-            } else {
-                sourceTextView.textStorage?.mutableString.setString("")
+        if let textStorage = sourceTextView.textStorage {
+            if codeDefinition == aiDocument.selectedCodeDefinition {
+                if let value = codeDefinition?.code {
+                    textStorage.mutableString.setString(value)
+                } else {
+                    textStorage.mutableString.setString("")
+                }
+            } else if aiDocument.selectedCodeDefinition == nil {
+                textStorage.mutableString.setString("")
             }
-        } else if aiDocument.selectedCodeDefinition == nil {
-            sourceTextView.textStorage?.mutableString.setString("")
+            textStorage.addAttribute(.font, value: UserDefaults[.sourceCodeFont]!, range: textStorage.mutableString.fullRange)
         }
     }
     
@@ -221,14 +228,12 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         }
     }
 
-    // MARK: - Testing
-
-    @IBAction func selected1(_ sender: Any?) -> Void {
-        aiDocument.selectedCodeDefinition = aiDocument.codeDefinitions[0]
-    }
-
-    @IBAction func selected2(_ sender: Any?) -> Void {
-        aiDocument.selectedCodeDefinition = aiDocument.codeDefinitions[1]
+    // MARK: - NSNibAwakening
+    
+    open override func awakeFromNib() -> Void {
+        if let storage = sourceTextView.textStorage {
+            storage.addAttribute(.font, value: UserDefaults[.sourceCodeFont]!, range: storage.mutableString.fullRange)
+        }
     }
 
 }
