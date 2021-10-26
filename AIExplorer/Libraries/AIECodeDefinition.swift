@@ -132,7 +132,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     // MARK: - XML Coding
 
     open override class var ajr_nameForXMLArchiving: String {
-        return "codeDefinition";
+        return "codeDefinition"
     }
 
     open func encode(with coder: AJRXMLCoder) {
@@ -282,17 +282,17 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
      Schedules that an update to the code probably needs to occur. This may seem strange, but it's quite likely that more than one property will change at a time. When that happens, we don't want to generate the code over and over again with each changing property. This allows us to just note that a change has occurred, and when that happens, we'll schedule ourself to update in the run loop when we return to it. In effect, we'll only update our code once.
      */
     open func scheduleCodeUpdate() -> Void {
-//        if let timer = updateTimer {
-//            timer.invalidate()
-//            self.updateTimer = nil
-//        }
-//        // NOTE: We're not worried about a retain cycle here, because we're going to clean up as soon as we fire.
-//        updateTimer = Timer(fire: Date(timeIntervalSinceNow: 0.0001), interval: 0.0, repeats: false, block: { timer in
-//            self.generateCode()
-//            self.updateTimer?.invalidate()
-//            self.updateTimer = nil
-//        })
-//        RunLoop.current.add(updateTimer!, forMode: .default)
+        if let timer = updateTimer {
+            timer.invalidate()
+            self.updateTimer = nil
+        }
+        // NOTE: We're not worried about a retain cycle here, because we're going to clean up as soon as we fire.
+        updateTimer = Timer(fire: Date(timeIntervalSinceNow: 0.0001), interval: 0.0, repeats: false, block: { timer in
+            self.generateCode()
+            self.updateTimer?.invalidate()
+            self.updateTimer = nil
+        })
+        RunLoop.current.add(updateTimer!, forMode: .default)
     }
 
 }
