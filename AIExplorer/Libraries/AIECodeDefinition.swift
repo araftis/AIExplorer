@@ -67,19 +67,19 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         didSet {
             self.didChangeValue(forKey: "library")
             scheduleCodeUpdate()
-//            if let language = language {
-//                if let library = library {
-//                    if !library.supportsLanguageForCodeGeneration(language) {
-//                        self.language = library.preferredLanguage
-//                    }
-//                } else {
-//                    self.language = nil
-//                }
-//            } else {
-//                if let library = library {
-//                    self.language = library.preferredLanguage
-//                }
-//            }
+            if let language = language {
+                if let library = library {
+                    if !library.supportsLanguageForCodeGeneration(language) {
+                        self.language = library.preferredLanguage
+                    }
+                } else {
+                    self.language = nil
+                }
+            } else {
+                if let library = library {
+                    self.language = library.preferredLanguage
+                }
+            }
         }
     }
     /** A language supported by library. */
@@ -104,6 +104,14 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     }
     /** Keeps a back pointer to our document. */
     open weak var document : AIEDocument? = nil
+    
+    open override func setValue(_ value: Any?, forKey key: String) {
+        if key == "library" {
+            library = value as? AIELibrary
+        } else {
+            super.setValue(value, forKey: key)
+        }
+    }
 
     /** The generated code. This is simple a cache for display purposes, but it's possible that could be expanded in the future. It's never archived. */
     open var code : String? {
