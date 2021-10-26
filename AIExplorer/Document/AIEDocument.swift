@@ -183,20 +183,17 @@ open class AIEDocument: DrawDocument {
                 didChangeValue(forKey: "selectedCodeDefinition")
             }
         }
-//        get {
-//            return aiStorage.selectedCodeDefinition
-//        }
-//        willSet {
-//            willChangeValue(forKey: "selectedCodeDefinition")
-//        }
-//        set {
-//            willChangeValue(forKey: "selectedCodeDefinition")
-//            aiStorage.selectedCodeDefinition = newValue
-//            didChangeValue(forKey: "selectedCodeDefinition")
-//        }
-//        didSet {
-//            didChangeValue(forKey: "selectedCodeDefinition")
-//        }
+    }
+    
+    /**
+     NOTE: This is a horrible hack. There's something going wrong with setValue(\_:forKey:) where where KVO tries to unregister for an observance twice, but only when the value is changed via setValue(\_:forKey:). That's wrong, in so many ways, but it's current what seems to be going on. It seems to be related, maybe, to some kind of optimazation that AppKit is doing along with something strange going on between the Obj-C and Swift bridge. This is probably worth a test case to reproduce (if I can), and filing with Apple.
+     */
+    open override func setValue(_ value: Any?, forKey key: String) {
+        if key == "selectedCodeDefinition" {
+            selectedCodeDefinition = value as? AIECodeDefinition
+        } else {
+            super.setValue(value, forKey: key)
+        }
     }
 
     // MARK: - AI Objects

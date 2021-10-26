@@ -14,7 +14,8 @@ import AJRFoundation
 @objcMembers
 open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
 
-    public enum Role : CaseIterable {
+    @objc
+    public enum Role : Int, CaseIterable {
         case deployment
         case training
         case deploymentAndTraining
