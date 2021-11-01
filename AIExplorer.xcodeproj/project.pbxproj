@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		210F8F8B2730A7F5004A939D /* AIEMessagesInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F892730A7F5004A939D /* AIEMessagesInspector.swift */; };
+		210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */; };
 		21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FCD9CA27067AD80049E558 /* AIETitle.swift */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
@@ -125,6 +127,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		210F8F892730A7F5004A939D /* AIEMessagesInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMessagesInspector.swift; sourceTree = "<group>"; };
+		210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEMessagesInspector.xib; sourceTree = "<group>"; };
 		21FCD9CA27067AD80049E558 /* AIETitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETitle.swift; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
@@ -485,6 +489,8 @@
 				FABD16A725CA59CB000294E3 /* AIEDocument.inspector */,
 				FABD16A325CA578C000294E3 /* AIEDocumentStorage.swift */,
 				FAF266492719051700EC0A19 /* AIEMessage.swift */,
+				210F8F892730A7F5004A939D /* AIEMessagesInspector.swift */,
+				210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */,
 			);
 			path = Document;
 			sourceTree = "<group>";
@@ -595,6 +601,7 @@
 				FA88826E25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib in Resources */,
 				25EC03B725DF0438008A4DE4 /* AIELSTM.inspector in Resources */,
 				25EC03AB25DE231C008A4DE4 /* AIEReshape.inspector in Resources */,
+				210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */,
 				25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */,
 				FA18B4D825AEA305000DEF0C /* AIExplorer.ajrplugindata in Resources */,
 				25EC039925D87D11008A4DE4 /* AIEUpsample.inspector in Resources */,
@@ -629,6 +636,7 @@
 				FABD166A25C8E947000294E3 /* AIETestingAccessory.swift in Sources */,
 				FA02BF5D25B78578001EFBBA /* AIEActivationTool.swift in Sources */,
 				FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */,
+				210F8F8B2730A7F5004A939D /* AIEMessagesInspector.swift in Sources */,
 				FA02BFB225B7AC4D001EFBBA /* AIEBatchNormalization.swift in Sources */,
 				FA02BF7825B7A7C6001EFBBA /* AIEMatrixMultiplication.swift in Sources */,
 				FA18B4DA25AEA305000DEF0C /* AIEFilter.swift in Sources */,

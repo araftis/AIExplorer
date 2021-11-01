@@ -132,4 +132,6 @@
     <ajr_inspector xml="AIESoftmax" identifier="aiSoftmax" />
     <ajr_inspector xml="AIEReduction" identifier="aiSoftmax" />
 
+    <draw-structure-inspector name="Messages" icon="inspectorMessages" id="messages" priority="3.0" inspectorClass="AIExplorer.AIEMessagesInspector" />
+
 </plugindata>

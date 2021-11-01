@@ -189,11 +189,6 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         }
     }
 
-    public func finalizeXMLDecoding() throws -> Any {
-        print("<\(descriptionPrefix): \(name ?? "Untitled")>")
-        return self
-    }
-
     // MARK: - Inspection
     
     // These methods are needed because Swift doesn't necessarily play well with UI in all cases.
