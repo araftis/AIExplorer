@@ -64,7 +64,9 @@ open class AIESoftmax: AIEGraphic {
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        return inspectorIdentifiers(including: [.aiSoftmax])
+        var supers = super.inspectorIdentifiers
+        supers.append(.aiSoftmax)
+        return supers
     }
 
     // MARK: - AJRXMLCoding

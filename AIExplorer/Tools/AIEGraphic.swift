@@ -105,14 +105,10 @@ open class AIEGraphic: DrawGraphic {
 
     // MARK: - AJRInspector
 
-    open func inspectorIdentifiers(including identifiers: [AJRInspectorIdentifier]) -> [AJRInspectorIdentifier] {
-        var supers = super.inspectorIdentifiers
-        supers.append(contentsOf: identifiers)
-        return supers
-    }
-    
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        return inspectorIdentifiers(including: [.aiGraphic])
+        var supers = super.inspectorIdentifiers
+        supers.append(.aiGraphic)
+        return supers
     }
 
     // MARK: - AJRXMLCoding
