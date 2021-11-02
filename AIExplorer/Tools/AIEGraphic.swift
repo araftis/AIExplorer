@@ -108,7 +108,7 @@ open class AIEGraphic: DrawGraphic {
     open func inspectorIdentifiers(including identifiers: [AJRInspectorIdentifier]) -> [AJRInspectorIdentifier] {
         var supers = super.inspectorIdentifiers
         supers.append(contentsOf: identifiers)
-        return identifiers
+        return supers
     }
     
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
