@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="Activation">
-        <group title="Dimentions">
-            <slice type="choice" style="segments" label="type" valueType="integer" valueKeyPath="controller.selection.type">
-                <choice title="relu" bundle="com.ajr.framework.Draw" value="0" />
-                <choice title="sigmoid" bundle="com.ajr.framework.Draw" value="1" />
-                <choice title="tanh" bundle="com.ajr.framework.Draw" value="2" />
+        <group title="Dimensions">
+            <slice type="choice" style="segments" label="Type" valueType="integer" valueKeyPath="controller.selection.type">
+                <choice title="ReLU" value="0" />
+                <choice title="Sigmoid" value="1" />
+                <choice title="Tanh" value="2" />
             </slice>
         </group>
     </group>

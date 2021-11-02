@@ -40,7 +40,9 @@ public extension AJRInspectorIdentifier {
 
 @objcMembers
 open class AIESoftmax: AIEGraphic {
+    
     // MARK: - Properties
+    
     open var axis : Int = -1
     
     // MARK: - Creation
@@ -62,9 +64,7 @@ open class AIESoftmax: AIEGraphic {
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiSoftmax)
-        return identifiers
+        return inspectorIdentifiers(including: [.aiSoftmax])
     }
 
     // MARK: - AJRXMLCoding

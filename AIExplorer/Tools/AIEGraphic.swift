@@ -70,14 +70,14 @@ open class AIEGraphic: DrawGraphic {
 
         style.alignment = .center;
 
-        attributes[.font] = NSFont.systemFont(ofSize: 11.0)
+        attributes[.font] = NSFont.systemFont(ofSize: 9.0)
         attributes[.paragraphStyle] = style
         attributes[.foregroundColor] = NSColor.black
 
         return attributes
     }
 
-    internal let cornerRadius : CGFloat = 15.0
+    internal let cornerRadius : CGFloat = 5.0
     
     open func updatePath() -> Void {
         path.removeAllPoints()
@@ -105,10 +105,14 @@ open class AIEGraphic: DrawGraphic {
 
     // MARK: - AJRInspector
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiGraphic)
+    open func inspectorIdentifiers(including identifiers: [AJRInspectorIdentifier]) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers
+        supers.append(contentsOf: identifiers)
         return identifiers
+    }
+    
+    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
+        return inspectorIdentifiers(including: [.aiGraphic])
     }
 
     // MARK: - AJRXMLCoding

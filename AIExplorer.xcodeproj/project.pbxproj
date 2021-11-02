@@ -253,10 +253,10 @@
 			isa = PBXGroup;
 			children = (
 				FA02BF4E25B78505001EFBBA /* AIEActivation.swift */,
+				25EC03A625DE02E6008A4DE4 /* AIEActivation.inspector */,
 				FA02BF5C25B78578001EFBBA /* AIEActivationTool.swift */,
 				FA02BF5425B7851C001EFBBA /* AIEMultiheadAttention.swift */,
 				FA02BF5825B78527001EFBBA /* AIESoftmax.swift */,
-				25EC03A625DE02E6008A4DE4 /* AIEActivation.inspector */,
 				25EC03BC25E26613008A4DE4 /* AIESoftmax.inspector */,
 			);
 			path = Activation;

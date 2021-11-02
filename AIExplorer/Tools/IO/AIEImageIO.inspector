@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="Image I/O">
-        <group title="Dimentions">
+        <group title="Dimensions">
             <slice type="integer" label="Size" subtitle="Width" valueKeyPath="controller.selection.width" />
             <slice type="integer" subtitle="Height" valueKeyPath="controller.selection.height" />
             <slice type="integer" label="Depth" valueKeyPath="controller.selection.depth" />

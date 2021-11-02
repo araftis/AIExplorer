@@ -43,7 +43,7 @@ open class AIETool: DrawTool {
             graphic.title = currentAction.title
             
             let stroke = DrawStroke(graphic: graphic)
-            stroke.width = 2.0;
+            stroke.width = 1.0;
             stroke.color = strokeColor(for: graphic)
             graphic.addAspect(stroke, with: DrawStroke.defaultPriority)
 
@@ -58,7 +58,7 @@ open class AIETool: DrawTool {
             graphic.title = "ERROR"
 
             let stroke = DrawStroke(graphic: graphic)
-            stroke.width = 2.0;
+            stroke.width = 1.0;
             stroke.color = strokeColor(for: graphic)
             graphic.addAspect(stroke, with: DrawStroke.defaultPriority)
 

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
-    <group title="Image I/O">
-        <group title="Dimentions">
-            <slice type="integer" label="Size" subtitle="Axis" valueKeyPath="controller.selection.axis" />
-        </group>
+    <group title="Softmax">
+        <slice type="integer" label="Size" subtitle="Axis" valueKeyPath="controller.selection.axis" />
     </group>
 </inspector>
 
