@@ -45,7 +45,7 @@ open class AIETitle: DrawText {
     // MARK: - AJRXMLCoding
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "title"
+        return "aieTitle"
     }
     
 }

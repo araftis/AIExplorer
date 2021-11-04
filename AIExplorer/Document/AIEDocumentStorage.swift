@@ -47,6 +47,8 @@ open class AIEDocumentStorage: DrawDocumentStorage {
 
     // MARK: - AJRXMLCoding
 
+    open override class var ajr_nameForXMLArchiving: String { return "aieDocument" }
+
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
         coder.encode(codeDefinitions, forKey: "codeDefinitions")
