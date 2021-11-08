@@ -3,6 +3,11 @@
     <group title="AI Object">
         <group title="Properties">
             <slice type="string" label="Title" valueKeyPath="controller.selection.title" />
+            <slice type="choice" style="popUp" label="Activity" valueType="string" valueKeyPath="controller.selection.activity">
+                <choice title="Any" value="0" />
+                <choice title="Deployment" value="1" />
+                <choice title="Training" value="2" />
+            </slice>
         </group>
     </group>
 </inspector>

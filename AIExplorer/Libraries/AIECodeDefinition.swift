@@ -15,16 +15,16 @@ import AJRFoundation
 open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
 
     @objc
-    public enum Role : Int, CaseIterable {
+    public enum Role : Int, AJRXMLEncodableEnum {
         case deployment
         case training
         case deploymentAndTraining
         
-        init?(string: String) {
-            if let found = Self.allCases.first(where: { string == "\($0)" }) {
-                self = found
-            } else {
-                return nil
+        public var description: String {
+            switch self {
+            case .deployment: return "deployment"
+            case .training: return "training"
+            case .deploymentAndTraining: return "deploymentAndTraining"
             }
         }
     }
@@ -157,7 +157,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             coder.encodeURLBookmark(url, forKey: "outputURL")
         }
         if role != .deploymentAndTraining {
-            coder.encode("\(role)", forKey: "role")
+            coder.encode(role, forKey: "role")
         }
     }
 
@@ -184,8 +184,8 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             self.outputURL = url
         }
         self.role = .deploymentAndTraining // Set to default, and then override if present.
-        coder.decodeString(forKey: "role") { value in
-            self.role = Role(string: value) ?? .deploymentAndTraining
+        coder.decodeEnumeration(forKey: "role") { (value: Role?) in
+            self.role = value ?? .deploymentAndTraining
         }
     }
 

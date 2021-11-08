@@ -39,6 +39,22 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIEGraphic: DrawGraphic {
 
+    @objc
+    public enum Activity : Int, AJRXMLEncodableEnum {
+
+        case any
+        case deployment
+        case training
+
+        public var description: String {
+            switch self {
+            case .any: return "any"
+            case .deployment: return "deployment"
+            case .training: return "training"
+            }
+        }
+    }
+
     private var _title : String?
     open var title: String {
         get {
@@ -55,6 +71,11 @@ open class AIEGraphic: DrawGraphic {
         set(newValue) {
             _title = newValue
         }
+    }
+
+    open var activity : Activity = .any {
+        willSet { willChangeValue(forKey: "activity") }
+        didSet { didChangeValue(forKey: "activity") }
     }
 
     public required override init() {
@@ -120,13 +141,16 @@ open class AIEGraphic: DrawGraphic {
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
         coder.encodeObjectIfNotNil(_title, forKey: "title")
+        if activity != .any {
+            coder.encode(activity, forKey: "activity")
+        }
     }
 
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
 
-        coder.decodeString(forKey: "title") { (value) in
-            self.title = value
+        coder.decodeEnumeration(forKey: "activity") { (value: Activity?) in
+            self.activity = value ?? .any
         }
     }
 
