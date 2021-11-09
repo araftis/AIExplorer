@@ -39,4 +39,8 @@ public enum AIELossTag : Int {
 @objcMembers
 open class AIELossTool: AIETool {
 
+    open override func fillColor(for graphic: AIEGraphic) -> NSColor {
+        return NSColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: 0.75)
+    }
+
 }
