@@ -3,14 +3,14 @@
     <group title="Loss">
         <group title="Type">
             <slice type="choice" style="popUp" label="Type" valueType="integer" valueKeyPath="controller.selection.loss_type">
-                <choice title="Binary Crossentropy" bundle="com.ajr.framework.Draw" value="0" />
-                <choice title="Categorical Crossentropy" bundle="com.ajr.framework.Draw" value="1" />
-                <choice title="Mean Square Error" bundle="com.ajr.framework.Draw" value="2" />
+                <choice title="Binary Crossentropy" value="0" />
+                <choice title="Categorical Crossentropy" value="1" />
+                <choice title="Mean Square Error" value="2" />
             </slice>
             <slice type="choice" style="popUp" label="Optimization" valueType="integer" valueKeyPath="controller.selection.optimization_type">
-                <choice title="SGD" bundle="com.ajr.framework.Draw" value="0" />
-                <choice title="ADAM" bundle="com.ajr.framework.Draw" value="1" />
-                <choice title="RMS Prop" bundle="com.ajr.framework.Draw" value="2" />
+                <choice title="SGD" value="0" />
+                <choice title="ADAM" value="1" />
+                <choice title="RMS Prop" value="2" />
             </slice>
             <slice type="float" subtitle="Learning Rate" valueKeyPath="controller.selection.learning_rate" />
 
