@@ -31,6 +31,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import AJRFoundation
 import Draw
+import Foundation
 
 public extension AJRInspectorIdentifier {
     static var aiGraphic = AJRInspectorIdentifier("aiGraphic")
@@ -69,7 +70,12 @@ open class AIEGraphic: DrawGraphic {
             return _title!
         }
         set(newValue) {
+            willChangeValue(forKey: "title")
             _title = newValue
+            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? AIETitle {
+                aspect.attributedString = NSAttributedString(string: newValue, attributes: Self.defaultTextAttributes)
+            }
+            didChangeValue(forKey: "title")
         }
     }
 
