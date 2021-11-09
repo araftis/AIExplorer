@@ -63,7 +63,7 @@ open class AIEImageIO: AIEGraphic {
 
     // MARK: - AJREditableObject
 
-    open override class func populateProperties(toObserve propertiesSet: NSMutableSet!) {
+    open override class func populateProperties(toObserve propertiesSet: NSMutableSet) {
         propertiesSet.add("width")
         propertiesSet.add("height")
         propertiesSet.add("depth")

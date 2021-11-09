@@ -297,5 +297,16 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         })
         RunLoop.current.add(updateTimer!, forMode: .default)
     }
+    
+    // MARK: - AJREditableObject
+    
+    open override class var propertiesToIgnore: Set<String>? {
+        if var ignore = super.propertiesToIgnore {
+            ignore.insert("code")
+            return ignore
+        } else {
+            return Set(["code"])
+        }
+    }
 
 }
