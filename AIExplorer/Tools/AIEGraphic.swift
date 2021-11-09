@@ -56,22 +56,15 @@ open class AIEGraphic: DrawGraphic {
         }
     }
 
-    private var _title : String?
     open var title: String {
         get {
-            if _title == nil {
-                if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? DrawText {
-                    _title = aspect.attributedString.string
-                }
+            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? DrawText {
+                return aspect.attributedString.string
             }
-            if _title == nil {
-                _title = "No Title"
-            }
-            return _title!
+            return "No Title"
         }
         set(newValue) {
             willChangeValue(forKey: "title")
-            _title = newValue
             if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? AIETitle {
                 aspect.attributedString = NSAttributedString(string: newValue, attributes: Self.defaultTextAttributes)
             }
@@ -146,7 +139,6 @@ open class AIEGraphic: DrawGraphic {
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
-        coder.encodeObjectIfNotNil(_title, forKey: "title")
         if activity != .any {
             coder.encode(activity, forKey: "activity")
         }
