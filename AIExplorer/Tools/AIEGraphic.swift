@@ -77,6 +77,58 @@ open class AIEGraphic: DrawGraphic {
         didSet { didChangeValue(forKey: "activity") }
     }
 
+    open class var baseVariableName : String {
+        return AJRVariableNameFromClass(Self.self)
+    }
+
+    /// Mostly a convenience for inspection.
+    open var baseVariableName : String {
+        return Self.baseVariableName
+    }
+
+    open var generatedVariableName : String {
+        // TODO: This is quite wrong, but a decent placeholder for the moment. What this needs to do is walk the graph we belong to, generating a unique variable index.
+        return Self.baseVariableName
+    }
+
+    private func validateVariableName(_ name: String) -> String? {
+        return name
+    }
+
+    private var _variableName : String?
+    open var variableName : String! {
+        get {
+            return _variableName ?? generatedVariableName
+        }
+        set {
+            willChangeValue(forKey: "variableName")
+            if newValue.isEmpty {
+                _variableName = nil
+            } else {
+                _variableName = validateVariableName(newValue)
+            }
+            didChangeValue(forKey: "variableName")
+        }
+    }
+
+    /// Used by the inspector, as this can actually be nil, which we want, but only in the inspector
+    open var inspectedVariableName : String? {
+        get {
+            return _variableName
+        }
+        set {
+            if let newValue = newValue {
+                if newValue.isEmpty {
+                    _variableName = nil
+                } else {
+                    _variableName = validateVariableName(newValue)
+                }
+            } else {
+                _variableName = nil
+            }
+        }
+    }
+
     public required override init() {
         super.init()
     }
@@ -139,6 +191,9 @@ open class AIEGraphic: DrawGraphic {
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
+        if let variableName = _variableName {
+            coder.encode(variableName, forKey: "variableName")
+        }
         if activity != .any {
             coder.encode(activity, forKey: "activity")
         }
@@ -149,6 +204,10 @@ open class AIEGraphic: DrawGraphic {
 
         coder.decodeEnumeration(forKey: "activity") { (value: Activity?) in
             self.activity = value ?? .any
+        }
+        coder.decodeString(forKey: "variableName") { name in
+            // We assign directly into _variableName, because variable is "nil-resettable", so just to be safe, we by-pass the additional logic of that.
+            self._variableName = name
         }
     }
 
