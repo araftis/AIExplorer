@@ -8,7 +8,7 @@
                 <choice title="Deployment" value="1" />
                 <choice title="Training" value="2" />
             </slice>
-            <slice type="string" label="Variable Name" valueKeyPath="controller.selection.inspectedVariableName" nullPlaceholderKeyPath="controller.selection.baseVariableName" />
+            <slice type="string" label="Variable Name" valueKeyPath="controller.selection.inspectedVariableName" nullPlaceholderKeyPath="controller.selection.generatedVariableName" />
         </group>
     </group>
 </inspector>

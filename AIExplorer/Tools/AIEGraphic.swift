@@ -86,9 +86,17 @@ open class AIEGraphic: DrawGraphic {
         return Self.baseVariableName
     }
 
+    open class func keyPathsForValuesAffectingGeneratedVariableName() -> Set<String> {
+        return ["graphIndex", "groupIndex"]
+    }
+    
     open var generatedVariableName : String {
         // TODO: This is quite wrong, but a decent placeholder for the moment. What this needs to do is walk the graph we belong to, generating a unique variable index.
-        return Self.baseVariableName
+        if groupIndex != 0 {
+            return Self.baseVariableName + String(describing: groupIndex)
+        } else {
+            return Self.baseVariableName
+        }
     }
 
     private func validateVariableName(_ name: String) -> String? {
@@ -128,6 +136,20 @@ open class AIEGraphic: DrawGraphic {
             }
         }
     }
+    
+    open var groupIndex : Int = 0 {
+        willSet { willChangeValue(forKey: "groupIndex") }
+        didSet { didChangeValue(forKey: "groupIndex") }
+    }
+    
+    open var graphIndex : Int = 0 {
+        willSet { willChangeValue(forKey: "graphIndex") }
+        didSet { didChangeValue(forKey: "graphIndex") }
+    }
+
+    public var aieDocument : AIEDocument? { return document as? AIEDocument }
+    
+    // MARK: - Creation
 
     public required override init() {
         super.init()
@@ -137,6 +159,8 @@ open class AIEGraphic: DrawGraphic {
         super.init(frame: frame)
     }
 
+    // MARK: - Default Values
+    
     open class var defaultTextAttributes : [NSAttributedString.Key:Any] {
         var attributes = [NSAttributedString.Key:Any]()
         let style : NSMutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
@@ -151,6 +175,8 @@ open class AIEGraphic: DrawGraphic {
     }
 
     internal let cornerRadius : CGFloat = 5.0
+    
+    // MARK: - DrawGraphic
     
     open func updatePath() -> Void {
         path.removeAllPoints()
@@ -176,6 +202,18 @@ open class AIEGraphic: DrawGraphic {
         }
     }
 
+    /// Overriden to re-compute the graph locations when the relationships on the node change.
+    open override func add(toRelatedGraphics graphic: DrawGraphic) {
+        super.add(toRelatedGraphics: graphic)
+        computeGraphLocations()
+    }
+    
+    /// Overriden to re-compute the graph locations when the relationships on the node change.
+    open override func remove(fromRelatedGraphics graphic: DrawGraphic) {
+        super.remove(fromRelatedGraphics: graphic)
+        computeGraphLocations()
+    }
+    
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
@@ -277,6 +315,33 @@ open class AIEGraphic: DrawGraphic {
             }
         }
         return destinationObjects
+    }
+    
+    internal func traverse(graph: AIEGraphic, visited: inout Set<AIEGraphic>, counts: inout AJRCountedSet<String>) -> Void {
+        if !visited.contains(graph) {
+            // Note that we've visited this node.
+            visited.insert(graph)
+            // Increment our count by adding the baseVariableName to the counted set.
+            counts.insert(graph.baseVariableName)
+            // Update the graphIndex and groupIndex on the node. NOTE: because we just inserted into the set, it's safe to force unwrap the call to counts.count(for:)
+            graph.graphIndex = counts.countForAll
+            graph.groupIndex = counts.count(for: graph.baseVariableName)!
+            // Finally, for each node graph visits, traverse.
+            for child in graph.destinationObjects {
+                traverse(graph: child, visited: &visited, counts: &counts)
+            }
+        }
+    }
+    
+    open func computeGraphLocations() -> Void {
+        if let document = aieDocument {
+            // Use this at the top, as it's possible the document will find two root objects that share siblings
+            var visited = Set<AIEGraphic>()
+            var counts = AJRCountedSet<String>()
+            for root in document.rootObjects {
+                traverse(graph: root, visited: &visited, counts: &counts)
+            }
+        }
     }
 
 }

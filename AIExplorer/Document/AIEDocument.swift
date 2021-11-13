@@ -89,6 +89,9 @@ open class AIEDocument: DrawDocument {
                 codeDefinition.document = self
                 addObject(toEditingContext: codeDefinition)
             }
+            
+            // If we have root objects, have them compute their offsets within the graph.
+            self.rootObjects.first?.computeGraphLocations()
         }
     }
 
