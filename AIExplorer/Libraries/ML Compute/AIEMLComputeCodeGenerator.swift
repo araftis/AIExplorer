@@ -35,9 +35,19 @@ import Cocoa
 open class AIEMLComputeCodeGenerator: AIECodeGenerator {
 
     override open func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
-        try outputStream.write("// This is where we'll generate some code, but for now, we're faking it.\n\n")
-        try outputStream.write("class <Class_name> {\n")
-        try outputStream.write("}\n")
+        var childGenerator : AIECodeGenerator? = nil
+        
+        if language.identifier == "obj-c" {
+            childGenerator = AIEMLComputeObjCGenerator(info: info, for: language, root: root)
+        } else if language.identifier == "swift" {
+            childGenerator = AIEMLComputeSwiftGenerator(info: info, for: language, root: root)
+        } else {
+            messages.append(AIEMessage(type: .error, message: "Invalid language: \(language.name)", on: root))
+        }
+        
+        if let childGenerator = childGenerator {
+            try childGenerator.generate(to: outputStream, accumulatingMessages: &messages)
+        }
     }
 
 }

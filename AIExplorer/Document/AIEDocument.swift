@@ -188,6 +188,17 @@ open class AIEDocument: DrawDocument {
         }
     }
     
+    /// Defines the "default" code name, where the code name is a class name, function name, or other name as needed by the code generators. The default is simple the document name, with generally non-viable characters removed.
+    open var defaultCodeName : String {
+        if let url = fileURL {
+            var name = url.deletingPathExtension().lastPathComponent
+            name = name.stringContainingOnlyCharacters(in: NSCharacterSet.ajr_swiftIdentifier())
+            return name
+        } else {
+            return "Unknown"
+        }
+    }
+    
     /**
      NOTE: This is a horrible hack. There's something going wrong with setValue(\_:forKey:) where where KVO tries to unregister for an observance twice, but only when the value is changed via setValue(\_:forKey:). That's wrong, in so many ways, but it's current what seems to be going on. It seems to be related, maybe, to some kind of optimazation that AppKit is doing along with something strange going on between the Obj-C and Swift bridge. This is probably worth a test case to reproduce (if I can), and filing with Apple.
      */
@@ -235,6 +246,13 @@ open class AIEDocument: DrawDocument {
         self.willChange(.insertion, valuesAt: index, forKey: "messages")
         messages.append(message)
         self.didChange(.insertion, valuesAt: index, forKey: "messages")
+    }
+
+    open func addMessages(_ messages: [AIEMessage]) -> Void {
+        let indexes = IndexSet(integersIn: self.messages.count ..< (self.messages.count + messages.count))
+        self.willChange(.insertion, valuesAt: indexes, forKey: "messages")
+        self.messages.append(contentsOf: messages)
+        self.didChange(.insertion, valuesAt: indexes, forKey: "messages")
     }
 
     open func removeMessage(_ message: AIEMessage) -> Void {

@@ -260,10 +260,10 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
     /**
      A code generator for a specific language.
      */
-    open func codeGenerator(for language: AIELanguage, root: AIEGraphic) -> AIECodeGenerator? {
+    open func codeGenerator(info: [String:Any], for language: AIELanguage, root: AIEGraphic) -> AIECodeGenerator? {
         for codeGenerator in codeGenerators {
             if codeGenerator.languages.contains(language) {
-                return codeGenerator.generatorClass.init(for: language, root: root)
+                return codeGenerator.generatorClass.init(info: info, for: language, root: root)
             }
         }
         return nil

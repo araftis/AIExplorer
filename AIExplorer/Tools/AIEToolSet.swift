@@ -95,7 +95,7 @@ open class AIEToolSet: DrawToolSet {
         if let root = root,
            let library = AIELibrary.library(for: .tensorflow),
            let language = library.language(for: "python"),
-           let codeGenerator = library.codeGenerator(for: language, root: root) {
+           let codeGenerator = library.codeGenerator(info: [:], for: language, root: root) {
             let outputStream = OutputStream.toMemory()
             outputStream.open()
             var messages = [AIEMessage]()

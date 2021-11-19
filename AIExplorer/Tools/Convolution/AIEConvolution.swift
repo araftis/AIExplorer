@@ -43,6 +43,7 @@ open class AIEConvolution: AIEGraphic {
     open var height : Int = 0
     open var depth : Int = 0
     open var step : Int = 0
+    
     // MARK: - Creation
 
     public convenience init(width: Int, height: Int, depth: Int, step : Int) {

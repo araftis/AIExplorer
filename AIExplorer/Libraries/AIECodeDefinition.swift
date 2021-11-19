@@ -59,6 +59,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             scheduleCodeUpdate()
         }
     }
+    
     /** The library to use. */
     open var library : AIELibrary? {
         willSet {
@@ -92,7 +93,8 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             scheduleCodeUpdate()
         }
     }
-    /** What type of code should be generated. */
+    
+    /// What type of code should be generated.
     open var role : AIECodeDefinition.Role = .deploymentAndTraining {
         willSet {
             self.willChangeValue(forKey: "role")
@@ -102,7 +104,18 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             scheduleCodeUpdate()
         }
     }
-    /** Keeps a back pointer to our document. */
+    
+    /// Tracks a name for the code definition. This may be a class name, function name, or something else similar, as required by the code generator.
+    open var codeName : String? {
+        willSet {
+            willChangeValue(forKey: "codeName")
+        }
+        didSet {
+            willChangeValue(forKey: "codeName")
+        }
+    }
+    
+    /// Keeps a back pointer to our document.
     open weak var document : AIEDocument? = nil
     
     open override func setValue(_ value: Any?, forKey key: String) {
@@ -159,6 +172,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         if role != .deploymentAndTraining {
             coder.encode(role, forKey: "role")
         }
+        if let codeName = codeName {
+            coder.encode(codeName, forKey: "codeName")
+        }
     }
 
     open func decode(with coder: AJRXMLCoder) {
@@ -186,6 +202,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         self.role = .deploymentAndTraining // Set to default, and then override if present.
         coder.decodeEnumeration(forKey: "role") { (value: Role?) in
             self.role = value ?? .deploymentAndTraining
+        }
+        coder.decodeString(forKey: "codeName") { value in
+            self.codeName = value
         }
     }
 
@@ -243,13 +262,18 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
      */
     internal func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL?) -> Void {
         if let document = self.document {
+            document.clearMessages()
             for object in document.rootObjects {
-                if let generator = library.codeGenerator(for: language, root: object) {
+                var info = [String:Any]()
+                info[.codeName] = codeName ?? document.defaultCodeName
+                info[.url] = outputURL
+                if let generator = library.codeGenerator(info: info, for: language, root: object) {
                     let outputStream = OutputStream.toMemory()
                     outputStream.open()
                     var messages = [AIEMessage]()
                     do {
                         try generator.generate(to: outputStream, accumulatingMessages: &messages)
+                        document.addMessages(messages)
                     } catch let error as NSError {
                         AJRLog.warning("Error generating code: \(error.localizedDescription)")
                     }

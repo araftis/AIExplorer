@@ -9,7 +9,13 @@ import Cocoa
 import AJRFoundation
 import Draw
 
-public typealias AIEMessageObject = AJRXMLCoding & NSObject
+@objc
+public protocol AIEMessageObject : AJRXMLCoding {
+    
+    var messagesTitle : String { get }
+    var messagesImage : NSImage? { get }
+
+}
 
 /**
  Defines a "message" to the user, whether that's an error, warning, or info.
@@ -65,7 +71,7 @@ open class AIEMessage: NSObject, AJRXMLCoding {
         if let object = object as? AIEMessage {
             return (message == object.message
                     && type == object.type
-                    && object == object.object)
+                    && object === object.object)
         }
         return false
     }

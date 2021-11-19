@@ -38,7 +38,7 @@ public extension AJRInspectorIdentifier {
 }
 
 @objcMembers
-open class AIEGraphic: DrawGraphic {
+open class AIEGraphic: DrawGraphic, AIEMessageObject {
 
     @objc
     public enum Activity : Int, AJRXMLEncodableEnum {
@@ -70,6 +70,23 @@ open class AIEGraphic: DrawGraphic {
             }
             didChangeValue(forKey: "title")
         }
+    }
+    
+    open var messagesTitle: String {
+        return title
+    }
+    
+    open var messagesImage: NSImage? {
+        if let toolSets = DrawToolSet(forIdentifier: .neuralNet) {
+            for tool in toolSets.tools {
+                for action in tool.actions {
+                    if action.graphicClass == Self.self {
+                        return action.icon
+                    }
+                }
+            }
+        }
+        return nil
     }
 
     open var activity : Activity = .any {
@@ -344,4 +361,87 @@ open class AIEGraphic: DrawGraphic {
         }
     }
 
+}
+
+// MARK: - Iteration
+
+extension AIEGraphic : Sequence {
+    
+    public func makeIterator() -> some IteratorProtocol {
+        return AIEGraphicIterator<Int>(root: self, userData: nil)
+    }
+    
+    public func makeIterator<UserData>(userData: UserData) -> some IteratorProtocol {
+        return AIEGraphicIterator(root: self, userData: userData)
+    }
+    
+}
+
+open class AIEGraphicIterator<UserData> : IteratorProtocol {
+
+    struct StackElement {
+        var graphic : AIEGraphic
+        var index : Int = 0
+        
+        init(graphic: AIEGraphic) {
+            self.graphic = graphic
+        }
+        
+        mutating func next() -> AIEGraphic? {
+            if index < graphic.destinationObjects.count {
+                let object = graphic.destinationObjects[index]
+                index += 1
+                return object
+            }
+            return nil
+        }
+        
+    }
+    
+    public typealias Element = AIEGraphic
+    
+    var root : AIEGraphic? = nil
+    var stack = [StackElement]()
+    var visited = Set<AIEGraphic>()
+    var userData : UserData?
+    
+    init(root: AIEGraphic, userData: UserData?) {
+        self.root = root
+        self.userData = userData
+    }
+
+    public func next() -> AIEGraphic? {
+        if let root = root {
+            // When root is != nil, then we push it onto the stack and return it.
+            stack.append(StackElement(graphic: root))
+            // And then set root to nil, so we'll know when to stop.
+            self.root = nil
+            // And add it to visited
+            visited.insert(root)
+            return root
+        } else if stack.count > 0 {
+            let lastIndex = stack.count - 1
+            if let next = stack[lastIndex].next() {
+                // First, make sure we haven't visited the node.
+                if !visited.contains(next) {
+                    // We haven't visited it, so add it to visited.
+                    visited.insert(next)
+                    // We got a next, so push it onto the stack
+                    stack.append(StackElement(graphic: next))
+                    // And return it.
+                    return next
+                } else {
+                    // We have visited it before, so get the next object.
+                    return self.next()
+                }
+            } else {
+                // OK, the stack didn't return next, so pop it
+                stack.removeLast()
+                // And call ourself to get the next possible object.
+                return self.next()
+            }
+        }
+        return nil
+    }
+    
 }
