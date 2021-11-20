@@ -51,6 +51,9 @@ open class AIEMessagesInspector: DrawStructureInspector, NSOutlineViewDataSource
     }
     
     open func messagesDidChange() -> Void {
+        var infoCount = 0
+        var warningCount = 0
+        var errorCount = 0
         if let document = document as? AIEDocument {
             let messages = document.messages
             orderedMessages.removeAll()
@@ -65,6 +68,14 @@ open class AIEMessagesInspector: DrawStructureInspector, NSOutlineViewDataSource
                     bucket?.append(message)
                     groupedMessages[object as! AnyHashable] = bucket
                 }
+                switch message.type {
+                case .info:
+                    infoCount += 1
+                case .warning:
+                    warningCount += 1
+                case .error:
+                    errorCount += 1
+                }
             }
             if groupedMessages.count > 0 {
                 tabView.selectTabViewItem(at: 1)
@@ -73,8 +84,19 @@ open class AIEMessagesInspector: DrawStructureInspector, NSOutlineViewDataSource
                     messagesTable.expandItem(object)
                 }
             }
+            // Now, show an appropriate badge for "worse" type.
+            if errorCount > 0 {
+                badge = AJRImages.image(named: "AJRBadgeErrorMini", in: AJRInterfaceBundle())
+            } else if warningCount > 0 {
+                badge = AJRImages.image(named: "AJRBadgeWarningMini", in: AJRInterfaceBundle())
+            } else if infoCount > 0 {
+                badge = AJRImages.image(named: "AJRBadgeInfoMini", in: AJRInterfaceBundle())
+            } else {
+                badge = nil
+            }
         } else {
             tabView.selectTabViewItem(at: 0)
+            badge = nil
         }
     }
     

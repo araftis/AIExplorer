@@ -39,6 +39,15 @@ public extension AJRInspectorIdentifier {
 
 @objcMembers
 open class AIEGraphic: DrawGraphic, AIEMessageObject {
+    
+    open override class var propertiesToIgnore: Set<String>? {
+        if var properties = super.propertiesToIgnore {
+            properties.insert("graphIndex")
+            properties.insert("groupIndex")
+            return properties
+        }
+        return nil
+    }
 
     @objc
     public enum Activity : Int, AJRXMLEncodableEnum {
