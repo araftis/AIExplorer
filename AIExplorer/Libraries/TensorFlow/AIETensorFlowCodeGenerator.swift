@@ -265,7 +265,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         
         //start python code
         try outputStream.write("model = tf.keras.Sequental()")
-        try generateCode(for: root, visited: &visited, to: outputStream)
+        try generateCode(for: roots[0], visited: &visited, to: outputStream)
         
         
         try outputStream.write("\n# Code generation complete.\n")

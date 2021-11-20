@@ -31,10 +31,12 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Cocoa
 
-class AIETextIO: AIEGraphic {
+class AIETextIO: AIEIO {
 
     open class override var ajr_nameForXMLArchiving: String {
         return "text-io"
     }
+
+    open override var type : AIEIO.Kind { return .text }
 
 }

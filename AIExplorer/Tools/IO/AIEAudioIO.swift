@@ -31,10 +31,11 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Draw
 
-open class AIEAudioIO: AIEGraphic {
+open class AIEAudioIO: AIEIO {
 
     open class override var ajr_nameForXMLArchiving: String {
         return "audio-io"
     }
 
+    open override var type : AIEIO.Kind { return .audio }
 }

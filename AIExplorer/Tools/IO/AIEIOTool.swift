@@ -31,13 +31,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Draw
 
-public enum AIEIOTag : Int {
-    case image = 0
-    case audio = 1
-    case text = 2
-    case knowledgeGraph = 3
-}
-
 @objcMembers
 open class AIEIOTool: AIETool {
 

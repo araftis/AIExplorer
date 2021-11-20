@@ -35,7 +35,7 @@ import AJRFoundation
 // NOTE: This is all a little awkward to set up, but it makes usage at the call sites much easier.
 public extension Dictionary where Key == String {
     
-    subscript<T>(_ key: AIECodeGenerator.InfoKey<T>) -> T? {
+    subscript<T>(_ key: AIECodeGenerator.InfoKey<T>) -> T! {
         get {
             return self[key.key] as? T
         }
@@ -50,8 +50,11 @@ public extension AIECodeGenerator.InfoKey {
     static var codeName : AIECodeGenerator.InfoKey<String> {
         return AIECodeGenerator.InfoKey(key: "codeName")
     }
-    static var url : AIECodeGenerator.InfoKey<URL> {
+    static var url : AIECodeGenerator.InfoKey<URL?> {
         return AIECodeGenerator.InfoKey(key: "url")
+    }
+    static var role : AIECodeGenerator.InfoKey<AIECodeDefinition.Role> {
+        return AIECodeGenerator.InfoKey(key: "role")
     }
 }
 
@@ -76,17 +79,17 @@ open class AIECodeGenerator: NSObject {
 
     open var info : [String:Any]
     open var language : AIELanguage
-    open var root : AIEGraphic
+    open var roots : [AIEGraphic]
 
     // MARK: - Creation
 
     /**
      Creates a new code generated based on `language` rooted on `root`.
      */
-    public required init(info: [String:Any], for language: AIELanguage, root: AIEGraphic) {
+    public required init(info: [String:Any], for language: AIELanguage, roots: [AIEGraphic]) {
         self.info = info
         self.language = language
-        self.root = root
+        self.roots = roots
         super.init()
     }
 

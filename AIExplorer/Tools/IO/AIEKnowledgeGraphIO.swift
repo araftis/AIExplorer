@@ -31,10 +31,12 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Cocoa
 
-class AIEKnowledgeGraphIO: AIEGraphic {
+class AIEKnowledgeGraphIO: AIEIO {
 
     open class override var ajr_nameForXMLArchiving: String {
         return "knowledge-graph-io"
     }
 
+    open override var type : AIEIO.Kind { return .knowledgeGraph }
+    
 }

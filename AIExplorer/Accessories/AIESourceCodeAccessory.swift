@@ -177,11 +177,11 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         if let role = codeDefinition?.role {
             let roleString : String
             switch role {
-            case .deployment:
-                roleString = "Deployment"
+            case .inference:
+                roleString = "Inference"
             case .training:
                 roleString = "Training"
-            case .deploymentAndTraining:
+            case .inferenceAndTraining:
                 roleString = "Both"
             }
             update(field: roleLabel, value: roleString, defaultValue: "", for: codeDefinition)

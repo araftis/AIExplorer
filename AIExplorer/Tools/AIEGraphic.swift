@@ -53,13 +53,13 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     public enum Activity : Int, AJRXMLEncodableEnum {
 
         case any
-        case deployment
+        case inference
         case training
 
         public var description: String {
             switch self {
             case .any: return "any"
-            case .deployment: return "deployment"
+            case .inference: return "inference"
             case .training: return "training"
             }
         }

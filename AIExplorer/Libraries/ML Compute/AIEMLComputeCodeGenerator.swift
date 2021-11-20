@@ -38,11 +38,13 @@ open class AIEMLComputeCodeGenerator: AIECodeGenerator {
         var childGenerator : AIECodeGenerator? = nil
         
         if language.identifier == "obj-c" {
-            childGenerator = AIEMLComputeObjCGenerator(info: info, for: language, root: root)
+            childGenerator = AIEMLComputeObjCGenerator(info: info, for: language, roots: roots)
         } else if language.identifier == "swift" {
-            childGenerator = AIEMLComputeSwiftGenerator(info: info, for: language, root: root)
+            childGenerator = AIEMLComputeSwiftGenerator(info: info, for: language, roots: roots)
         } else {
-            messages.append(AIEMessage(type: .error, message: "Invalid language: \(language.name)", on: root))
+            for root in roots {
+                messages.append(AIEMessage(type: .error, message: "Invalid language: \(language.name)", on: root))
+            }
         }
         
         if let childGenerator = childGenerator {

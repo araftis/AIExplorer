@@ -48,10 +48,6 @@ open class AIEToolSet: DrawToolSet {
             item.target = self
             item.representedObject = event.document.selection
 
-            item = menu.addItem(withTitle: "Dump Source Code", action: #selector(dumpSourceCodeTest(_:)), keyEquivalent: "")
-            item.target = self
-            item.representedObject = event.document.selection
-
             return menu
         } else {
             let menu = NSMenu(title: "AI Explorer")
@@ -79,33 +75,6 @@ open class AIEToolSet: DrawToolSet {
         if let objects = ((sender as? NSMenuItem)?.representedObject as? AIEDocument)?.rootObjects {
             for graphic in objects {
                 AJRLog.info("object: \(graphic): \(graphic.destinationObjects)")
-            }
-        }
-    }
-
-    @IBAction open func dumpSourceCodeTest(_ sender: Any?) -> Void {
-        var root : AIEGraphic?
-
-        if let objects = (sender as? NSMenuItem)?.representedObject as? Set<DrawGraphic> {
-            root = objects.first(where: { (graphic) -> Bool in
-                return graphic is AIEGraphic
-            }) as? AIEGraphic
-        }
-        // Comment.
-        if let root = root,
-           let library = AIELibrary.library(for: .tensorflow),
-           let language = library.language(for: "python"),
-           let codeGenerator = library.codeGenerator(info: [:], for: language, root: root) {
-            let outputStream = OutputStream.toMemory()
-            outputStream.open()
-            var messages = [AIEMessage]()
-            do {
-                try codeGenerator.generate(to: outputStream, accumulatingMessages: &messages)
-            } catch let error as NSError {
-                AJRLog.warning("Error generating code: \(error.localizedDescription)")
-            }
-            if let string = outputStream.dataAsString(using: .utf8) {
-                AJRLog.info("Generated code:\n\(string)")
             }
         }
     }

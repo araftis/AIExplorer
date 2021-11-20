@@ -16,17 +16,21 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
 
     @objc
     public enum Role : Int, AJRXMLEncodableEnum {
-        case deployment
+        case inference
         case training
-        case deploymentAndTraining
+        case inferenceAndTraining
         
         public var description: String {
             switch self {
-            case .deployment: return "deployment"
+            case .inference: return "inference"
             case .training: return "training"
-            case .deploymentAndTraining: return "deploymentAndTraining"
+            case .inferenceAndTraining: return "inferenceAndTraining"
             }
         }
+        
+        public var canInfer : Bool { return self == .inference || self == .inferenceAndTraining }
+        public var canTrain : Bool { return self == .training || self == .inferenceAndTraining }
+        public var canInferAndTrain : Bool { return self == .inferenceAndTraining }
     }
 
     /* NOTE: All of these properties are nullable, but the object won't really be useable until they're defined. They're nullable in order to allow the user to populate them via the UI. */
@@ -95,7 +99,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     }
     
     /// What type of code should be generated.
-    open var role : AIECodeDefinition.Role = .deploymentAndTraining {
+    open var role : AIECodeDefinition.Role = .inferenceAndTraining {
         willSet {
             self.willChangeValue(forKey: "role")
         }
@@ -169,7 +173,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         if let url = outputURL {
             coder.encodeURLBookmark(url, forKey: "outputURL")
         }
-        if role != .deploymentAndTraining {
+        if role != .inferenceAndTraining {
             coder.encode(role, forKey: "role")
         }
         if let codeName = codeName {
@@ -199,9 +203,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         coder.decodeURLBookmark(forKey: "outputURL") { (url) in
             self.outputURL = url
         }
-        self.role = .deploymentAndTraining // Set to default, and then override if present.
+        self.role = .inferenceAndTraining // Set to default, and then override if present.
         coder.decodeEnumeration(forKey: "role") { (value: Role?) in
-            self.role = value ?? .deploymentAndTraining
+            self.role = value ?? .inferenceAndTraining
         }
         coder.decodeString(forKey: "codeName") { value in
             self.codeName = value
@@ -219,19 +223,19 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     open var inspectedRole : String {
         get {
             switch role {
-            case .deploymentAndTraining:
+            case .inferenceAndTraining:
                 return "Both"
-            case .deployment:
-                return "Deployment"
+            case .inference:
+                return "Inference"
             case .training:
                 return "Training"
             }
         }
         set {
             if newValue == "Both" {
-                role = .deploymentAndTraining
-            } else if newValue == "Deployment" {
-                role = .deployment
+                role = .inferenceAndTraining
+            } else if newValue == "Inference" {
+                role = .inference
             } else if newValue == "Training" {
                 role = .training
             }
@@ -263,29 +267,28 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     internal func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL?) -> Void {
         if let document = self.document {
             document.clearMessages()
-            for object in document.rootObjects {
-                var info = [String:Any]()
-                info[.codeName] = codeName ?? document.defaultCodeName
-                info[.url] = outputURL
-                if let generator = library.codeGenerator(info: info, for: language, root: object) {
-                    let outputStream = OutputStream.toMemory()
-                    outputStream.open()
-                    var messages = [AIEMessage]()
-                    do {
-                        try generator.generate(to: outputStream, accumulatingMessages: &messages)
-                        document.addMessages(messages)
-                    } catch let error as NSError {
-                        AJRLog.warning("Error generating code: \(error.localizedDescription)")
-                    }
-                    if let string = outputStream.dataAsString(using: .utf8) {
-                        code = string
-                        if let url = url {
-                            do {
-                                try write(code: string, to: url)
-                            } catch {
-                                // TODO: This should present in the UI somehow.
-                                AJRLog.error("Failed to write code to \(url.path): \(error)")
-                            }
+            var info = [String:Any]()
+            info[.codeName] = codeName ?? document.defaultCodeName
+            info[.url] = outputURL
+            info[.role] = role
+            if let generator = library.codeGenerator(info: info, for: language, roots: document.rootObjects) {
+                let outputStream = OutputStream.toMemory()
+                outputStream.open()
+                var messages = [AIEMessage]()
+                do {
+                    try generator.generate(to: outputStream, accumulatingMessages: &messages)
+                    document.addMessages(messages)
+                } catch let error as NSError {
+                    AJRLog.warning("Error generating code: \(error.localizedDescription)")
+                }
+                if let string = outputStream.dataAsString(using: .utf8) {
+                    code = string
+                    if let url = url {
+                        do {
+                            try write(code: string, to: url)
+                        } catch {
+                            // TODO: This should present in the UI somehow.
+                            AJRLog.error("Failed to write code to \(url.path): \(error)")
                         }
                     }
                 }

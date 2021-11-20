@@ -11,6 +11,7 @@
 		210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */; };
 		210F8F922742ECF1004A939D /* AIEMLComputeObjCGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F912742ECF1004A939D /* AIEMLComputeObjCGenerator.swift */; };
 		210F8F942742ED08004A939D /* AIEMLComputeSwiftGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */; };
+		2169BA2F2748799B00A5407D /* AIEIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2169BA2E2748799B00A5407D /* AIEIO.swift */; };
 		21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FCD9CA27067AD80049E558 /* AIETitle.swift */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
@@ -133,6 +134,7 @@
 		210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEMessagesInspector.xib; sourceTree = "<group>"; };
 		210F8F912742ECF1004A939D /* AIEMLComputeObjCGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeObjCGenerator.swift; sourceTree = "<group>"; };
 		210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeSwiftGenerator.swift; sourceTree = "<group>"; };
+		2169BA2E2748799B00A5407D /* AIEIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEIO.swift; sourceTree = "<group>"; };
 		21FCD9CA27067AD80049E558 /* AIETitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETitle.swift; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
@@ -393,8 +395,9 @@
 			isa = PBXGroup;
 			children = (
 				FA18B4CD25AEA305000DEF0C /* AIEAudioIO.swift */,
-				FA18B4CC25AEA305000DEF0C /* AIEImageIO.swift */,
 				FA0F526225D392FD00DD0F3D /* AIEImageIO.inspector */,
+				FA18B4CC25AEA305000DEF0C /* AIEImageIO.swift */,
+				2169BA2E2748799B00A5407D /* AIEIO.swift */,
 				FA18B4CF25AEA305000DEF0C /* AIEIOTool.swift */,
 				FA02BF4725B783CB001EFBBA /* AIEKnowledgeGraphIO.swift */,
 				FA18B4CE25AEA305000DEF0C /* AIETextIO.swift */,
@@ -665,6 +668,7 @@
 				FABD166425C8E931000294E3 /* AIEValidationAccessory.swift in Sources */,
 				FADD1CFF270FD5B9000C49DA /* AIECodeDefinition.swift in Sources */,
 				FA02BF9125B7AACA001EFBBA /* AIEConcatenation.swift in Sources */,
+				2169BA2F2748799B00A5407D /* AIEIO.swift in Sources */,
 				FA02BF9525B7AAD9001EFBBA /* AIEReshape.swift in Sources */,
 				FA02BFA125B7AAFF001EFBBA /* AIEPadding.swift in Sources */,
 				FA18B4D925AEA305000DEF0C /* AIEToolSet.swift in Sources */,

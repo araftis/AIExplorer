@@ -36,7 +36,7 @@ public extension AJRInspectorIdentifier {
 }
 
 @objcMembers
-open class AIEImageIO: AIEGraphic {
+open class AIEImageIO: AIEIO {
 
     // MARK: - Properties
     open var width : Int = 0
@@ -105,5 +105,7 @@ open class AIEImageIO: AIEGraphic {
     open class override var ajr_nameForXMLArchiving: String {
         return "image-io"
     }
+
+    open override var type : AIEIO.Kind { return .image }
 
 }

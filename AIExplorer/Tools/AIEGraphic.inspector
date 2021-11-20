@@ -5,7 +5,7 @@
             <slice type="string" label="Title" valueKeyPath="controller.selection.title" />
             <slice type="choice" style="popUp" label="Activity" valueType="string" valueKeyPath="controller.selection.activity">
                 <choice title="Any" value="0" />
-                <choice title="Deployment" value="1" />
+                <choice title="Inference" value="1" />
                 <choice title="Training" value="2" />
             </slice>
             <slice type="string" label="Variable Name" valueKeyPath="controller.selection.inspectedVariableName" nullPlaceholderKeyPath="controller.selection.generatedVariableName" />

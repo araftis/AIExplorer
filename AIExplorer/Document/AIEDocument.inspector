@@ -10,7 +10,7 @@
             <slice type="choice" valueType="object" label="Language" objectsKeyPath="controller.selection.selectedCodeDefinition.library.supportedLanguagesForCodeGeneration" valueKeyPath="controller.selection.selectedCodeDefinition.language" />
             <slice type="choice" style="popUp" label="Role" valueType="string" valueKeyPath="controller.selection.selectedCodeDefinition.inspectedRole">
                 <choice title="Both" value="Both" />
-                <choice title="Deployment" value="Deployment" />
+                <choice title="Inference" value="Inference" />
                 <choice title="Training" value="Training" />
             </slice>
             <slice type="string" valueKeyPath="controller.selection.selectedCodeDefinition.codeName" label="Code Name" nullPlaceholderKeyPath="controller.selection.defaultCodeName" />
