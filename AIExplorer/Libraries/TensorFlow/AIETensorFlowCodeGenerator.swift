@@ -68,7 +68,7 @@ extension AIEConvolution : AIETensorFlowCodeWriter {
         //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
 
         try prePrint(to: outputStream)
-        try outputStream.write("tf.keras.layers.Conv2D(\(self.depth), (\(self.height), \(self.width)), \(self.step))")
+        try outputStream.write("tf.keras.layers.Conv2D(\(3/*self.depth*/), (\(height), \(width)), \(stride))")
         try postPrint(to: outputStream)
     }
 }

@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="Convolution">
-        <group title="Dimentions">
+        <group title="Type">
+            <slice type="choice" valueKeyPath="controller.selection.type" style="popUp" valueType="integer">
+                <choice title="Standard" value="0" />
+                <choice title="Depthwise" value="1" />
+                <choice title="Transposed" value="2" />
+            </slice>
+        </group>
+        <group title="Dimensions">
             <slice type="integer" label="Size" subtitle="Width" valueKeyPath="controller.selection.width" />
             <slice type="integer" subtitle="Height" valueKeyPath="controller.selection.height" />
             <slice type="integer" label="Depth" valueKeyPath="controller.selection.depth" />
-            <slice type="integer" label="Step" valueKeyPath="controller.selection.step" />
+        </group>
+        <group title="Feature Channels">
+            <slice type="integer" label="Input" valueKeyPath="controller.selection.inputFeatureChannels" />
+            <slice type="integer" label="Output" valueKeyPath="controller.selection.outputFeatureChannels" />
+        </group>
+        <group title="Stride">
+            <slice type="integer" label="Dilation" valueKeyPath="controller.selection.dilation" />
+            <slice type="integer" label="Stride" valueKeyPath="controller.selection.stride" />
+        </group>
+        <group title="Padding">
+            <slice type="choice" label="Policy" valueKeyPath="controller.selection.paddingPolicy" style="popUp" valueType="integer">
+                <choice title="Same" value="0" />
+                <choice title="Valid" value="1" />
+                <choice title="Use Padding Size" value="2" />
+            </slice>
+            <slice type="integer" label="Size" valueKeyPath="controller.selection.paddingSize" />
         </group>
     </group>
 </inspector>

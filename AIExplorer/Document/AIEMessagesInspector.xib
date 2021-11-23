@@ -26,11 +26,11 @@
                     <tabViewItems>
                         <tabViewItem label="Tab" identifier="" id="cny-82-Cnk">
                             <view key="view" id="wsR-nA-x4W">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="260"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="bUf-0p-QSd">
-                                        <rect key="frame" x="196" y="128" width="89" height="16"/>
+                                        <rect key="frame" x="196" y="122" width="89" height="16"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="No Messages" id="Cfy-Zu-F5f">
                                             <font key="font" metaFont="systemSemibold" size="13"/>
@@ -72,12 +72,12 @@
                                                             </textFieldCell>
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
-                                                                <tableCellView id="48i-KP-aQt">
+                                                                <tableCellView misplaced="YES" id="48i-KP-aQt">
                                                                     <rect key="frame" x="11" y="0.0" width="457" height="22"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <imageView horizontalHuggingPriority="252" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ub6-M1-WME">
-                                                                            <rect key="frame" x="0.0" y="4" width="0.0" height="15"/>
+                                                                            <rect key="frame" x="0.0" y="5" width="0.0" height="15"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="15" id="KVE-UI-4vo"/>
                                                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="15" id="cPf-D1-oSs"/>
@@ -85,9 +85,9 @@
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyDown" id="2az-LH-91V"/>
                                                                         </imageView>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-qk-3xW">
-                                                                            <rect key="frame" x="3" y="4" width="454" height="14"/>
+                                                                            <rect key="frame" x="3" y="4" width="454" height="16"/>
                                                                             <textFieldCell key="cell" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="DFi-j5-gH8">
-                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
@@ -98,7 +98,7 @@
                                                                         <constraint firstItem="E5Z-qk-3xW" firstAttribute="top" secondItem="48i-KP-aQt" secondAttribute="top" constant="4" id="Pdd-wa-dhe"/>
                                                                         <constraint firstAttribute="trailing" secondItem="E5Z-qk-3xW" secondAttribute="trailing" constant="2" id="QaW-tV-ips"/>
                                                                         <constraint firstItem="Ub6-M1-WME" firstAttribute="leading" secondItem="48i-KP-aQt" secondAttribute="leading" id="YFW-5r-Go8"/>
-                                                                        <constraint firstItem="Ub6-M1-WME" firstAttribute="top" secondItem="48i-KP-aQt" secondAttribute="top" constant="3" id="q1J-w2-oIf"/>
+                                                                        <constraint firstItem="Ub6-M1-WME" firstAttribute="top" secondItem="48i-KP-aQt" secondAttribute="top" constant="4" id="q1J-w2-oIf"/>
                                                                         <constraint firstItem="E5Z-qk-3xW" firstAttribute="leading" secondItem="Ub6-M1-WME" secondAttribute="trailing" constant="5" id="v1s-OU-eWW"/>
                                                                     </constraints>
                                                                     <connections>

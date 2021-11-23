@@ -383,7 +383,7 @@ extension AIEGraphic : Sequence {
     public func makeIterator<UserData>(userData: UserData) -> some IteratorProtocol {
         return AIEGraphicIterator(root: self, userData: userData)
     }
-    
+
 }
 
 open class AIEGraphicIterator<UserData> : IteratorProtocol {
