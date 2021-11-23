@@ -84,7 +84,7 @@ open class AIELayerNormalization: AIEGraphic {
     }
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "layer-normalization"
+        return "aieLayerNormalization"
     }
 
 }

@@ -35,7 +35,7 @@ import Cocoa
 open class AIEMatrixMultiplication: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "matrix-multiplication-layer"
+        return "aieMatrixMultiplication"
     }
 
 }

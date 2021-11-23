@@ -34,7 +34,7 @@ import Draw
 open class AIEAudioIO: AIEIO {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "audio-io"
+        return "aieAudioIO"
     }
 
     open override var type : AIEIO.Kind { return .audio }

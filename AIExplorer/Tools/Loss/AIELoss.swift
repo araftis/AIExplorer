@@ -98,7 +98,7 @@ open class AIELoss: AIEGraphic {
 
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "loss-layer"
+        return "aieLoss"
     }
 
 }

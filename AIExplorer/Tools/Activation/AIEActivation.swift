@@ -86,7 +86,7 @@ open class AIEActivation: AIEGraphic {
     
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "activation-layer"
+        return "aieActivationLayer"
     }
     
     

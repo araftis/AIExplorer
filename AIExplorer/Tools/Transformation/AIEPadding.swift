@@ -35,7 +35,7 @@ import Cocoa
 open class AIEPadding: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "padding-layer"
+        return "aiePadding"
     }
 
 }

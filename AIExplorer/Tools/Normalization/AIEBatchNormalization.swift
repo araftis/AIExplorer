@@ -91,7 +91,7 @@ open class AIEBatchNormalization: AIEGraphic {
     }
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "batch-normalization"
+        return "aieBatchNormalization"
     }
 
 }

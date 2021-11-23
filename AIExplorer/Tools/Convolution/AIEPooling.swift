@@ -96,7 +96,7 @@ open class AIEPooling: AIEGraphic {
     }
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "pooling-layer"
+        return "aiePoolingLayer"
     }
 
 }

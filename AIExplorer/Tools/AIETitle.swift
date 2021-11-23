@@ -8,6 +8,9 @@
 import Cocoa
 import Draw
 
+/**
+ Draws the title in a neural network node. This pretty specialized, and not all that useful for general purpose.
+ */
 open class AIETitle: DrawText {
 
     override public func draw(_ path: AJRBezierPath, with priority: DrawAspectPriority) -> DrawGraphicCompletionBlock? {

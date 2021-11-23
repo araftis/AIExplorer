@@ -157,7 +157,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     // MARK: - XML Coding
 
     open override class var ajr_nameForXMLArchiving: String {
-        return "codeDefinition"
+        return "aieCodeDefinition"
     }
 
     open func encode(with coder: AJRXMLCoder) {

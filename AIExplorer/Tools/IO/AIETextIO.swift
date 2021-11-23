@@ -34,7 +34,7 @@ import Cocoa
 class AIETextIO: AIEIO {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "text-io"
+        return "aieTextIO"
     }
 
     open override var type : AIEIO.Kind { return .text }

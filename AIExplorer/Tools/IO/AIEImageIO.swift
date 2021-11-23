@@ -103,7 +103,7 @@ open class AIEImageIO: AIEIO {
     }
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "image-io"
+        return "aieImageIO"
     }
 
     open override var type : AIEIO.Kind { return .image }

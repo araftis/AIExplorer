@@ -88,7 +88,7 @@ open class AIESoftmax: AIEGraphic {
 
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "softmax-layer"
+        return "aieSoftmaxLayer"
     }
 
 }

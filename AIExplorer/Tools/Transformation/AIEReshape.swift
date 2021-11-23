@@ -35,7 +35,7 @@ import Cocoa
 open class AIEReshape: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "reshape-layer"
+        return "aieReshape"
     }
 
 }

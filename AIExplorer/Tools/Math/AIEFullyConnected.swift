@@ -84,7 +84,7 @@ open class AIEFullyConnected: AIEGraphic {
 
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "fully-connected-layer"
+        return "aieFullyConnected"
     }
 
 }

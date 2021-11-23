@@ -95,7 +95,7 @@ open class AIEReduction: AIEGraphic {
         coder.encode(step, forKey: "step")
     }
     open class override var ajr_nameForXMLArchiving: String {
-        return "reduction-layer"
+        return "aieReduction"
     }
 
 }

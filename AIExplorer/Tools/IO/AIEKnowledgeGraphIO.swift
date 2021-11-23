@@ -34,7 +34,7 @@ import Cocoa
 class AIEKnowledgeGraphIO: AIEIO {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "knowledge-graph-io"
+        return "aieKnowledgeGraphIO"
     }
 
     open override var type : AIEIO.Kind { return .knowledgeGraph }

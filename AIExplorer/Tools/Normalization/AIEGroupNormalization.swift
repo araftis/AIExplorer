@@ -35,7 +35,7 @@ import Cocoa
 open class AIEGroupNormalization: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "group-normalization"
+        return "aieGroupNormalization"
     }
 
 }

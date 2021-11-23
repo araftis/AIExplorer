@@ -83,7 +83,7 @@ open class AIELSTM: AIEGraphic {
     }
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "lstm-layer"
+        return "aieLSTMLayer"
     }
 
 }

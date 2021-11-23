@@ -182,7 +182,7 @@ open class AIEConvolution: AIEGraphic {
     }
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "convolution"
+        return "aieConvolution"
     }
 
 }

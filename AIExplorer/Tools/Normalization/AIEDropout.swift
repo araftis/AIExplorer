@@ -85,7 +85,7 @@ open class AIEDropout: AIEGraphic {
     }
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "dropout-layer"
+        return "aieDropoutLayer"
     }
 
 }

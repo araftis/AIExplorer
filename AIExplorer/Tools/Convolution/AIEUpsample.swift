@@ -102,7 +102,7 @@ open class AIEUpsample: AIEGraphic {
 
     
     open class override var ajr_nameForXMLArchiving: String {
-        return "upsample-layer"
+        return "aieUpsampleLayer"
     }
 
 }

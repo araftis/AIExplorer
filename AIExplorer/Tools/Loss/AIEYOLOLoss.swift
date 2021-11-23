@@ -35,7 +35,7 @@ import Cocoa
 open class AIEYOLOLoss: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "yolo-loss-layer"
+        return "aieYOLOLoss"
     }
 
 }

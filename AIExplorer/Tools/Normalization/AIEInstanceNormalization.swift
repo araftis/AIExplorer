@@ -35,7 +35,7 @@ import Cocoa
 open class AIEInstanceNormalization: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
-        return "instance-normalization"
+        return "aieInstanceNormalization"
     }
 
 }
