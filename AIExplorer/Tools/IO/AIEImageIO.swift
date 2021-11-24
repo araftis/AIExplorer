@@ -61,6 +61,29 @@ open class AIEImageIO: AIEIO {
         super.init(frame: frame)
     }
 
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Size", {
+                        if let self = weakSelf {
+                            var string = ""
+                            string += "\(self.width == 0 ? "Any" : String(describing: self.width)) ✕ \(self.height == 0 ? "Any" : String(describing: self.height))"
+                            if self.depth > 0 {
+                                if !string.isEmpty {
+                                    string += " ✕ "
+                                }
+                                string += "\(self.depth)"
+                            }
+                            return string.isEmpty ? nil : string
+                        }
+                        return nil
+                    }),
+        ]
+    }
+
+
+
     // MARK: - AJREditableObject
 
     open override class func populateProperties(toObserve propertiesSet: NSMutableSet) {

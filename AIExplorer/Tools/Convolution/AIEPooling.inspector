@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="Pooling">
-        <group title="Dimentions">
+        <group title="Dimensions and Stride">
             <slice type="integer" label="Size" subtitle="Width" valueKeyPath="controller.selection.width" />
             <slice type="integer" subtitle="Height" valueKeyPath="controller.selection.height" />
-            <slice type="integer" label="Step" valueKeyPath="controller.selection.step" />
+            <slice type="integer" label="Stride" subtitle="X" valueKeyPath="controller.selection.strideX" />
+            <slice type="integer" subtitle="Y" valueKeyPath="controller.selection.strideY" />
+            <slice type="integer" label="Dilation" subtitle="X" valueKeyPath="controller.selection.dilationX" />
+            <slice type="integer" subtitle="Y" valueKeyPath="controller.selection.dilationY" />
+        </group>
+        <group title="Padding">
+            <slice type="choice" style="popUp" label="Policy" valueType="integer" valueKeyPath="controller.selection.paddingPolicy">
+                <choice title="Same" value="0" />
+                <choice title="Valid" value="1" />
+                <choice title="Use Padding Size" value="2">
+                    <slice type="integer" label="X" valueKeyPath="controller.selection.paddingX" />
+                    <slice type="integer" label="Y" valueKeyPath="controller.selection.paddingY" />
+                    <!-- TODO: The below should work, but for some reason, side by side fields aren't working as part of choices. There's an invalid constraint I have to sort out.
+                    <slice type="integer" label="Size" subtitle="X" valueKeyPath="controller.selection.paddingX" />
+                    <slice type="integer" subtitle="Y" valueKeyPath="controller.selection.paddingY" />
+                    -->
+                </choice>
+            </slice>
         </group>
     </group>
 </inspector>

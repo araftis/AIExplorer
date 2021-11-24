@@ -44,12 +44,6 @@ open class AIEDropout: AIEGraphic {
 
     // MARK: - Creation
 
-    public convenience init(rate: Float) {
-        self.init()
-
-        self.rate = rate
-    }
-
     public required init() {
         super.init()
     }
@@ -58,6 +52,25 @@ open class AIEDropout: AIEGraphic {
         super.init(frame: frame)
     }
     
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Rate", {
+                        if let self = weakSelf {
+                            return String(describing: self.rate)
+                        }
+                        return nil
+                    }),
+                Property("Seed", {
+                        if let self = weakSelf {
+                            return String(describing: self.seed)
+                        }
+                        return nil
+                    }),
+        ]
+    }
+
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
@@ -71,11 +84,9 @@ open class AIEDropout: AIEGraphic {
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
 
-        //coder.decodeFloat(forKey: "rate", setter: <#T##((Float) -> Void)?##((Float) -> Void)?##(Float) -> Void#>) { (value) in
-        //    self.rate = value
-        //}
-
-        
+        coder.decodeFloat(forKey: "rate", setter: { value in
+            self.rate = value
+        })
     }
 
     open override func encode(with coder: AJRXMLCoder) {

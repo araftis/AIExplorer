@@ -25,9 +25,10 @@
             <slice type="choice" label="Policy" valueKeyPath="controller.selection.paddingPolicy" style="popUp" valueType="integer">
                 <choice title="Same" value="0" />
                 <choice title="Valid" value="1" />
-                <choice title="Use Padding Size" value="2" />
+                <choice title="Use Padding Size" value="2">
+                    <slice type="integer" label="Size" valueKeyPath="controller.selection.paddingSize" />
+                </choice>
             </slice>
-            <slice type="integer" label="Size" valueKeyPath="controller.selection.paddingSize" />
         </group>
     </group>
 </inspector>

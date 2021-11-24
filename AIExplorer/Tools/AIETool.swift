@@ -51,8 +51,8 @@ open class AIETool: DrawTool {
             fill.color = fillColor(for: graphic)
             graphic.addAspect(fill, with: DrawFill.defaultPriority)
 
-            let text = AIETitle(graphic: graphic, text: NSAttributedString(string: currentAction.title, attributes: AIEGraphic.defaultTextAttributes))
-            graphic.addAspect(text)
+            // NOTE: Setting the title will create the appropriate title aspect.
+            graphic.title = currentAction.title
         } else {
             graphic = AIEGraphic(frame: .zero)
             graphic.title = "ERROR"
@@ -66,8 +66,7 @@ open class AIETool: DrawTool {
             fill.color = NSColor.red
             graphic.addAspect(fill, with: DrawFill.defaultPriority)
 
-            let text = AIETitle(graphic: graphic, text: NSAttributedString(string: "Error: No class defined for action \(currentAction.title) (\(currentAction.tag))", attributes: AIEGraphic.defaultTextAttributes))
-            graphic.addAspect(text)
+            graphic.title = "Error: No class defined for action \(currentAction.title) (\(currentAction.tag))"
         }
 
         return graphic

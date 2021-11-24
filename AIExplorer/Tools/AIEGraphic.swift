@@ -67,15 +67,15 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
 
     open var title: String {
         get {
-            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? DrawText {
-                return aspect.attributedString.string
+            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority, create: true) as? AIETitle {
+                return aspect.title
             }
             return "No Title"
         }
         set(newValue) {
             willChangeValue(forKey: "title")
-            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority) as? AIETitle {
-                aspect.attributedString = NSAttributedString(string: newValue, attributes: Self.defaultTextAttributes)
+            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority, create: true) as? AIETitle {
+                aspect.title = newValue
             }
             didChangeValue(forKey: "title")
         }
@@ -173,6 +173,33 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         didSet { didChangeValue(forKey: "graphIndex") }
     }
 
+    public struct Property {
+        public var title : String
+        public var valueBlock : (() -> String?)?
+
+        init(_ title: String, _ block: @escaping () -> String?) {
+            self.title = title
+            self.valueBlock = block
+        }
+
+        init(_ title: String) {
+            self.title = title
+        }
+
+        public var isTitle : Bool { return valueBlock == nil }
+
+        public var value : String? {
+            if let valueBlock = valueBlock {
+                return valueBlock()
+            }
+            return nil
+        }
+    }
+
+    open var displayedProperties : [Property] {
+        return []
+    }
+
     public var aieDocument : AIEDocument? { return document as? AIEDocument }
     
     // MARK: - Creation
@@ -183,23 +210,12 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
 
     public required override init(frame: NSRect) {
         super.init(frame: frame)
+        // Causes us to create the default "properties" aspect.
+        firstAspect(ofType: AIEProperties.self, with: AIEProperties.defaultPriority, create: true)
     }
 
     // MARK: - Default Values
     
-    open class var defaultTextAttributes : [NSAttributedString.Key:Any] {
-        var attributes = [NSAttributedString.Key:Any]()
-        let style : NSMutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-
-        style.alignment = .center;
-
-        attributes[.font] = NSFont.systemFont(ofSize: 9.0)
-        attributes[.paragraphStyle] = style
-        attributes[.foregroundColor] = NSColor.black
-
-        return attributes
-    }
-
     internal let cornerRadius : CGFloat = 5.0
     
     // MARK: - DrawGraphic
@@ -261,11 +277,15 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         if activity != .any {
             coder.encode(activity, forKey: "activity")
         }
+        coder.encode(title, forKey: "title")
     }
 
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
 
+        coder.decodeString(forKey: "title") { title in
+            self.title = title
+        }
         coder.decodeEnumeration(forKey: "activity") { (value: Activity?) in
             self.activity = value ?? .any
         }
@@ -278,6 +298,8 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     open override func finalizeXMLDecoding() throws -> Any {
         try super.finalizeXMLDecoding()
         updatePath()
+        // Force the creation of our "properties" aspect.
+        firstAspect(ofType: AIEProperties.self, with: AIEProperties.defaultPriority, create: true)
         return self
     }
 

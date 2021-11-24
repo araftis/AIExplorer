@@ -115,7 +115,8 @@
     </aie-library>
 
     <!-- Draw title inside NN node. -->
-    <draw-aspect class="AIExplorer.AIETitle" id="ai_title" name="Title" priority="afterBackground" />
+    <draw-aspect class="AIExplorer.AIETitle" id="aieTitle" name="Title" priority="beforeForeground" />
+    <draw-aspect class="AIExplorer.AIEProperties" id="aieProperties" name="Properties" priority="afterChildren" />
 
     <ajr_inspector xml="AIEDocument" identifier="aiDocument" />
     <ajr_inspector xml="AIEGraphic" identifier="aiGraphic" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="BatchNorm">
-        <group title="Dimentions">
+        <group title="Dimensions">
             <slice type="float" label="HiperParam" subtitle="Momentum" valueKeyPath="controller.selection.momentum" />
             <slice type="float" subtitle="Epsilon" valueKeyPath="controller.selection.epsilon" />
         </group>

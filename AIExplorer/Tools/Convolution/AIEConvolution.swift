@@ -52,6 +52,14 @@ open class AIEConvolution: AIEGraphic {
             }
         }
 
+        public var localizedDescription: String {
+            switch self {
+            case .standard: return "Standard"
+            case .depthwise: return "Depthwise"
+            case .transposed: return "Transposed"
+            }
+        }
+
     }
     
     @objc
@@ -65,6 +73,14 @@ open class AIEConvolution: AIEGraphic {
             case .same: return "same"
             case .valid: return "valid"
             case .usePaddingSize: return "usePaddingSize"
+            }
+        }
+
+        public var localizedDescription : String {
+            switch self {
+            case .same: return "Same"
+            case .valid: return "Valid"
+            case .usePaddingSize: return "Use Padding Size"
             }
         }
 
@@ -100,7 +116,66 @@ open class AIEConvolution: AIEGraphic {
     public required init(frame: NSRect) {
         super.init(frame: frame)
     }
-    
+
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Type", {
+                        if let self = weakSelf {
+                            return self.type.localizedDescription
+                        }
+                        return nil
+                    }),
+                Property("Size", {
+                        if let self = weakSelf {
+                            var string = ""
+                            if self.width > 0 || self.height > 0 {
+                                string += "\(self.width) ✕ \(self.height)"
+                            }
+                            if self.depth > 0 {
+                                if !string.isEmpty {
+                                    string += " ✕ "
+                                }
+                                string += "\(self.depth)"
+                            }
+                            return string.isEmpty ? nil : string
+                        }
+                        return nil
+                    }),
+                Property("FC", {
+                        if let self = weakSelf {
+                            if self.inputFeatureChannels > 0 || self.outputFeatureChannels > 0 {
+                                return "\(self.inputFeatureChannels) → \(self.outputFeatureChannels)"
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Dilation", {
+                        if let self = weakSelf {
+                            return self.dilation > 0 ? String(describing: self.dilation) : nil
+                        }
+                        return nil
+                    }),
+                Property("Stride", {
+                        if let self = weakSelf {
+                            return self.stride > 0 ? String(describing: self.stride) : nil
+                        }
+                        return nil
+                    }),
+                Property("Pad", {
+                        if let self = weakSelf {
+                            if self.paddingPolicy == .usePaddingSize {
+                                return String(describing: self.paddingSize)
+                            } else {
+                                return self.paddingPolicy.localizedDescription
+                            }
+                        }
+                        return nil
+                    }),
+        ]
+    }
+
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {

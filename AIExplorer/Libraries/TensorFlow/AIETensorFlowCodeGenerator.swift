@@ -102,7 +102,7 @@ extension AIEPooling : AIETensorFlowCodeWriter {
         //try outputStream.write("# We're writing a convolution layer. \(self.title)\n")
 
         try prePrint(to: outputStream)
-        try outputStream.write("tf.keras.layers.MaxPool2D((\(self.height), \(self.width)), \(self.step))")
+        try outputStream.write("tf.keras.layers.MaxPool2D((\(self.height), \(self.width)), \(self.strideX))")
         try postPrint(to: outputStream)
     }
 }
@@ -176,9 +176,9 @@ extension AIEActivation : AIETensorFlowCodeWriter{
         //try outputStream.write("# Activation layer")
         
         try prePrint(to: outputStream)
-        if (self.type == 0){
+        if (type == .relu){
             try outputStream.write("tf.keras.layers.Activation('relu')")
-        } else if (self.type == 1){
+        } else if (type == .sigmoid){
             try outputStream.write("tf.keras.layers.Activation('sigmoid')")
         } else {
             try outputStream.write("tf.keras.layers.Activation('tanh')")

@@ -77,6 +77,7 @@
 		FA18B51125AEA375000DEF0C /* AJRInterfaceFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51025AEA375000DEF0C /* AJRInterfaceFoundation.framework */; };
 		FA18B51325AEA375000DEF0C /* Draw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51225AEA375000DEF0C /* Draw.framework */; };
 		FA18B52325AEA433000DEF0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B52225AEA433000DEF0C /* Cocoa.framework */; };
+		FA3C316B274D780E00B1A338 /* AIEProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C316A274D780E00B1A338 /* AIEProperties.swift */; };
 		FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */; };
 		FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */; };
 		FA88825025F5E8FC00DFE50B /* AIEDocumentTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */; };
@@ -204,6 +205,7 @@
 		FA18B51225AEA375000DEF0C /* Draw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Draw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B52225AEA433000DEF0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FA2877082611768E00F5BBE8 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		FA3C316A274D780E00B1A338 /* AIEProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEProperties.swift; sourceTree = "<group>"; };
 		FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplateChooser.swift; sourceTree = "<group>"; };
 		FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooser.xib; sourceTree = "<group>"; };
 		FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplate.swift; sourceTree = "<group>"; };
@@ -301,15 +303,15 @@
 		FA02BFA425B7ABF9001EFBBA /* Normalization */ = {
 			isa = PBXGroup;
 			children = (
-				FA02BFA525B7AC13001EFBBA /* AIENormalizationTool.swift */,
-				FA02BFAB25B7AC2F001EFBBA /* AIELayerNormalization.swift */,
+				25EC03A225D8874C008A4DE4 /* AIEBatchNormalization.inspector */,
 				FA02BFB125B7AC4D001EFBBA /* AIEBatchNormalization.swift */,
+				25EC03AE25DEFAED008A4DE4 /* AIEDropout.inspector */,
+				FA18B4D525AEA305000DEF0C /* AIEDropout.swift */,
 				FA02BFB525B7AC5B001EFBBA /* AIEGroupNormalization.swift */,
 				FA02BFB925B7AC66001EFBBA /* AIEInstanceNormalization.swift */,
-				FA18B4D525AEA305000DEF0C /* AIEDropout.swift */,
-				25EC03A225D8874C008A4DE4 /* AIEBatchNormalization.inspector */,
-				25EC03AE25DEFAED008A4DE4 /* AIEDropout.inspector */,
 				25EC03B225DEFE85008A4DE4 /* AIELayerNormalization.inspector */,
+				FA02BFAB25B7AC2F001EFBBA /* AIELayerNormalization.swift */,
+				FA02BFA525B7AC13001EFBBA /* AIENormalizationTool.swift */,
 			);
 			path = Normalization;
 			sourceTree = "<group>";
@@ -352,6 +354,7 @@
 				FAD9250425AEA5ED00079DAB /* AIExplorer.xcassets */,
 				FA18B4C725AEA305000DEF0C /* AIExplorer.ajrplugindata */,
 				FABD165725C8E8B6000294E3 /* Accessories */,
+				FA3C3169274D77E400B1A338 /* Aspects */,
 				FABD168325C9FFCE000294E3 /* Document */,
 				FA8E368125BF8CE100EB554F /* Libraries */,
 				FA18B4C825AEA305000DEF0C /* Tools */,
@@ -384,7 +387,6 @@
 				FA18B4CA25AEA305000DEF0C /* AIEFilter.swift */,
 				FA18B4D725AEA305000DEF0C /* AIEGraphic.swift */,
 				FA0F525E25D38F5900DD0F3D /* AIEGraphic.inspector */,
-				21FCD9CA27067AD80049E558 /* AIETitle.swift */,
 				FA02BF6025B7973B001EFBBA /* AIETool.swift */,
 				FA18B4C925AEA305000DEF0C /* AIEToolSet.swift */,
 			);
@@ -431,6 +433,15 @@
 				FA18B51225AEA375000DEF0C /* Draw.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FA3C3169274D77E400B1A338 /* Aspects */ = {
+			isa = PBXGroup;
+			children = (
+				21FCD9CA27067AD80049E558 /* AIETitle.swift */,
+				FA3C316A274D780E00B1A338 /* AIEProperties.swift */,
+			);
+			path = Aspects;
 			sourceTree = "<group>";
 		};
 		FA88824425F5D76B00DFE50B /* User Interface */ = {
@@ -690,6 +701,7 @@
 				FAF2664A2719051700EC0A19 /* AIEMessage.swift in Sources */,
 				FA02BFBA25B7AC66001EFBBA /* AIEInstanceNormalization.swift in Sources */,
 				FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */,
+				FA3C316B274D780E00B1A338 /* AIEProperties.swift in Sources */,
 				FA02BF9D25B7AAF6001EFBBA /* AIESplit.swift in Sources */,
 				FA02BFAC25B7AC2F001EFBBA /* AIELayerNormalization.swift in Sources */,
 				FABD163D25C78722000294E3 /* AIECodeGenerator.swift in Sources */,

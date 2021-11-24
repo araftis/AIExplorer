@@ -39,20 +39,45 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIEPooling: AIEGraphic {
 
+    @objc
+    public enum PoolingType : Int, AJRXMLEncodableEnum {
+
+        case max
+        case average
+        case l2norm
+
+        public var description: String {
+            switch self {
+            case .max: return "max"
+            case .average: return "average"
+            case .l2norm: return "l2norm"
+            }
+        }
+
+        public var localizedDescription: String {
+            switch self {
+            case .max: return "Max"
+            case .average: return "Average"
+            case .l2norm: return "L2 Norm"
+            }
+        }
+
+    }
+
     // MARK: - Properties
+
     open var width : Int = 0
     open var height : Int = 0
-    open var step : Int = 0
+    open var strideX : Int = 0
+    open var strideY : Int = 0
+    open var dilationX : Int = 0
+    open var dilationY : Int = 0
+    open var paddingPolicy : AIEConvolution.PaddingPolicy = .same
+    open var paddingX : Int = 0
+    open var paddingY : Int = 0
+    open var countIncludesPadding : Bool = false
 
     // MARK: - Creation
-
-    public convenience init(width: Int, height: Int, step : Int) {
-        self.init()
-
-        self.width = width
-        self.height = height
-        self.step = step
-    }
 
     public required init() {
         super.init()
@@ -62,6 +87,51 @@ open class AIEPooling: AIEGraphic {
         super.init(frame: frame)
     }
     
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Size", {
+                        if let self = weakSelf {
+                            var string = ""
+                            if self.width > 0 || self.height > 0 {
+                                string += "\(self.width) ✕ \(self.height)"
+                            }
+                            return string.isEmpty ? nil : string
+                        }
+                        return nil
+                    }),
+                Property("Stride", {
+                        if let self = weakSelf {
+                            var string = ""
+                            if self.strideX > 0 || self.strideY > 0 {
+                                string += "\(self.strideX) ✕ \(self.strideY)"
+                            }
+                            return string.isEmpty ? nil : string
+                        }
+                        return nil
+                    }),
+                Property("Dilation", {
+                        if let self = weakSelf {
+                            if self.dilationX != 0 || self.dilationY != 0 {
+                                return "\(self.dilationX) ✕ \(self.dilationY)"
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Pad", {
+                        if let self = weakSelf {
+                            if self.paddingPolicy == .usePaddingSize {
+                                return "\(self.paddingX) ✕ \(self.paddingY)"
+                            } else {
+                                return self.paddingPolicy.localizedDescription
+                            }
+                        }
+                        return nil
+                    }),
+        ]
+    }
+
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
@@ -81,10 +151,30 @@ open class AIEPooling: AIEGraphic {
         coder.decodeInteger(forKey: "height") { (value) in
             self.height = value
         }
-        coder.decodeInteger(forKey: "step") { (value) in
-            self.step = value
+        coder.decodeInteger(forKey: "strideX") { (value) in
+            self.strideX = value
         }
-        
+        coder.decodeInteger(forKey: "strideY") { (value) in
+            self.strideX = value
+        }
+        coder.decodeInteger(forKey: "dilationX") { (value) in
+            self.dilationX = value
+        }
+        coder.decodeInteger(forKey: "dilationY") { (value) in
+            self.dilationY = value
+        }
+        coder.decodeEnumeration(forKey: "paddingPolicy") { (value: AIEConvolution.PaddingPolicy?) in
+            self.paddingPolicy = value ?? .same
+        }
+        coder.decodeInteger(forKey: "paddingX") { (value) in
+            self.paddingX = value
+        }
+        coder.decodeInteger(forKey: "paddingY") { (value) in
+            self.paddingY = value
+        }
+        coder.decodeBool(forKey: "countIncludesPadding") { (value) in
+            self.countIncludesPadding = value
+        }
     }
 
     open override func encode(with coder: AJRXMLCoder) {
@@ -92,7 +182,14 @@ open class AIEPooling: AIEGraphic {
 
         coder.encode(width, forKey: "width")
         coder.encode(height, forKey: "height")
-        coder.encode(step, forKey: "step")
+        coder.encode(strideX, forKey: "strideX")
+        coder.encode(strideY, forKey: "strideY")
+        coder.encode(dilationX, forKey: "dilationX")
+        coder.encode(dilationY, forKey: "dilationY")
+        coder.encode(paddingPolicy, forKey: "paddingPolicy")
+        coder.encode(paddingX, forKey: "paddingX")
+        coder.encode(paddingY, forKey: "paddingY")
+        coder.encode(countIncludesPadding, forKey: "countIncludesPadding")
     }
 
     open class override var ajr_nameForXMLArchiving: String {
