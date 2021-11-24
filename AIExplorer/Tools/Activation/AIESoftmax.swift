@@ -41,16 +41,36 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIESoftmax: AIEGraphic {
     
+    @objc
+    public enum SoftmaxOperation : Int, AJRXMLEncodableEnum {
+        case softmax
+        case logSoftmax
+
+        public var description: String {
+            switch self {
+            case .softmax: return "softmax"
+            case .logSoftmax: return "logSoftmax"
+            }
+        }
+
+        public var localizedDescription: String {
+            switch self {
+            case .softmax: return "Softmax"
+            case .logSoftmax: return "Log Softmax"
+            }
+        }
+    }
     // MARK: - Properties
-    
-    open var axis : Int = -1
+
+    open var operation : SoftmaxOperation = .softmax
+    open var dimension : Int = 0
     
     // MARK: - Creation
 
-    public convenience init(axis: Int) {
+    public convenience init(dimension: Int) {
         self.init()
 
-        self.axis = axis
+        self.dimension = dimension
     }
 
     public required init() {
@@ -61,6 +81,27 @@ open class AIESoftmax: AIEGraphic {
         super.init(frame: frame)
     }
     
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Op", {
+                        if let self = weakSelf {
+                            return self.operation.localizedDescription
+                        }
+                        return nil
+                    }),
+                Property("Dimension", {
+                        if let self = weakSelf {
+                            if self.dimension != 0 {
+                                return String(describing: self.dimension)
+                            }
+                        }
+                        return nil
+                    }),
+        ]
+    }
+
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
@@ -74,8 +115,11 @@ open class AIESoftmax: AIEGraphic {
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
 
-        coder.decodeInteger(forKey: "axis") { (value) in
-            self.axis = value
+        coder.decodeEnumeration(forKey: "operation") { (value: SoftmaxOperation?) in
+            self.operation = value ?? .softmax
+        }
+        coder.decodeInteger(forKey: "dimension") { (value) in
+            self.dimension = value
         }
         
     }
@@ -83,7 +127,8 @@ open class AIESoftmax: AIEGraphic {
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
 
-        coder.encode(axis, forKey: "axis")
+        coder.encode(operation, forKey: "operation")
+        coder.encode(dimension, forKey: "dimension")
     }
 
     
