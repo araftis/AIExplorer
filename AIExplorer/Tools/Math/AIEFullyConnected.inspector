@@ -10,7 +10,7 @@
             <slice type="integer" label="Input" valueKeyPath="controller.selection.inputFeatureChannels" />
             <slice type="integer" label="Output" valueKeyPath="controller.selection.outputFeatureChannels" />
         </group>
-        <group title="Stride">
+        <!--<group title="Stride">
             <slice type="integer" label="Dilation" valueKeyPath="controller.selection.dilation" />
             <slice type="integer" label="Stride" valueKeyPath="controller.selection.stride" />
         </group>
@@ -22,7 +22,7 @@
                     <slice type="integer" label="Size" valueKeyPath="controller.selection.paddingSize" />
                 </choice>
             </slice>
-        </group>
+        </group>-->
     </group>
 </inspector>
 

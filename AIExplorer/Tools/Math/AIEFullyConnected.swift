@@ -46,7 +46,7 @@ open class AIEFullyConnected: AIEGraphic {
     open var inputFeatureChannels : Int = 0
     open var outputFeatureChannels : Int = 0
     open var dilation : Int = 0
-    open var stride : Int = 0
+    open var stride : Int = 1
     open var paddingPolicy : AIEConvolution.PaddingPolicy = .same
     open var paddingSize : Int = 0
 

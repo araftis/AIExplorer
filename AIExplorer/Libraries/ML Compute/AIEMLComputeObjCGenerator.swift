@@ -222,9 +222,10 @@ extension AIEConvolution : AIEMLComputeObjCWriter {
                 messages.append(AIEMessage(type: .warning, message: "Encountered an unknown padding policy type that cannot be handled by the Obj-C code generator: \(self.type). Using \"\(paddingPolicy)\" instead.", on: self))
             }
             try outputStream.indent(2).write("                     paddingPolicy: \(paddingPolicy)\n")
-            try outputStream.indent(2).write("                      paddingSizes:@[@\(paddingSize), @\(paddingSize)]];\n")
+            try outputStream.indent(2).write("                      paddingSizes: @[@\(paddingSize), @\(paddingSize)]];\n")
         }
     }
+
 }
 
 extension AIEFullyConnected : AIEMLComputeObjCWriter {
@@ -232,6 +233,33 @@ extension AIEFullyConnected : AIEMLComputeObjCWriter {
     func generatePrivateInterfaceDefinition(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws {
         if let variableName = self.variableName {
             try outputStream.indent(1).write("MLCConvolutionDescriptor *_\(variableName)Weights;\n")
+        }
+    }
+
+    func generateCreationInsideInit(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+        if let variableName = self.variableName {
+            // Let's do some generally error checking, first.
+            if stride < 1 {
+                messages.append(AIEMessage(type: .warning, message: "Stride must be at least 1.", on: self))
+            }
+            if width < 1 {
+                messages.append(AIEMessage(type: .warning, message: "Width must be at least 2, defaulting to 3.", on: self))
+            }
+            if height < 1 {
+                messages.append(AIEMessage(type: .warning, message: "Height must be at least 2, defaulting to 3.", on: self))
+            }
+            if inputFeatureChannels < 1 {
+                messages.append(AIEMessage(type: .warning, message: "Input feature channels must be at least 1.", on: self))
+            }
+            if outputFeatureChannels < 1 {
+                messages.append(AIEMessage(type: .warning, message: "Output feature channels must be at least 1.", on: self))
+            }
+            // NOTE: Depth can be 0, because when it is we'll just depend on the depth of the input images.
+
+            try outputStream.indent(2).write("_\(variableName)Weights = [MLCConvolutionDescriptor descriptorWithKernelWidth: \(width)\n")
+            try outputStream.indent(2).write("                      kernelHeight: \(height)\n")
+            try outputStream.indent(2).write("          inputFeatureChannelCount: \(inputFeatureChannels)\n")
+            try outputStream.indent(2).write("         outputFeatureChannelCount: \(outputFeatureChannels)];\n")
         }
     }
 
