@@ -123,7 +123,7 @@ extension AIEFullyConnected : AIETensorFlowCodeWriter{
         //try outputStream.write("# Fully connected layer")
         
         try prePrint(to: outputStream)
-        try outputStream.write("tf.keras.layers.Dense(\(self.dimension))")
+        //try outputStream.write("tf.keras.layers.Dense(\(self.dimension))")
         try postPrint(to: outputStream)
     }
 }

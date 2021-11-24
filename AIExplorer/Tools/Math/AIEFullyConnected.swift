@@ -40,15 +40,17 @@ public extension AJRInspectorIdentifier {
 open class AIEFullyConnected: AIEGraphic {
 
     // MARK: - Properties
-    open var dimension : Int = 0
-    
+    open var width : Int = 0
+    open var height : Int = 0
+    open var depth : Int = 0
+    open var inputFeatureChannels : Int = 0
+    open var outputFeatureChannels : Int = 0
+    open var dilation : Int = 0
+    open var stride : Int = 0
+    open var paddingPolicy : AIEConvolution.PaddingPolicy = .same
+    open var paddingSize : Int = 0
+
     // MARK: - Creation
-
-    public convenience init(dimension: Int) {
-        self.init()
-
-        self.dimension = dimension
-    }
 
     public required init() {
         super.init()
@@ -56,6 +58,59 @@ open class AIEFullyConnected: AIEGraphic {
 
     public required init(frame: NSRect) {
         super.init(frame: frame)
+    }
+
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Size", {
+                        if let self = weakSelf {
+                            var string = ""
+                            if self.width > 0 || self.height > 0 {
+                                string += "\(self.width) ✕ \(self.height)"
+                            }
+                            if self.depth > 0 {
+                                if !string.isEmpty {
+                                    string += " ✕ "
+                                }
+                                string += "\(self.depth)"
+                            }
+                            return string.isEmpty ? nil : string
+                        }
+                        return nil
+                    }),
+                Property("FC", {
+                        if let self = weakSelf {
+                            if self.inputFeatureChannels > 0 || self.outputFeatureChannels > 0 {
+                                return "\(self.inputFeatureChannels) → \(self.outputFeatureChannels)"
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Dilation", {
+                        if let self = weakSelf {
+                            return self.dilation > 0 ? String(describing: self.dilation) : nil
+                        }
+                        return nil
+                    }),
+                Property("Stride", {
+                        if let self = weakSelf {
+                            return self.stride > 0 ? String(describing: self.stride) : nil
+                        }
+                        return nil
+                    }),
+                Property("Pad", {
+                        if let self = weakSelf {
+                            if self.paddingPolicy == .usePaddingSize {
+                                return String(describing: self.paddingSize)
+                            } else {
+                                return self.paddingPolicy.localizedDescription
+                            }
+                        }
+                        return nil
+                    }),
+        ]
     }
 
     // MARK: - AJRInspector
@@ -71,15 +126,65 @@ open class AIEFullyConnected: AIEGraphic {
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
 
-        coder.decodeInteger(forKey: "dimension") { (value) in
-            self.dimension = value
+        coder.decodeInteger(forKey: "width") { (value) in
+            self.width = value
+        }
+        coder.decodeInteger(forKey: "height") { (value) in
+            self.height = value
+        }
+        coder.decodeInteger(forKey: "depth") { (value) in
+            self.depth = value
+        }
+        coder.decodeInteger(forKey: "inputFeatureChannels") { (value) in
+            self.inputFeatureChannels = value
+        }
+        coder.decodeInteger(forKey: "outputFeatureChannels") { (value) in
+            self.outputFeatureChannels = value
+        }
+        coder.decodeInteger(forKey: "dilation") { (value) in
+            self.dilation = value
+        }
+        coder.decodeInteger(forKey: "stride") { (value) in
+            self.stride = value
+        }
+        coder.decodeEnumeration(forKey: "paddingPolicy") { (value : AIEConvolution.PaddingPolicy?) in
+            self.paddingPolicy = value ?? .same
+        }
+        coder.decodeInteger(forKey: "paddingSize") { value in
+            self.paddingSize = value
         }
     }
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
 
-        coder.encode(dimension, forKey: "dimension")
+        if width != 0 {
+            coder.encode(width, forKey: "width")
+        }
+        if height != 0 {
+            coder.encode(height, forKey: "height")
+        }
+        if depth != 0 {
+            coder.encode(depth, forKey: "depth")
+        }
+        if inputFeatureChannels != 0 {
+            coder.encode(inputFeatureChannels, forKey: "inputFeatureChannels")
+        }
+        if outputFeatureChannels != 0 {
+            coder.encode(outputFeatureChannels, forKey: "outputFeatureChannels")
+        }
+        if dilation != 0 {
+            coder.encode(stride, forKey: "dilation")
+        }
+        if stride != 0 {
+            coder.encode(stride, forKey: "stride")
+        }
+        if paddingPolicy != .same {
+            coder.encode(paddingPolicy, forKey: "paddingPolicy")
+        }
+        if paddingSize != 0 {
+            coder.encode(paddingSize, forKey: "paddingSize")
+        }
     }
 
     
