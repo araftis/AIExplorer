@@ -40,17 +40,106 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIELoss: AIEGraphic {
 
+    @objc
+    public enum LossType : Int, AJRXMLEncodableEnum {
+        case categoricalCrossEntropy
+        case cosineDistance
+        case hinge
+        case huber
+        case log
+        case meanAbsoluteError
+        case meanSquaredError
+        case sigmoidCrossEntropy
+        case softmaxCrossEntropy
+
+        public var description: String {
+            switch self {
+            case .categoricalCrossEntropy: return "categoricalCrossEntropy"
+            case .cosineDistance: return "cosineDistance"
+            case .hinge: return "hinge"
+            case .huber: return "huber"
+            case .log: return "log"
+            case .meanAbsoluteError: return "meanAbsoluteError"
+            case .meanSquaredError: return "meanSquaredError"
+            case .sigmoidCrossEntropy: return "sigmoidCrossEntropy"
+            case .softmaxCrossEntropy: return "softmaxCrossEntropy"
+            }
+        }
+
+        public var localizedDescription: String {
+            switch self {
+            case .categoricalCrossEntropy: return "Categorical Cross Entropy"
+            case .cosineDistance: return "Cosine Distance"
+            case .hinge: return "Hinge"
+            case .huber: return "Huber"
+            case .log: return "Log"
+            case .meanAbsoluteError: return "Mean Absolute Error"
+            case .meanSquaredError: return "Mean Squared Error"
+            case .sigmoidCrossEntropy: return "Sigmoid Cross Entropy"
+            case .softmaxCrossEntropy: return "Softmax Cross Entropy"
+            }
+        }
+    }
+
+    @objc
+    public enum ReductionType : Int, AJRXMLEncodableEnum {
+        case all
+        case any
+        case argMax
+        case argMin
+        case max
+        case mean
+        case min
+        case none
+        case sum
+        case l1Norm
+
+        public var description: String {
+            switch self {
+            case .all: return "all"
+            case .any: return "any"
+            case .argMax: return "argMax"
+            case .argMin: return "argMin"
+            case .max: return "max"
+            case .mean: return "mean"
+            case .min: return "min"
+            case .none: return "none"
+            case .sum: return "sum"
+            case .l1Norm: return "l1Norm"
+            }
+        }
+
+        public var localizedDescription: String {
+            switch self {
+            case .all: return "All"
+            case .any: return "Any"
+            case .argMax: return "Arg Max"
+            case .argMin: return "Arg Min"
+            case .max: return "Max"
+            case .mean: return "Mean"
+            case .min: return "Min"
+            case .none: return "None"
+            case .sum: return "Sum"
+            case .l1Norm: return "L1 Norm"
+            }
+        }
+    }
+
     // MARK: - Properties
-    open var loss_type : Int = 0
-    open var optimization_type : Int = 0
-    open var learning_rate : Double = 0.001
+    open var type : LossType = .softmaxCrossEntropy
+    open var reductionType : ReductionType = .none
+    open var weight : Float = 0.001
+    open var labelSmoothing : Float = 0.001
+    open var classCount : Int = 1
+    open var epsilon : Float = 0.001
+    open var delta : Float = 0.001
 
     // MARK: - Creation
 
-    public convenience init(loss_type: Int) {
+    public convenience init(type: LossType) {
         self.init()
 
-        self.loss_type = loss_type
+        self.type = type
     }
 
     public required init() {
@@ -59,6 +148,66 @@ open class AIELoss: AIEGraphic {
 
     public required init(frame: NSRect) {
         super.init(frame: frame)
+    }
+
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Type", {
+                        if let self = weakSelf {
+                            return self.type.localizedDescription
+                        }
+                        return nil
+                    }),
+                Property("Reduction", {
+                        if let self = weakSelf {
+                            return self.reductionType.localizedDescription
+                        }
+                        return nil
+                    }),
+                Property("Smooth", {
+                        if let self = weakSelf {
+                            if self.type == .softmaxCrossEntropy
+                                || self.type == .categoricalCrossEntropy
+                                || self.type == .sigmoidCrossEntropy {
+                                return String(describing: self.labelSmoothing)
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Class Count", {
+                        if let self = weakSelf {
+                            if self.type == .categoricalCrossEntropy
+                                || self.type == .softmaxCrossEntropy {
+                                return String(describing: self.classCount)
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Epsilon", {
+                        if let self = weakSelf {
+                            if self.type == .log {
+                                return String(describing: self.epsilon)
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Delta", {
+                        if let self = weakSelf {
+                            if self.type == .huber {
+                                return String(describing: self.delta)
+                            }
+                        }
+                        return nil
+                    }),
+                Property("Weight", {
+                        if let self = weakSelf {
+                            return String(describing: self.weight)
+                        }
+                        return nil
+                    }),
+        ]
     }
 
     // MARK: - AJRInspector
@@ -74,29 +223,41 @@ open class AIELoss: AIEGraphic {
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
 
-        coder.decodeInteger(forKey: "loss_type") { (value) in
-            self.loss_type = value
+        coder.decodeEnumeration(forKey: "type") { (value: LossType?) in
+            self.type = value ?? .softmaxCrossEntropy
         }
-        
-        coder.decodeInteger(forKey: "optimization_type") { (value) in
-            self.loss_type = value
+        coder.decodeEnumeration(forKey: "reductionType") { (value: ReductionType?) in
+            self.reductionType = value ?? .none
         }
-        
-        //coder.decodeInteger(forKey: "learning_rate") { (value) in
-        //    self.loss_type = value
-        //}
+        coder.decodeFloat(forKey: "weight") { value in
+            self.weight = value
+        }
+        coder.decodeFloat(forKey: "labelSmoothing") { value in
+            self.labelSmoothing = value
+        }
+        coder.decodeInteger(forKey: "classCount") { value in
+            self.classCount = value
+        }
+        coder.decodeFloat(forKey: "epsilon") { value in
+            self.epsilon = value
+        }
+        coder.decodeFloat(forKey: "delta") { value in
+            self.delta = value
+        }
     }
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
 
-        coder.encode(loss_type, forKey: "loss_type")
-        coder.encode(loss_type, forKey: "optimization_type")
-        //coder.encode(loss_type, forKey: "learning_rate")
-
+        coder.encode(type, forKey: "type")
+        coder.encode(reductionType, forKey: "reductionType")
+        coder.encode(weight, forKey: "weight")
+        coder.encode(labelSmoothing, forKey: "labelSmoothing")
+        coder.encode(classCount, forKey: "classCount")
+        coder.encode(epsilon, forKey: "epsilon")
+        coder.encode(delta, forKey: "delta")
     }
 
-    
     open class override var ajr_nameForXMLArchiving: String {
         return "aieLoss"
     }

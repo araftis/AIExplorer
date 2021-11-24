@@ -5,31 +5,31 @@
             <slice type="choice" style="popUp" label="Type" valueType="integer" valueKeyPath="controller.selection.type">
                 <choice title="Absolute" value="0" />
                 <choice title="CELU" value="1">
-                    <slice type="float" label="Alpha" valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Alpha" increment="0.1"  valueKeyPath="controller.selection.a" />
                 </choice>
                 <choice title="Clamp" value="2">
-                    <slice type="float" label="Min Value" valueKeyPath="controller.selection.a" />
-                    <slice type="float" label="Max Value" valueKeyPath="controller.selection.b" />
+                    <slice type="float" label="Min Value" increment="0.1"  valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Max Value" increment="0.1"  valueKeyPath="controller.selection.b" />
                 </choice>
                 <choice title="ELU" value="3">
-                    <slice type="float" label="Alpha" valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Alpha" increment="0.1"  valueKeyPath="controller.selection.a" />
                 </choice>
                 <choice title="GELU" value="4" />
                 <choice title="Hard Shrink" value="5">
-                    <slice type="float" label="Lambda" valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Lambda" increment="0.1"  valueKeyPath="controller.selection.a" />
                 </choice>
                 <choice title="Hard Sigmoid" value="6" />
                 <choice title="Hard Swish" value="7" />
                 <choice title="Linear" value="8">
-                    <slice type="float" label="Scale" valueKeyPath="controller.selection.a" />
-                    <slice type="float" label="Bias" valueKeyPath="controller.selection.b" />
+                    <slice type="float" label="Scale" increment="0.1"  valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Bias" increment="0.1"  valueKeyPath="controller.selection.b" />
                 </choice>
                 <choice title="Log Sigmoid" value="9" />
                 <choice title="None" value="10" />
                 <choice title="ReLU" value="11" />
                 <choice title="ReLUN" value="12">
-                    <slice type="float" label="Alpha" valueKeyPath="controller.selection.a" />
-                    <slice type="float" label="Beta" valueKeyPath="controller.selection.b" />
+                    <slice type="float" label="Alpha" increment="0.1" valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Beta" increment="0.1"  valueKeyPath="controller.selection.b" />
                 </choice>
                 <choice title="SELU" value="13" />
                 <choice title="Sigmoid" value="14" />
@@ -37,14 +37,14 @@
                     <slice type="float" label="Beta" valueKeyPath="controller.selection.a" />
                 </choice>
                 <choice title="Soft Shrink" value="16">
-                    <slice type="float" label="Lambda" valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Lambda" increment="0.1"  valueKeyPath="controller.selection.a" />
                 </choice>
                 <choice title="Soft Sign" value="17" />
                 <choice title="Tanh" value="18" />
                 <choice title="Tanh Shrink" value="19" />
                 <choice title="Threshold" value="20">
-                    <slice type="float" label="Threshold" valueKeyPath="controller.selection.a" />
-                    <slice type="float" label="Replacement" valueKeyPath="controller.selection.b" />
+                    <slice type="float" label="Threshold" increment="0.1"  valueKeyPath="controller.selection.a" />
+                    <slice type="float" label="Replacement" increment="0.1"  valueKeyPath="controller.selection.b" />
                 </choice>
             </slice>
         </group>

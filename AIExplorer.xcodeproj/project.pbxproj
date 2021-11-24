@@ -260,12 +260,12 @@
 		FA02BF4D25B784EC001EFBBA /* Activation */ = {
 			isa = PBXGroup;
 			children = (
-				FA02BF4E25B78505001EFBBA /* AIEActivation.swift */,
 				25EC03A625DE02E6008A4DE4 /* AIEActivation.inspector */,
+				FA02BF4E25B78505001EFBBA /* AIEActivation.swift */,
 				FA02BF5C25B78578001EFBBA /* AIEActivationTool.swift */,
 				FA02BF5425B7851C001EFBBA /* AIEMultiheadAttention.swift */,
-				FA02BF5825B78527001EFBBA /* AIESoftmax.swift */,
 				25EC03BC25E26613008A4DE4 /* AIESoftmax.inspector */,
+				FA02BF5825B78527001EFBBA /* AIESoftmax.swift */,
 			);
 			path = Activation;
 			sourceTree = "<group>";
@@ -319,10 +319,10 @@
 		FA02BFBF25B7ADB3001EFBBA /* Loss */ = {
 			isa = PBXGroup;
 			children = (
-				FA02BFC025B7ADC6001EFBBA /* AIELossTool.swift */,
-				FA02BFC625B7ADD6001EFBBA /* AIELoss.swift */,
-				FA02BFCA25B7ADE9001EFBBA /* AIEYOLOLoss.swift */,
 				25EC039425D7D499008A4DE4 /* AIELoss.inspector */,
+				FA02BFC625B7ADD6001EFBBA /* AIELoss.swift */,
+				FA02BFC025B7ADC6001EFBBA /* AIELossTool.swift */,
+				FA02BFCA25B7ADE9001EFBBA /* AIEYOLOLoss.swift */,
 			);
 			path = Loss;
 			sourceTree = "<group>";

@@ -131,40 +131,40 @@ extension AIEFullyConnected : AIETensorFlowCodeWriter{
 extension AIELoss : AIETensorFlowCodeWriter{
     
     public func generateCode(to outputStream: OutputStream) throws {
-        //try outputStream.write("# Loss layer")
-        
-        //would need to compile the model to add loss
-        try prePrint(to: outputStream)
-        
-        var loss_s: String
-        if (self.loss_type == 0){
-            loss_s = "tf.keras.losses.BinaryCrossentropy(from_logits=True)"
-        }
-        else if (self.loss_type == 1){
-            loss_s = "tf.keras.losses.CategoricalCrossentropy(from_logits=False)"
-        }
-        else {
-            loss_s = "tf.keras.losses.MeanSquaredError()"
-        }
-        
-        
-        var optimizer : String
-        
-        if (self.optimization_type == 0){
-            optimizer = "tf.keras.optimizers.SGD(learning_rate=\(self.learning_rate))"
-        }
-        else if (self.optimization_type == 1){
-            optimizer = "tf.keras.optimizers.Adam(learning_rate=\(self.learning_rate))"
-        }
-        else {
-            optimizer = "tf.keras.optimizers.RMSprop(learning_rate=\(self.learning_rate))"
-        }
-        
-        
-        try outputStream.write("model.compile(loss=\(loss_s), optimizer=\(optimizer))")
-
-        try outputStream.write("# Loss type number: \(self.loss_type)")
-        try postPrint(to: outputStream)
+//        //try outputStream.write("# Loss layer")
+//
+//        //would need to compile the model to add loss
+//        try prePrint(to: outputStream)
+//
+//        var loss_s: String
+//        if (self.loss_type == 0){
+//            loss_s = "tf.keras.losses.BinaryCrossentropy(from_logits=True)"
+//        }
+//        else if (self.loss_type == 1){
+//            loss_s = "tf.keras.losses.CategoricalCrossentropy(from_logits=False)"
+//        }
+//        else {
+//            loss_s = "tf.keras.losses.MeanSquaredError()"
+//        }
+//
+//
+//        var optimizer : String
+//
+//        if (self.optimization_type == 0){
+//            optimizer = "tf.keras.optimizers.SGD(learning_rate=\(self.learning_rate))"
+//        }
+//        else if (self.optimization_type == 1){
+//            optimizer = "tf.keras.optimizers.Adam(learning_rate=\(self.learning_rate))"
+//        }
+//        else {
+//            optimizer = "tf.keras.optimizers.RMSprop(learning_rate=\(self.learning_rate))"
+//        }
+//
+//
+//        try outputStream.write("model.compile(loss=\(loss_s), optimizer=\(optimizer))")
+//
+//        try outputStream.write("# Loss type number: \(self.loss_type)")
+//        try postPrint(to: outputStream)
     }
 }
 

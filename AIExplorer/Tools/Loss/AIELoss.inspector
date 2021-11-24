@@ -2,18 +2,150 @@
 <inspector>
     <group title="Loss">
         <group title="Type">
-            <slice type="choice" style="popUp" label="Type" valueType="integer" valueKeyPath="controller.selection.loss_type">
-                <choice title="Binary Crossentropy" value="0" />
-                <choice title="Categorical Crossentropy" value="1" />
-                <choice title="Mean Square Error" value="2" />
+            <slice type="choice" style="popUp" label="Type" valueType="integer" valueKeyPath="controller.selection.type">
+                <choice title="Categorical Crossentropy" value="0">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Smoothing" increment="0.1"  valueKeyPath="controller.selection.labelSmoothing" />
+                    <slice type="integer" label="Class Count" valueKeyPath="controller.selection.classCount" />
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Cosine Distance" value="1">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Hinge" value="2">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Huber" value="3">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Delta" increment="0.1"  valueKeyPath="controller.selection.epsilon" />
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Log" value="4">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Epsilon" increment="0.1"  valueKeyPath="controller.selection.epsilon" />
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Mean Absolute Error" value="5">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Mean Squared Error" value="6">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Sigmoid Cross Entropy" value="7">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Smoothing" increment="0.1"  valueKeyPath="controller.selection.labelSmoothing" />
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
+                <choice title="Softmax Cross Entropy" value="8">
+                    <slice type="choice" style="popUp" label="Reduction" valueType="integer" valueKeyPath="controller.selection.reductionType">
+                        <choice title="All" value="0" />
+                        <choice title="Any" value="1" />
+                        <choice title="Argument Max" value="2" />
+                        <choice title="Argument Min" value="3" />
+                        <choice title="Max" value="4" />
+                        <choice title="Mean" value="5" />
+                        <choice title="Min" value="6" />
+                        <choice title="None" value="7" />
+                        <choice title="Sum" value="8" />
+                        <choice title="L1 Norm" value="9" />
+                    </slice>
+                    <slice type="float" label="Smoothing" increment="0.1"  valueKeyPath="controller.selection.labelSmoothing" />
+                    <slice type="integer" label="Class Count" valueKeyPath="controller.selection.classCount" />
+                    <slice type="float" label="Weight" increment="0.1"  valueKeyPath="controller.selection.weight" />
+                </choice>
             </slice>
-            <slice type="choice" style="popUp" label="Optimization" valueType="integer" valueKeyPath="controller.selection.optimization_type">
-                <choice title="SGD" value="0" />
-                <choice title="ADAM" value="1" />
-                <choice title="RMS Prop" value="2" />
-            </slice>
-            <slice type="float" subtitle="Learning Rate" valueKeyPath="controller.selection.learning_rate" />
-
         </group>
     </group>
 </inspector>
