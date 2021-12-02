@@ -50,6 +50,12 @@ public extension AJRUserDefaultsKey {
 
 }
 
+public extension Notification.Name {
+
+    static var sourceCodeNeedsUpdate = Notification.Name("AIESourceCodeNeedsUpdate")
+
+}
+
 @objcMembers
 open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserver {
 
@@ -86,6 +92,10 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         updateObservations()
         document.addGraphicObserver(self)
         updateUI(for: aiDocument.selectedCodeDefinition)
+        // This notification will be coallesced and then called when idle.
+        NotificationCenter.default.addObserver(forName: .sourceCodeNeedsUpdate, object: self, queue: nil) { notification in
+            self.generateCode()
+        }
     }
 
     open func updateDefinitionObservations() {
@@ -223,8 +233,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     open func graphic(_ graphic: DrawGraphic, didEditKeys keys: Set<String>) {
         // We only need to generate code if the changed object was a neural network note.
         if graphic is AIEGraphic {
-            print("change: \(graphic): \(keys)")
-            self.generateCode()
+            NotificationQueue.default.enqueue(Notification(name: .sourceCodeNeedsUpdate, object: self, userInfo: [:]), postingStyle: .whenIdle, coalesceMask: [.onName, .onSender], forModes: nil)
         }
     }
 
