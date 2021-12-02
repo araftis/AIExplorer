@@ -56,6 +56,9 @@ public extension AIECodeGenerator.InfoKey {
     static var role : AIECodeGenerator.InfoKey<AIECodeDefinition.Role> {
         return AIECodeGenerator.InfoKey(key: "role")
     }
+    static var `extension` : AIECodeGenerator.InfoKey<String> {
+        return AIECodeGenerator.InfoKey(key: "extension")
+    }
 }
 
 @objcMembers
@@ -94,6 +97,12 @@ open class AIECodeGenerator: NSObject {
     }
 
     // MARK: - Code Generation
+
+    /**
+     */
+    open func fileNames(forBaseName baseName: String) -> [String] {
+        return language.fileNames(forBaseName: baseName)
+    }
 
     /**
      Generates the desired source code to `outputStream`.

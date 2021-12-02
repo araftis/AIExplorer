@@ -99,7 +99,7 @@
             </language>
             <language identifier="c++" name="C++">
                 <extension extension="cpp" uti="public.c-plus-plus-source" />
-                <extension extension="cc" uti="public.c-plus-plus-source" />
+                <extension extension="h" uti="public.c-header" />
             </language>
         </code-generator>
     </aie-library>
@@ -110,6 +110,7 @@
             </language>
             <language identifier="obj-c" name="Obj-C">
                 <extension extension="m" uti="public.objective-c-source" />
+                <extension extension="h" uti="public.c-header" />
             </language>
         </code-generator>
     </aie-library>

@@ -95,6 +95,19 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         didSet {
             self.didChangeValue(forKey: "language")
             scheduleCodeUpdate()
+            if let language = language {
+                if let selectedExtension = selectedExtension {
+                    if !language.fileExtensions.contains(selectedExtension) {
+                        self.selectedExtension = language.fileExtensions[0]
+                    }
+                } else {
+                    self.selectedExtension = language.fileExtensions[0]
+                }
+            } else {
+                if selectedExtension != nil {
+                    selectedExtension = nil
+                }
+            }
         }
     }
     
@@ -106,6 +119,16 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         didSet {
             self.didChangeValue(forKey: "role")
             scheduleCodeUpdate()
+        }
+    }
+
+    open var selectedExtension : String? {
+        willSet {
+            self.willChangeValue(forKey: "selectedExtension")
+        }
+        didSet {
+            self.didChangeValue(forKey: "selectedExtension")
+            // NOTE: We don't schedule an update, because this doesn't change the actual code generated, just what's displayed in the UI.
         }
     }
     
@@ -131,7 +154,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     }
 
     /** The generated code. This is simple a cache for display purposes, but it's possible that could be expanded in the future. It's never archived. */
-    open var code : String? {
+    open var code = [String:String]() {
         willSet {
             willChangeValue(forKey: "code")
         }
@@ -179,6 +202,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         if let codeName = codeName {
             coder.encode(codeName, forKey: "codeName")
         }
+        if let selectedExtension = selectedExtension {
+            coder.encode(selectedExtension, forKey: "selectedExtension")
+        }
     }
 
     open func decode(with coder: AJRXMLCoder) {
@@ -209,6 +235,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         }
         coder.decodeString(forKey: "codeName") { value in
             self.codeName = value
+        }
+        coder.decodeString(forKey: "selectedExtension") { value in
+            self.selectedExtension = value
         }
     }
 
@@ -261,34 +290,47 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         }
     }
 
+    open var fileNames : [String] {
+        if let document = document {
+            let codeName = codeName ?? document.defaultCodeName
+            if let language = language {
+                return language.fileNames(forBaseName: codeName)
+            }
+        }
+        return []
+    }
+
     /**
      Generates the source code and caches is on `code`. Also writes it to disk. This method is called by `generateCode()` once all nullable objects have been resolved, which is why it isn't public. The public API is to just call `generateCode()`.
      */
-    internal func generateCode(for library: AIELibrary, language: AIELanguage, to url: URL?) -> Void {
+    internal func generateCode(for library: AIELibrary, language: AIELanguage, to baseURL: URL?) -> Void {
         if let document = self.document {
             document.clearMessages()
             var info = [String:Any]()
             info[.codeName] = codeName ?? document.defaultCodeName
             info[.url] = outputURL
             info[.role] = role
-            if let generator = library.codeGenerator(info: info, for: language, roots: document.rootObjects) {
-                let outputStream = OutputStream.toMemory()
-                outputStream.open()
-                var messages = [AIEMessage]()
-                do {
-                    try generator.generate(to: outputStream, accumulatingMessages: &messages)
-                    document.addMessages(messages)
-                } catch let error as NSError {
-                    AJRLog.warning("Error generating code: \(error.localizedDescription)")
-                }
-                if let string = outputStream.dataAsString(using: .utf8) {
-                    code = string
-                    if let url = url {
-                        do {
-                            try write(code: string, to: url)
-                        } catch {
-                            // TODO: This should present in the UI somehow.
-                            AJRLog.error("Failed to write code to \(url.path): \(error)")
+            for fileExtension in language.fileExtensions {
+                info[.extension] = fileExtension
+                if let generator = library.codeGenerator(info: info, for: language, roots: document.rootObjects) {
+                    let outputStream = OutputStream.toMemory()
+                    outputStream.open()
+                    var messages = [AIEMessage]()
+                    do {
+                        try generator.generate(to: outputStream, accumulatingMessages: &messages)
+                        document.addMessages(messages)
+                    } catch let error as NSError {
+                        AJRLog.warning("Error generating code: \(error.localizedDescription)")
+                    }
+                    if let string = outputStream.dataAsString(using: .utf8) {
+                        code[fileExtension] = string
+                        if let url = baseURL?.appendingPathComponent(info[.codeName]).appendingPathExtension(fileExtension) {
+                            do {
+                                try write(code: string, to: url)
+                            } catch {
+                                // TODO: This should present in the UI somehow.
+                                AJRLog.error("Failed to write code to \(url.path): \(error)")
+                            }
                         }
                     }
                 }

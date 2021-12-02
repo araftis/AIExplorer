@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="AIESourceCodeAccessory" customModule="AIExplorer" customModuleProvider="target">
             <connections>
+                <outlet property="fileNamePopUp" destination="NeH-pC-cnT" id="oa7-fa-p4w"/>
                 <outlet property="languageLabel" destination="4dS-3s-i3W" id="3sB-9o-0wB"/>
                 <outlet property="libraryLabel" destination="dX5-qP-zwc" id="DSj-do-ynS"/>
                 <outlet property="nameLabel" destination="3zd-3t-3hO" id="0TH-Ny-kAn"/>
@@ -101,9 +102,29 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tTk-Xl-EXk">
+                    <rect key="frame" x="218" y="253" width="5" height="14"/>
+                </box>
+                <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="NeH-pC-cnT">
+                    <rect key="frame" x="220" y="253" width="70" height="14"/>
+                    <popUpButtonCell key="cell" type="bevel" title="File Name" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="2fV-xb-ADg" id="HHy-dw-czN">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="yOK-Ue-IL9">
+                            <items>
+                                <menuItem title="File Name" state="on" id="2fV-xb-ADg"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="selectFileName:" target="-2" id="Mai-E0-pzO"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <constraints>
                 <constraint firstItem="YWG-9O-BPH" firstAttribute="top" secondItem="BcC-RW-Tck" secondAttribute="top" id="0hf-i3-hc3"/>
+                <constraint firstItem="NeH-pC-cnT" firstAttribute="leading" secondItem="tTk-Xl-EXk" secondAttribute="leading" constant="5" id="0yD-WK-OUM"/>
+                <constraint firstItem="NeH-pC-cnT" firstAttribute="firstBaseline" secondItem="MSf-Ap-WbH" secondAttribute="firstBaseline" id="3LP-Qs-hXU"/>
                 <constraint firstItem="4dS-3s-i3W" firstAttribute="bottom" secondItem="J5o-xj-P72" secondAttribute="bottom" id="3dG-no-l6v"/>
                 <constraint firstItem="YWG-9O-BPH" firstAttribute="firstBaseline" secondItem="MSf-Ap-WbH" secondAttribute="firstBaseline" id="4hT-RE-5PO"/>
                 <constraint firstItem="4dS-3s-i3W" firstAttribute="top" secondItem="J5o-xj-P72" secondAttribute="top" id="7cN-Tz-mhz"/>
@@ -117,10 +138,13 @@
                 <constraint firstItem="3zd-3t-3hO" firstAttribute="top" secondItem="Mzl-vo-Hna" secondAttribute="top" id="Qri-8u-oap"/>
                 <constraint firstItem="dX5-qP-zwc" firstAttribute="leading" secondItem="Mzl-vo-Hna" secondAttribute="trailing" constant="5" id="Qtq-bk-i7C"/>
                 <constraint firstItem="YWG-9O-BPH" firstAttribute="firstBaseline" secondItem="4dS-3s-i3W" secondAttribute="firstBaseline" id="SI6-mI-sl9"/>
+                <constraint firstItem="tTk-Xl-EXk" firstAttribute="bottom" secondItem="MSf-Ap-WbH" secondAttribute="bottom" id="Txw-rQ-v4d"/>
                 <constraint firstItem="A69-4F-8gh" firstAttribute="top" secondItem="3zd-3t-3hO" secondAttribute="bottom" constant="5" id="VKf-K9-GkG"/>
                 <constraint firstItem="4dS-3s-i3W" firstAttribute="firstBaseline" secondItem="dX5-qP-zwc" secondAttribute="firstBaseline" id="W8Z-rJ-cul"/>
                 <constraint firstItem="MSf-Ap-WbH" firstAttribute="leading" secondItem="BcC-RW-Tck" secondAttribute="trailing" constant="5" id="WQG-Ae-utD"/>
+                <constraint firstItem="tTk-Xl-EXk" firstAttribute="top" secondItem="MSf-Ap-WbH" secondAttribute="top" id="b7s-uf-Ye6"/>
                 <constraint firstItem="YWG-9O-BPH" firstAttribute="bottom" secondItem="BcC-RW-Tck" secondAttribute="bottom" id="eE2-ei-nRJ"/>
+                <constraint firstItem="tTk-Xl-EXk" firstAttribute="trailing" secondItem="MSf-Ap-WbH" secondAttribute="trailing" constant="5" id="fqS-ZG-H8C"/>
                 <constraint firstItem="BcC-RW-Tck" firstAttribute="leading" secondItem="YWG-9O-BPH" secondAttribute="trailing" constant="5" id="hOs-M7-f9c"/>
                 <constraint firstItem="Mzl-vo-Hna" firstAttribute="leading" secondItem="3zd-3t-3hO" secondAttribute="trailing" constant="5" id="i5u-vu-eZf"/>
                 <constraint firstItem="3zd-3t-3hO" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="5" id="j22-qW-ZMA"/>

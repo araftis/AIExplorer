@@ -147,16 +147,22 @@ open class AIEMLComputeObjCGenerator: AIECodeGenerator {
             if let root = root as? AIEIO {
                 self.type = root.type
             } else {
-                messages.append(AIEMessage(type: .error, message: "Network roots must begin on an IO node.", on: root))
+                if info[.extension] == "m" {
+                    // Be careful to only add a message once.
+                    messages.append(AIEMessage(type: .error, message: "Network roots must begin on an IO node.", on: root))
+                }
             }
         }
 
-
-        try generateInterface(to: outputStream, accumulatingMessages: &messages)
-        try generateImplementation(to: outputStream, accumulatingMessages: &messages)
+        if info[.extension] == "h" {
+            try generateInterface(to: outputStream, accumulatingMessages: &messages)
+        } else if info[.extension] == "m" {
+            try generateImplementation(to: outputStream, accumulatingMessages: &messages)
+        }
         
-//        // Add a message, just because we want a message to test with.
-        if let root = roots.first {
+        // Add a message, just because we want a message to test with.
+        if let root = roots.first,
+           info[.extension] == "m" {
             messages.append(AIEMessage(type: .info, message: "Test info. This is a really long message, because we want to make sure that the text is wrapping correctly, and also that it stops growing in height after wrapping three lines tall. To manage that, I need to write a whole bunch of text.", on: root))
             messages.append(AIEMessage(type: .warning, message: "Test warning", on: root))
             messages.append(AIEMessage(type: .error, message: "Test error", on: root))

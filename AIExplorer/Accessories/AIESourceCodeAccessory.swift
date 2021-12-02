@@ -67,6 +67,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     @IBOutlet var languageLabel : NSTextField!
     @IBOutlet var roleLabel : NSTextField!
     @IBOutlet var pathLabel : NSTextField!
+    @IBOutlet var fileNamePopUp : NSPopUpButton!
 
     internal var observationTokens = [AJRInvalidation]()
     internal var definitionObservationTokens = [AJRInvalidation]()
@@ -120,6 +121,10 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
                 weakSelf?.updatePathLabel(for: codeDefinition as? AIECodeDefinition)
             }))
             definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "code", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateCode(for: codeDefinition as? AIECodeDefinition)
+            }))
+            definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "selectedExtension", options: [], block: { codeDefinition, key, change in
+                weakSelf?.updateFileNamePopUp(for: codeDefinition as? AIECodeDefinition)
                 weakSelf?.updateCode(for: codeDefinition as? AIECodeDefinition)
             }))
         }
@@ -203,12 +208,50 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     open func updatePathLabel(for codeDefinition: AIECodeDefinition?) -> Void {
         update(field: pathLabel, value: codeDefinition?.outputURL?.path, defaultValue: "No Path", for: codeDefinition)
     }
+
+    open func updateFileNamePopUp(for codeDefinition: AIECodeDefinition?) -> Void {
+        var showNoSelection = true
+
+        if let codeDefinition = codeDefinition,
+           codeDefinition == aiDocument.selectedCodeDefinition {
+            let names = codeDefinition.fileNames
+            if names.count > 0 {
+                let selectedExtension = codeDefinition.selectedExtension
+                var itemToSelect : NSMenuItem? = nil
+
+                fileNamePopUp.isEnabled = true
+                fileNamePopUp.removeAllItems()
+                for fileName in names {
+                    fileNamePopUp.addItem(withTitle: fileName)
+                    if let item = fileNamePopUp.lastItem {
+                        item.representedObject = fileName
+                        if selectedExtension == (fileName as NSString).pathExtension {
+                            itemToSelect = item
+                        }
+                    }
+                }
+                if let itemToSelect = itemToSelect {
+                    fileNamePopUp.select(itemToSelect)
+                }
+                showNoSelection = false
+            }
+        }
+
+        if showNoSelection {
+            fileNamePopUp.removeAllItems()
+            fileNamePopUp.addItem(withTitle: "No Selection")
+            fileNamePopUp.isEnabled = false
+        }
+    }
     
     open func updateCode(for codeDefinition: AIECodeDefinition?) -> Void {
         if let textStorage = sourceTextView.textStorage {
             if codeDefinition == aiDocument.selectedCodeDefinition {
-                if let value = codeDefinition?.code {
-                    textStorage.mutableString.setString(value)
+                if let value = codeDefinition?.code, let fileName = fileNamePopUp.selectedItem?.representedObject as? String {
+                    let pathExtension = (fileName as NSString).pathExtension
+                    if let code = value[pathExtension] {
+                        textStorage.mutableString.setString(code)
+                    }
                 } else {
                     textStorage.mutableString.setString("")
                 }
@@ -225,6 +268,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         updateLanguageLabel(for: codeDefinition)
         updateRoleLabel(for: codeDefinition)
         updatePathLabel(for: codeDefinition)
+        updateFileNamePopUp(for: codeDefinition)
         updateCode(for: codeDefinition)
     }
 
@@ -242,6 +286,15 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     open override func awakeFromNib() -> Void {
         if let storage = sourceTextView.textStorage {
             storage.addAttribute(.font, value: UserDefaults[.sourceCodeFont]!, range: storage.mutableString.fullRange)
+        }
+    }
+
+    // MARK: - Actions
+
+    @IBAction
+    open func selectFileName(_ sender: Any?) -> Void {
+        if let ext = (fileNamePopUp.selectedItem?.representedObject as? NSString)?.pathExtension {
+            aiDocument.selectedCodeDefinition?.selectedExtension = ext
         }
     }
 

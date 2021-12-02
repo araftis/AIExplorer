@@ -143,6 +143,18 @@ public class AIEFileType : NSObject {
 
     public var imageForInspector: NSImage? { return nil }
 
+    // MARK: - Utilities
+
+    open func fileNames(forBaseName baseName: String) -> [String] {
+        var names = [String]()
+
+        for fileExtension in fileExtensions {
+            names.append("\(baseName).\(fileExtension)")
+        }
+
+        return names
+    }
+
 }
 
 /**
