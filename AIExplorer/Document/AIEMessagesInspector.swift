@@ -48,6 +48,8 @@ open class AIEMessagesInspector: DrawStructureInspector, NSOutlineViewDataSource
                 weakSelf?.messagesDidChange()
             })
         }
+        messagesTable.doubleAction = #selector(doubleSelect(_:))
+        messagesTable.target = self
     }
     
     open func messagesDidChange() -> Void {
@@ -182,4 +184,12 @@ open class AIEMessagesInspector: DrawStructureInspector, NSOutlineViewDataSource
             document?.addGraphics(toSelection: graphicsToSelect as NSSet)
         }
     }
+
+    // MARK: - Actions
+
+    @IBAction open func doubleSelect(_ sender: Any?) -> Void {
+        // We just hand focus over to the main editor.
+        document?.makeSelectionOrVisiblePageFirstResponderAndScrollToVisible(true)
+    }
+
 }
