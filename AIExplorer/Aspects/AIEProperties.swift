@@ -40,6 +40,8 @@ open class AIEProperties: DrawText, AJREditObserver {
 
     public static var fontSize : CGFloat = 8.0
 
+    open override class var shouldArchive : Bool { return false }
+
     open override class func defaultAspect(for graphic: DrawGraphic) -> DrawAspect {
         return AIEProperties(graphic: graphic, text: NSAttributedString(string: "", attributes: [:]))
     }
