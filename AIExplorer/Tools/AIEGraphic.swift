@@ -211,6 +211,7 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     public required override init(frame: NSRect) {
         super.init(frame: frame)
         // Causes us to create the default "properties" aspect.
+        firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority, create: true)
         firstAspect(ofType: AIEProperties.self, with: AIEProperties.defaultPriority, create: true)
     }
 

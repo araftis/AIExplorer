@@ -20,5 +20,9 @@ open class AIEIO: AIEGraphic {
     }
     
     open var type : AIEIO.Kind { return .unknown }
+    
+    open class override var ajr_nameForXMLArchiving: String {
+        return "aieIO" // Never used, but we need to avoid returning our superclass' name.
+    }
 
 }

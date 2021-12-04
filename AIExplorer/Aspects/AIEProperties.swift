@@ -42,8 +42,11 @@ open class AIEProperties: DrawText, AJREditObserver {
 
     open override class var shouldArchive : Bool { return false }
 
-    open override class func defaultAspect(for graphic: DrawGraphic) -> DrawAspect {
-        return AIEProperties(graphic: graphic, text: NSAttributedString(string: "", attributes: [:]))
+    open override class func defaultAspect(for graphic: DrawGraphic) -> DrawAspect? {
+        if graphic is AIEGraphic {
+            return AIEProperties(graphic: graphic, text: NSAttributedString(string: "", attributes: [:]))
+        }
+        return nil
     }
 
     public static var defaultTextAttributes : [NSAttributedString.Key:Any] = {

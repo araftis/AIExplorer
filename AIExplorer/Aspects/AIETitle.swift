@@ -66,8 +66,11 @@ open class AIETitle: DrawText {
 
     open override class var shouldArchive : Bool { return false }
 
-    open override class func defaultAspect(for graphic: DrawGraphic) -> DrawAspect {
-        return AIETitle(graphic: graphic, text: NSAttributedString(string: "Untitled", attributes: Self.defaultTextAttributes))
+    open override class func defaultAspect(for graphic: DrawGraphic) -> DrawAspect? {
+        if graphic is AIEGraphic {
+            return AIETitle(graphic: graphic, text: NSAttributedString(string: "Untitled", attributes: Self.defaultTextAttributes))
+        }
+        return nil
     }
 
     internal var _height : CGFloat? = nil
@@ -111,6 +114,7 @@ open class AIETitle: DrawText {
 
     open override func graphicDidChangeShape(_ graphic: DrawGraphic) {
         _height = nil
+        super.graphicDidChangeShape(graphic)
     }
     
     // MARK: - AJRXMLCoding
