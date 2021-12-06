@@ -59,6 +59,9 @@ public extension AIECodeGenerator.InfoKey {
     static var `extension` : AIECodeGenerator.InfoKey<String> {
         return AIECodeGenerator.InfoKey(key: "extension")
     }
+    static var batchSize : AIECodeGenerator.InfoKey<Int> {
+        return AIECodeGenerator.InfoKey(key: "batchSize")
+    }
 }
 
 @objcMembers

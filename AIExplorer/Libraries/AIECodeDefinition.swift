@@ -141,6 +141,16 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             willChangeValue(forKey: "codeName")
         }
     }
+
+    /// Defines the size of the training batches. Seems to be a necessary parameter of most libraries.
+    open var batchSize : Int = 0 {
+        willSet {
+            willChangeValue(forKey: "batchSize")
+        }
+        didSet {
+            willChangeValue(forKey: "batchSize")
+        }
+    }
     
     /// Keeps a back pointer to our document.
     open weak var document : AIEDocument? = nil
@@ -205,6 +215,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         if let selectedExtension = selectedExtension {
             coder.encode(selectedExtension, forKey: "selectedExtension")
         }
+        if batchSize != 0 {
+            coder.encode(batchSize, forKey: "batchSize")
+        }
     }
 
     open func decode(with coder: AJRXMLCoder) {
@@ -238,6 +251,9 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
         }
         coder.decodeString(forKey: "selectedExtension") { value in
             self.selectedExtension = value
+        }
+        coder.decodeInteger(forKey: "batchSize") { value in
+            self.batchSize = value
         }
     }
 
@@ -310,6 +326,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             info[.codeName] = codeName ?? document.defaultCodeName
             info[.url] = outputURL
             info[.role] = role
+            info[.batchSize] = batchSize
             for fileExtension in language.fileExtensions {
                 info[.extension] = fileExtension
                 if let generator = library.codeGenerator(info: info, for: language, roots: document.rootObjects) {

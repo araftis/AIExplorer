@@ -14,7 +14,8 @@
                 <choice title="Training" value="Training" />
             </slice>
             <slice type="string" valueKeyPath="controller.selection.selectedCodeDefinition.codeName" label="Code Name" nullPlaceholderKeyPath="controller.selection.defaultCodeName" />
-            <slice type="file" urlKeyPath="controller.selection.selectedCodeDefinition.outputURL" label="Full Path" editable="false" utisKeyPath="controller.selection.selectedCodeDefinition.language.fileUTIs" defaultsKey="codeGeneratorSavePanelPath" />
+            <slice type="file" urlKeyPath="controller.selection.selectedCodeDefinition.outputURL" label="Path" editable="false" utisKeyPath="controller.selection.selectedCodeDefinition.language.fileUTIs" defaultsKey="codeGeneratorSavePanelPath" />
+            <slice type="integer" valueKeyPath="controller.selection.selectedCodeDefinition.batchSize" label="Batch Size" />
         </group>
     </group>
 </inspector>
