@@ -18,6 +18,9 @@ private protocol AIEMLComputeObjCWriter {
     // Allows nodes that should generate a private ivar to do so.
     func generateCreationInsideInit(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void
 
+    // Allows nodes that should generate a private ivar to do so.
+    func generateCreationInsideBuild(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void
+
 }
 
 private extension AIEMLComputeObjCWriter {
@@ -29,6 +32,10 @@ private extension AIEMLComputeObjCWriter {
     }
 
     func generateCreationInsideInit(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+    }
+
+    func generateCreationInsideBuild(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+        try outputStream.indent(1).write("// We should output the creation of node: \(self)\n")
     }
 
 }
@@ -136,8 +143,18 @@ open class AIEMLComputeObjCGenerator: AIECodeGenerator {
         try outputStream.indent(1).write("return self;\n")
         try outputStream.indent(0).write("}\n")
         try outputStream.indent(0).write("\n")
-        try outputStream.write("@end\n")
-        try outputStream.write("\n")
+        try outputStream.indent(0).write("- (MLCGraph *)buildGraph {\n")
+        try iterateAllNodes(using: { node in
+            if let node = node as? AIEMLComputeObjCWriter {
+                try node.generateCreationInsideBuild(to: outputStream, accumulatingMessages: &messages)
+            } else {
+                try outputStream.indent(1).write("// \(Swift.type(of:node)) does not yet conform to AIEMLComputeObjCWriter.\n")
+            }
+        })
+        try outputStream.indent(0).write("}\n")
+        try outputStream.indent(0).write("\n")
+        try outputStream.indent(0).write("@end\n")
+        try outputStream.indent(0).write("\n")
     }
     
     override open func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
@@ -175,7 +192,7 @@ extension AIEConvolution : AIEMLComputeObjCWriter {
 
     func generatePrivateInterfaceDefinition(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws {
         if let variableName = self.variableName {
-            try outputStream.indent(1).write("MLCConvolutionDescriptor *_\(variableName)Weights;\n")
+            try outputStream.indent(1).write("MLCConvolutionDescriptor *_\(variableName)Descriptor;\n")
         }
     }
 
@@ -208,7 +225,7 @@ extension AIEConvolution : AIEMLComputeObjCWriter {
             @unknown default:
                 messages.append(AIEMessage(type: .warning, message: "Encountered an unknown convolution layer type that cannot be handled by the Obj-C code generator: \(self.type). Using \"\(type)\" instead.", on: self))
             }
-            try outputStream.indent(2).write("_\(variableName)Weights = [MLCConvolutionDescriptor descriptorWithType: \(type)\n")
+            try outputStream.indent(2).write("_\(variableName)Descriptor = [MLCConvolutionDescriptor descriptorWithType: \(type)\n")
             if depth > 0 {
                 try outputStream.indent(2).write("                       kernelSizes: @[@\(width >= 2 ? width : 3), @\(height >= 2 ? height : 3), @\(depth)]\n")
             } else {
@@ -232,13 +249,21 @@ extension AIEConvolution : AIEMLComputeObjCWriter {
         }
     }
 
+    func generateCreationInsideBuild(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+        if let variableName = variableName {
+            try outputStream.indent(1).write("MLCConvolutionLayer *\(variableName) = [MLCConvolutionLayer layerWithWeights: /* ???? */\n")
+            try outputStream.indent(2).write("biases: /* ???? */\n")
+            try outputStream.indent(2).write("descriptor: _\(variableName)Descriptor];\n")
+        }
+    }
+
 }
 
 extension AIEFullyConnected : AIEMLComputeObjCWriter {
 
     func generatePrivateInterfaceDefinition(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws {
         if let variableName = self.variableName {
-            try outputStream.indent(1).write("MLCConvolutionDescriptor *_\(variableName)Weights;\n")
+            try outputStream.indent(1).write("MLCConvolutionDescriptor *_\(variableName)Descriptor;\n")
         }
     }
 
@@ -262,11 +287,19 @@ extension AIEFullyConnected : AIEMLComputeObjCWriter {
             }
             // NOTE: Depth can be 0, because when it is we'll just depend on the depth of the input images.
 
-            try outputStream.indent(2).write("_\(variableName)Weights = [MLCConvolutionDescriptor descriptorWithKernelWidth: \(width)\n")
+            try outputStream.indent(2).write("_\(variableName)Descriptor = [MLCConvolutionDescriptor descriptorWithKernelWidth: \(width)\n")
             try outputStream.indent(2).write("                      kernelHeight: \(height)\n")
             try outputStream.indent(2).write("          inputFeatureChannelCount: \(inputFeatureChannels)\n")
             try outputStream.indent(2).write("         outputFeatureChannelCount: \(outputFeatureChannels)];\n")
         }
+    }
+
+}
+
+extension AIEImageIO : AIEMLComputeObjCWriter {
+
+    func generateCreationInsideBuild(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
+        // IO nodes don't actually become part of the graph, they just define our input.
     }
 
 }
