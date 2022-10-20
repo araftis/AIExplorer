@@ -40,6 +40,12 @@ open class AIEMessage: NSObject, AJRXMLCoding {
     open var message : String
     open var type : Intent
     open var object : AIEMessageObject?
+    
+    required public override init() {
+        self.message = ""
+        self.type = .info
+        self.object = nil
+    }
 
     public init(type: Intent, message: String, on object: AIEMessageObject?) {
         self.message = message

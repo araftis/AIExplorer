@@ -204,7 +204,7 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     
     // MARK: - Creation
 
-    public required override init() {
+    public required init() {
         super.init()
     }
 

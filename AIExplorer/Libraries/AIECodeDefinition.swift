@@ -178,7 +178,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
     /**
      This initialization is needed by XML unarchiving, and generally speaking, it's not the init you want to call.
      */
-    public override init() {
+    required public override init() {
         self.name = "Untitled"
     }
     
