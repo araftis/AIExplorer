@@ -77,7 +77,12 @@ open class AIETitle: DrawText {
     open var height : CGFloat {
         if _height == nil {
             prepareTextInLayoutManager()
-            _height = layoutManager.usedRect(for: textContainer!).height + 3.0
+            if let layoutManager {
+                _height = layoutManager.usedRect(for: textContainer!).height + 3.0
+            } else {
+                // We'll likely never enter this, but in case we do, we still want to make sure we've initialized _height.
+                _height = 15.0
+            }
         }
         return _height!
     }
@@ -107,9 +112,7 @@ open class AIETitle: DrawText {
         linePath.lineWidth = 1.0
         linePath.stroke()
 
-        super.draw(path, with: priority)
-
-        return nil
+        return super.draw(path, with: priority)
     }
 
     open override func graphicDidChangeShape(_ graphic: DrawGraphic) {
