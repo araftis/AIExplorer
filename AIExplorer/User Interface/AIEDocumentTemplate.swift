@@ -79,8 +79,8 @@ open class AIEDocumentTemplate: NSObject {
             let fileFinder = AJRFileFinder(subpath: "AIE Templates", andExtension: "nnt")
             fileFinder.addAllBundles()
 
-            for path in fileFinder.findFiles() {
-                _templates.append(AIEDocumentTemplate(url: URL(fileURLWithPath: path)))
+            for url in fileFinder.findFiles() {
+                _templates.append(AIEDocumentTemplate(url: url))
             }
 
             _templates!.sort { (left, right) -> Bool in
