@@ -32,7 +32,7 @@
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiConvolution = AJRInspectorIdentifier("aiConvolution")
+    static var aieConvolution = AJRInspectorIdentifier("aiesConvolution")
 }
 
 @objcMembers
@@ -180,7 +180,7 @@ open class AIEConvolution: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiConvolution)
+        identifiers.append(.aieConvolution)
         return identifiers
     }
 

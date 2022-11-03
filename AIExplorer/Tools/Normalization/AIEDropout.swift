@@ -32,7 +32,7 @@
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiDropout = AJRInspectorIdentifier("aiDropout")
+    static var aieDropout = AJRInspectorIdentifier("aieDropout")
 }
 
 
@@ -75,7 +75,7 @@ open class AIEDropout: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiDropout)
+        identifiers.append(.aieDropout)
         return identifiers
     }
 

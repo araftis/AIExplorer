@@ -32,7 +32,7 @@
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiUpsample = AJRInspectorIdentifier("aiUpsample")
+    static var aieUpsample = AJRInspectorIdentifier("aieUpsample")
 }
 
 @objcMembers
@@ -67,7 +67,7 @@ open class AIEUpsample: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiUpsample)
+        identifiers.append(.aieUpsample)
         return identifiers
     }
 

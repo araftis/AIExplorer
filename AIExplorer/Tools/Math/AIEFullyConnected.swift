@@ -33,7 +33,7 @@ import Cocoa
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiFullyConnected = AJRInspectorIdentifier("aiFullyConnected")
+    static var aieFullyConnected = AJRInspectorIdentifier("aieFullyConnected")
 }
 
 @objcMembers
@@ -117,7 +117,7 @@ open class AIEFullyConnected: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiFullyConnected)
+        identifiers.append(.aieFullyConnected)
         return identifiers
     }
 

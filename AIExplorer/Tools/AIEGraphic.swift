@@ -34,7 +34,7 @@ import Draw
 import Foundation
 
 public extension AJRInspectorIdentifier {
-    static var aiGraphic = AJRInspectorIdentifier("aiGraphic")
+    static var aieGraphic = AJRInspectorIdentifier("aieGraphic")
 }
 
 @objcMembers
@@ -261,7 +261,7 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var supers = super.inspectorIdentifiers
-        supers.append(.aiGraphic)
+        supers.append(.aieGraphic)
         return supers
     }
 

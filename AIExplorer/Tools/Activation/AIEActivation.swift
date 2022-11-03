@@ -33,7 +33,7 @@ import Cocoa
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiActivation = AJRInspectorIdentifier("aiActivation")
+    static var aieActivation = AJRInspectorIdentifier("aieActivation")
 }
 
 @objcMembers
@@ -229,7 +229,7 @@ open class AIEActivation: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiActivation)
+        identifiers.append(.aieActivation)
         return identifiers
     }
 

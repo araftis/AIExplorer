@@ -84,9 +84,14 @@
         <action title="Upsample" icon="toolUpsample" tag="3" graphicClass="AIExplorer.AIEUpsample" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIELossTool" name="Loss" id="loss" toolset="neuralNet" displayPriority="8" addsViaDrag="NO" newGraphicSize="{72,90}" activationKey="s">
+    <draw-tool class="AIExplorer.AIELossTool" name="Loss" id="loss" toolset="neuralNet" displayPriority="8" addsViaDrag="NO" newGraphicSize="{72,90}" activationKey="l">
         <action title="Loss" icon="toolLoss" tag="0" graphicClass="AIExplorer.AIELoss" />
         <action title="YOLO Loss" icon="toolYOLOLoss" tag="1" graphicClass="AIExplorer.AIEYOLOLoss" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIELogicTool" name="Logic" id="logic" toolset="neuralNet" displayPriority="9" addsViaDrag="NO" newGraphicSize="{48,48}" activationKey="L">
+        <action title="Loop" icon="toolLoop" tag="0" graphicClass="AIExplorer.AIELoop" />
+        <action title="Branch" icon="toolBranch" tag="1" graphicClass="AIExplorer.AIEBranch" />
     </draw-tool>
 
     <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org">
@@ -119,20 +124,22 @@
     <draw-aspect class="AIExplorer.AIETitle" id="aieTitle" name="Title" priority="beforeForeground" />
     <draw-aspect class="AIExplorer.AIEProperties" id="aieProperties" name="Properties" priority="afterChildren" />
 
-    <ajr_inspector xml="AIEDocument" identifier="aiDocument" />
-    <ajr_inspector xml="AIEGraphic" identifier="aiGraphic" />
-    <ajr_inspector xml="AIEImageIO" identifier="aiImageIO" />
-    <ajr_inspector xml="AIEConvolution" identifier="aiConvolution" />
-    <ajr_inspector xml="AIEUpsample" identifier="aiUpsample" />
-    <ajr_inspector xml="AIEPooling" identifier="aiPooling" />
-    <ajr_inspector xml="AIEFullyConnected" identifier="aiFullyConnected" />
-    <ajr_inspector xml="AIELoss" identifier="aiLoss" />
-    <ajr_inspector xml="AIEActivation" identifier="aiActivation" />
-    <ajr_inspector xml="AIEBatchNorm" identifier="aiBatchNormalization" />
-    <ajr_inspector xml="AIEDropout" identifier="aiDropout" />
-    <ajr_inspector xml="AIELSTM" identifier="aiLTSM" />
-    <ajr_inspector xml="AIESoftmax" identifier="aiSoftmax" />
-    <ajr_inspector xml="AIEReduction" identifier="aiReduction" />
+    <ajr_inspector xml="AIEDocument" identifier="aieDocument" />
+    <ajr_inspector xml="AIEGraphic" identifier="aieGraphic" />
+    <ajr_inspector xml="AIEImageIO" identifier="aieImageIO" />
+    <ajr_inspector xml="AIEConvolution" identifier="aieConvolution" />
+    <ajr_inspector xml="AIEUpsample" identifier="aieUpsample" />
+    <ajr_inspector xml="AIEPooling" identifier="aiePooling" />
+    <ajr_inspector xml="AIEFullyConnected" identifier="aieFullyConnected" />
+    <ajr_inspector xml="AIELoss" identifier="aieLoss" />
+    <ajr_inspector xml="AIEActivation" identifier="aieActivation" />
+    <ajr_inspector xml="AIEBatchNorm" identifier="aieBatchNormalization" />
+    <ajr_inspector xml="AIEDropout" identifier="aieDropout" />
+    <ajr_inspector xml="AIELSTM" identifier="aieLTSM" />
+    <ajr_inspector xml="AIESoftmax" identifier="aieSoftmax" />
+    <ajr_inspector xml="AIEReduction" identifier="aieReduction" />
+    <ajr_inspector xml="AIELoop" identifier="aieLoop" />
+    <ajr_inspector xml="AIEBranch" identifier="aieBranch" />
 
     <draw-structure-inspector name="Messages" icon="inspectorMessages" id="messages" priority="3.0" inspectorClass="AIExplorer.AIEMessagesInspector" />
 

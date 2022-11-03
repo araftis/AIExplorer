@@ -33,7 +33,7 @@ import Draw
 
 
 public extension AJRInspectorIdentifier {
-    static var aiPooling = AJRInspectorIdentifier("aiPooling")
+    static var aiePooling = AJRInspectorIdentifier("aiePooling")
 }
 
 @objcMembers
@@ -136,7 +136,7 @@ open class AIEPooling: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiPooling)
+        identifiers.append(.aiePooling)
         return identifiers
     }
 

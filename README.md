@@ -59,6 +59,10 @@ This frame is very badly unit testing. That should be fixed, and I might even ge
 
 There's bound to be some I've missed. If you spot any, and it's not attributed, please let me know ASAP at [AJ Raftis](mailto:araftis@calpoly.edu).
 
+## Images
+
+**logic** by *Adrien Coquet* from [Noun Project](https://thenounproject.com/browse/icons/term/logic/).
+
 ## License
 
 I'm releasing this under a BSD license.

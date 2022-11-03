@@ -33,7 +33,7 @@ import Cocoa
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiLayerNormalization = AJRInspectorIdentifier("aiLayerNormalization")
+    static var aieLayerNormalization = AJRInspectorIdentifier("aieLayerNormalization")
 }
 
 
@@ -63,7 +63,7 @@ open class AIELayerNormalization: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiLayerNormalization)
+        identifiers.append(.aieLayerNormalization)
         return identifiers
     }
 

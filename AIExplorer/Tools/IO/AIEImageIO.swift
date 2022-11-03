@@ -32,7 +32,7 @@
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiImageIO = AJRInspectorIdentifier("aiImageIO")
+    static var aieImageIO = AJRInspectorIdentifier("aieImageIO")
 }
 
 @objcMembers
@@ -97,7 +97,7 @@ open class AIEImageIO: AIEIO {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiImageIO)
+        identifiers.append(.aieImageIO)
         return identifiers
     }
 

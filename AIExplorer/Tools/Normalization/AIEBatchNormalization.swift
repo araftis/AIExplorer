@@ -33,7 +33,7 @@ import Cocoa
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aiBatchNormalization = AJRInspectorIdentifier("aiBatchNormalization")
+    static var aieBatchNormalization = AJRInspectorIdentifier("aieBatchNormalization")
 }
 
 
@@ -65,7 +65,7 @@ open class AIEBatchNormalization: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiBatchNormalization)
+        identifiers.append(.aieBatchNormalization)
         return identifiers
     }
 

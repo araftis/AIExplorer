@@ -33,7 +33,7 @@ import Draw
 
 public extension AJRInspectorIdentifier {
 
-    static var aiDocument = AJRInspectorIdentifier("aiDocument")
+    static var aieDocument = AJRInspectorIdentifier("aieDocument")
 
 }
 
@@ -72,7 +72,7 @@ open class AIEDocument: DrawDocument {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(AJRInspectorIdentifier.aiDocument)
+        identifiers.append(AJRInspectorIdentifier.aieDocument)
         return identifiers
     }
     

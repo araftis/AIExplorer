@@ -37,6 +37,8 @@ import Draw
  Draws the title in a neural network node. This pretty specialized, and not all that useful for general purpose.
  */
 open class AIETitle: DrawText {
+    
+    open var simpleAppearance = false
 
     open var title : String {
         get {
@@ -89,29 +91,31 @@ open class AIETitle: DrawText {
 
     override public func draw(_ path: AJRBezierPath, with priority: DrawAspectPriority) -> DrawGraphicCompletionBlock? {
 
-        prepareTextInLayoutManager()
-
-        let bounds = path.strokeBounds()
-
-        var rectBounds = bounds
-        drawWithSavedGraphicsState() {
-            rectBounds.size.height = height
-            if let fill = graphic?.firstAspect(ofType: DrawFill.self, with: DrawFill.defaultPriority) as? DrawColorFill {
-                fill.color.set()
-            } else {
-                NSColor.red.set()
+        if !simpleAppearance {
+            prepareTextInLayoutManager()
+            
+            let bounds = path.strokeBounds()
+            
+            var rectBounds = bounds
+            drawWithSavedGraphicsState() {
+                rectBounds.size.height = height
+                if let fill = graphic?.firstAspect(ofType: DrawFill.self, with: DrawFill.defaultPriority) as? DrawColorFill {
+                    fill.color.set()
+                } else {
+                    NSColor.red.set()
+                }
+                path.addClip()
+                rectBounds.fill()
             }
-            path.addClip()
-            rectBounds.fill()
+            
+            NSColor.black.withAlphaComponent(0.25).set()
+            let linePath = AJRBezierPath()
+            linePath.move(to: (bounds.minX, bounds.minY + height))
+            linePath.line(to: (bounds.maxX, bounds.minY + height))
+            linePath.lineWidth = 1.0
+            linePath.stroke()
         }
-        
-        NSColor.black.withAlphaComponent(0.25).set()
-        let linePath = AJRBezierPath()
-        linePath.move(to: (bounds.minX, bounds.minY + height))
-        linePath.line(to: (bounds.maxX, bounds.minY + height))
-        linePath.lineWidth = 1.0
-        linePath.stroke()
-
+            
         return super.draw(path, with: priority)
     }
 
@@ -121,6 +125,18 @@ open class AIETitle: DrawText {
     }
     
     // MARK: - AJRXMLCoding
+    
+    open override func encode(with coder: AJRXMLCoder) {
+        if !simpleAppearance {
+            coder.encode(simpleAppearance, forKey: "simpleAppearance")
+        }
+    }
+    
+    open override func decode(with coder: AJRXMLCoder) {
+        coder.decodeBool(forKey: "simpleAppearance") { value in
+            self.simpleAppearance = value
+        }
+    }
     
     open class override var ajr_nameForXMLArchiving: String {
         return "aieTitle"

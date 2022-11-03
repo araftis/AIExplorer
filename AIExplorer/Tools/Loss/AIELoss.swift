@@ -34,7 +34,7 @@ import Draw
 
 
 public extension AJRInspectorIdentifier {
-    static var aiLoss = AJRInspectorIdentifier("aiLoss")
+    static var aieLoss = AJRInspectorIdentifier("aieLoss")
 }
 
 @objcMembers
@@ -214,7 +214,7 @@ open class AIELoss: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aiLoss)
+        identifiers.append(.aieLoss)
         return identifiers
     }
 

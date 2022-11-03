@@ -34,7 +34,7 @@ import Draw
 
 
 public extension AJRInspectorIdentifier {
-    static var aiSoftmax = AJRInspectorIdentifier("aiSoftmax")
+    static var aieSoftmax = AJRInspectorIdentifier("aieSoftmax")
 }
 
 
@@ -106,7 +106,7 @@ open class AIESoftmax: AIEGraphic {
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
         var supers = super.inspectorIdentifiers
-        supers.append(.aiSoftmax)
+        supers.append(.aieSoftmax)
         return supers
     }
 
