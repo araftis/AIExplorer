@@ -16,8 +16,8 @@
 		21FFE2F929131D7700A79F8F /* AIELogicTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE2F829131D7700A79F8F /* AIELogicTool.swift */; };
 		21FFE2FB29131D9B00A79F8F /* AIEBranch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE2FA29131D9B00A79F8F /* AIEBranch.swift */; };
 		21FFE2FD29131DA500A79F8F /* AIELoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE2FC29131DA500A79F8F /* AIELoop.swift */; };
-		21FFE2FF2913208C00A79F8F /* AIEBranch.ajrinspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE2FE2913208C00A79F8F /* AIEBranch.ajrinspector */; };
-		21FFE301291320F200A79F8F /* AIELoop.ajrinspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE300291320F200A79F8F /* AIELoop.ajrinspector */; };
+		21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */; };
+		21FFE301291320F200A79F8F /* AIELoop.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE300291320F200A79F8F /* AIELoop.inspector */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
 		25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC039425D7D499008A4DE4 /* AIELoss.inspector */; };
@@ -145,8 +145,8 @@
 		21FFE2F829131D7700A79F8F /* AIELogicTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELogicTool.swift; sourceTree = "<group>"; };
 		21FFE2FA29131D9B00A79F8F /* AIEBranch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEBranch.swift; sourceTree = "<group>"; };
 		21FFE2FC29131DA500A79F8F /* AIELoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELoop.swift; sourceTree = "<group>"; };
-		21FFE2FE2913208C00A79F8F /* AIEBranch.ajrinspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIEBranch.ajrinspector; sourceTree = "<group>"; };
-		21FFE300291320F200A79F8F /* AIELoop.ajrinspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIELoop.ajrinspector; sourceTree = "<group>"; };
+		21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIEBranch.inspector; sourceTree = "<group>"; };
+		21FFE300291320F200A79F8F /* AIELoop.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIELoop.inspector; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
 		25EC039425D7D499008A4DE4 /* AIELoss.inspector */ = {isa = PBXFileReference; lastKnownFileType = text; path = AIELoss.inspector; sourceTree = "<group>"; };
@@ -270,10 +270,10 @@
 		21FFE2F729130DB700A79F8F /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				21FFE2FE2913208C00A79F8F /* AIEBranch.ajrinspector */,
+				21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */,
 				21FFE2FA29131D9B00A79F8F /* AIEBranch.swift */,
 				21FFE2F829131D7700A79F8F /* AIELogicTool.swift */,
-				21FFE300291320F200A79F8F /* AIELoop.ajrinspector */,
+				21FFE300291320F200A79F8F /* AIELoop.inspector */,
 				21FFE2FC29131DA500A79F8F /* AIELoop.swift */,
 			);
 			path = Logic;
@@ -652,11 +652,11 @@
 				25EC039F25D882F8008A4DE4 /* AIEPooling.inspector in Resources */,
 				FABD166525C8E931000294E3 /* AIEValidationAccessory.xib in Resources */,
 				25EC03A725DE02E6008A4DE4 /* AIEActivation.inspector in Resources */,
-				21FFE301291320F200A79F8F /* AIELoop.ajrinspector in Resources */,
+				21FFE301291320F200A79F8F /* AIELoop.inspector in Resources */,
 				FA0F526325D392FD00DD0F3D /* AIEImageIO.inspector in Resources */,
 				25EC03BD25E26613008A4DE4 /* AIESoftmax.inspector in Resources */,
 				25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */,
-				21FFE2FF2913208C00A79F8F /* AIEBranch.ajrinspector in Resources */,
+				21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

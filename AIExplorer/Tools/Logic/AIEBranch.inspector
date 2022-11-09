@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="Branch">
+        <group title="Conditions">
+            <slice type="integer" value="0"/>
+        </group>
     </group>
 </inspector>

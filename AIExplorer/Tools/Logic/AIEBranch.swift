@@ -14,6 +14,8 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIEBranch: AIEGraphic {
 
+    open var conditions = [AJREvaluation]()
+
     // MARK: - AJRInspector
 
     open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
@@ -44,8 +46,28 @@ open class AIEBranch: AIEGraphic {
 
     // MARK: - AJRXMLCoding
 
+    open override func decode(with coder: AJRXMLCoder) {
+        super.decode(with: coder)
+        coder.decodeObject(forKey: "conditions") { object in
+            if let objects = object as? [AJREvaluation] {
+                self.conditions.append(contentsOf: objects)
+            }
+        }
+    }
+
+    open override func encode(with coder: AJRXMLCoder) {
+        super.encode(with: coder)
+        if conditions.count > 0 {
+            coder.encode(conditions, forKey: "conditions")
+        }
+    }
+
     open class override var ajr_nameForXMLArchiving: String {
         return "aieBranch"
+    }
+
+    open override func awakeFromUnarchiving() {
+        print("We're alive!")
     }
 
 }
