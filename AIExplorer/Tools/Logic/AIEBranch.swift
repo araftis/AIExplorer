@@ -23,6 +23,13 @@ open class AIEBranch: AIEGraphic {
     }
 
     // MARK: - DrawGraphic
+
+    open override func createTitleAspect() -> AIETitle {
+        let title = super.createTitleAspect()
+        title.simpleAppearance = true
+        title.verticalAlignment = .middle
+        return title
+    }
     
     open override func updatePath() -> Void {
         path.removeAllPoints()

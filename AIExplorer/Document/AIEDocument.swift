@@ -92,6 +92,12 @@ open class AIEDocument: DrawDocument {
             
             // If we have root objects, have them compute their offsets within the graph.
             self.rootObjects.first?.computeGraphLocations()
+
+            // Make sure we have the "isTraining" variable.
+            var isTraining = variableStore["isTraining"] as? AJRVariable
+            if isTraining == nil {
+                isTraining = variableStore.createVariable(named: "isTraining", type: .boolean, value: false)
+            }
         }
     }
 

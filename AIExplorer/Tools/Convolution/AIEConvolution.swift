@@ -32,7 +32,7 @@
 import Draw
 
 public extension AJRInspectorIdentifier {
-    static var aieConvolution = AJRInspectorIdentifier("aiesConvolution")
+    static var aieConvolution = AJRInspectorIdentifier("aieConvolution")
 }
 
 @objcMembers

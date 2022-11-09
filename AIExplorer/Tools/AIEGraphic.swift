@@ -65,18 +65,25 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         }
     }
 
+    open func createTitleAspect() -> AIETitle {
+        return firstAspect(of: AIETitle.self, create: true)!
+    }
+
+    open var titleAspect : AIETitle {
+        var aspect = firstAspect(of: AIETitle.self, create: false)
+        if aspect == nil {
+            aspect = createTitleAspect()
+        }
+        return aspect!
+    }
+
     open var title: String {
         get {
-            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority, create: true) as? AIETitle {
-                return aspect.title
-            }
-            return "No Title"
+            return titleAspect.title
         }
         set(newValue) {
             willChangeValue(forKey: "title")
-            if let aspect = firstAspect(ofType: AIETitle.self, with: AIETitle.defaultPriority, create: true) as? AIETitle {
-                aspect.title = newValue
-            }
+            titleAspect.title = newValue
             didChangeValue(forKey: "title")
         }
     }

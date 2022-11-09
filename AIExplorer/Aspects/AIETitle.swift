@@ -90,7 +90,6 @@ open class AIETitle: DrawText {
     }
 
     override public func draw(_ path: AJRBezierPath, with priority: DrawAspectPriority) -> DrawGraphicCompletionBlock? {
-
         if !simpleAppearance {
             prepareTextInLayoutManager()
             
@@ -123,23 +122,12 @@ open class AIETitle: DrawText {
         _height = nil
         super.graphicDidChangeShape(graphic)
     }
-    
+
     // MARK: - AJRXMLCoding
-    
-    open override func encode(with coder: AJRXMLCoder) {
-        if !simpleAppearance {
-            coder.encode(simpleAppearance, forKey: "simpleAppearance")
-        }
-    }
-    
-    open override func decode(with coder: AJRXMLCoder) {
-        coder.decodeBool(forKey: "simpleAppearance") { value in
-            self.simpleAppearance = value
-        }
-    }
-    
+
+    // We have to override this, even though we don't archive, because if we don't, we'll get identified as part of unarchiving as a "title", and since we registered second, ever text object will get read back in as an AIETitle, not DrawText.
     open class override var ajr_nameForXMLArchiving: String {
         return "aieTitle"
     }
-    
+
 }
