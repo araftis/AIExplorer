@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector>
     <group title="Branch">
-        <group title="Conditions">
-            <slice type="integer" value="0"/>
+        <group title="Conditions" forEachKeyPath="controller.selectedObjects.exitLinks">
+            <slice type="string" label="Desintation" valueKeyPath="controller.selectedObjects.destination.name" editable="false"/>
+            <slice type="string" label="Condition" value="test"/>
         </group>
     </group>
 </inspector>
