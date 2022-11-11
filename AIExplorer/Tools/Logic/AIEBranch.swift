@@ -30,6 +30,7 @@ open class AIEBranch: AIEGraphic {
         let title = super.createTitleAspect()
         title.simpleAppearance = true
         title.verticalAlignment = .middle
+        title.font = NSFont.systemFont(ofSize: NSFont.systemFontSize(for: .large))
         return title
     }
     
@@ -64,10 +65,6 @@ open class AIEBranch: AIEGraphic {
 
     open class override var ajr_nameForXMLArchiving: String {
         return "aieBranch"
-    }
-
-    open override func awakeFromUnarchiving() {
-        print("We're alive!")
     }
 
 }

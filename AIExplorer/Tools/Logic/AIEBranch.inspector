@@ -2,8 +2,8 @@
 <inspector>
     <group title="Branch">
         <group title="Conditions" forEachKeyPath="controller.selectedObjects.exitLinks">
-            <slice type="string" label="Desintation" valueKeyPath="controller.selectedObjects.destination.name" editable="false"/>
-            <slice type="string" label="Condition" value="test"/>
+            <slice type="string" label="Desintation" valueKeyPath="controller.selection.destination.title" editable="false"/>
+            <slice type="choice" label="Condition" style="popUp" valueType="object" objectsKeyPath="controller.selection.variables" choiceTitleKeyPath="name" valueKeyPath="controller.selection.extendedProperties.condition" />
         </group>
     </group>
 </inspector>
