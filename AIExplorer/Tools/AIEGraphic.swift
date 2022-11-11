@@ -398,6 +398,12 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
                 remove(fromRelatedGraphics: object)
             }
         }
+        exitLinks.sort { left, right in
+            if left.frame.origin.y == right.frame.origin.y {
+                return left.frame.origin.x < right.frame.origin.x
+            }
+            return left.frame.origin.y < right.frame.origin.y
+        }
         return exitLinks
     }
 
