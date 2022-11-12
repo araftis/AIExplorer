@@ -351,30 +351,6 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
      */
     open var destinationObjects : [AIEGraphic] {
         return exitLinks.map { return $0.destination as! AIEGraphic }
-        // TODO: Remove code below.
-//        var destinationObjects = [AIEGraphic]()
-//        var objectsToRemove = [DrawGraphic]()
-//        for related in self.relatedGraphics {
-//            if let drawLink = related as? DrawLink {
-//                if (drawLink.source === self && drawLink.sourceCap == nil
-//                        && drawLink.destinationCap != nil), let destination = drawLink.destination as? AIEGraphic {
-//                    if drawLink.document == nil {
-//                        // We've got a delete issue, so we're going to "clean" our document here, along with a warning. We will, obviously, want to fix this. This is probably happening because when a link is deleted, it's not deleting itself from it's related graphics.
-//                        AJRLog.warning("Graphic \(drawLink) in \(self) is no longer a member of the document.")
-//                        self.document?.remove(drawLink)
-//                        objectsToRemove.append(drawLink)
-//                    } else {
-//                        destinationObjects.append(destination)
-//                    }
-//                }
-//            }
-//        }
-//        if objectsToRemove.count > 0 {
-//            for object in objectsToRemove {
-//                remove(fromRelatedGraphics: object)
-//            }
-//        }
-//        return destinationObjects
     }
     
     open var exitLinks : [DrawLink] {
