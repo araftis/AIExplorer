@@ -16,10 +16,12 @@ open class AIELoop: AIEGraphic {
 
     // MARK: - AJRInspector
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aieLoop)
-        return identifiers
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        if inspectorContentIdentifier == .graphic {
+            supers.append(.aieLoop)
+        }
+        return supers
     }
 
     // MARK: - DrawGraphic

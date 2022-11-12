@@ -310,14 +310,14 @@
 		FA02BF8525B7AA8B001EFBBA /* Transformation */ = {
 			isa = PBXGroup;
 			children = (
-				FA02BF8625B7AAA4001EFBBA /* AIETransformationTool.swift */,
-				FA02BF8C25B7AABA001EFBBA /* AIETranspose.swift */,
 				FA02BF9025B7AACA001EFBBA /* AIEConcatenation.swift */,
+				FA02BFA025B7AAFF001EFBBA /* AIEPadding.swift */,
+				25EC03AA25DE231C008A4DE4 /* AIEReshape.inspector */,
 				FA02BF9425B7AAD9001EFBBA /* AIEReshape.swift */,
 				FA02BF9825B7AAEA001EFBBA /* AIESlice.swift */,
 				FA02BF9C25B7AAF6001EFBBA /* AIESplit.swift */,
-				FA02BFA025B7AAFF001EFBBA /* AIEPadding.swift */,
-				25EC03AA25DE231C008A4DE4 /* AIEReshape.inspector */,
+				FA02BF8625B7AAA4001EFBBA /* AIETransformationTool.swift */,
+				FA02BF8C25B7AABA001EFBBA /* AIETranspose.swift */,
 			);
 			path = Transformation;
 			sourceTree = "<group>";

@@ -178,10 +178,12 @@ open class AIEConvolution: AIEGraphic {
 
     // MARK: - AJRInspector
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aieConvolution)
-        return identifiers
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        if inspectorContentIdentifier == .graphic {
+            supers.append(.aieConvolution)
+        }
+        return supers
     }
 
     // MARK: - AJRXMLCoding

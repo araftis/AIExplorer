@@ -115,10 +115,12 @@ open class AIEFullyConnected: AIEGraphic {
 
     // MARK: - AJRInspector
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aieFullyConnected)
-        return identifiers
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        if inspectorContentIdentifier == .graphic {
+            supers.append(.aieFullyConnected)
+        }
+        return supers
     }
 
     // MARK: - AJRXMLCoding

@@ -70,10 +70,10 @@ open class AIEDocument: DrawDocument {
         return AIEDocumentStorage.self
     }
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(AJRInspectorIdentifier.aieDocument)
-        return identifiers
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        supers.append(.aieDocument)
+        return supers
     }
     
     open override var storage: DrawDocumentStorage {

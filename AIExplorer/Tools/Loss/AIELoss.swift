@@ -212,10 +212,12 @@ open class AIELoss: AIEGraphic {
 
     // MARK: - AJRInspector
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var identifiers = super.inspectorIdentifiers
-        identifiers.append(.aieLoss)
-        return identifiers
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        if inspectorContentIdentifier == .graphic {
+            supers.append(.aieLoss)
+        }
+        return supers
     }
 
     // MARK: - AJRXMLCoding

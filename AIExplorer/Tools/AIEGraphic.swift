@@ -266,9 +266,11 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     
     // MARK: - AJRInspector
 
-    open override var inspectorIdentifiers: [AJRInspectorIdentifier] {
-        var supers = super.inspectorIdentifiers
-        supers.append(.aieGraphic)
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        if inspectorContentIdentifier == .graphic {
+            supers.append(.aieGraphic)
+        }
         return supers
     }
 
@@ -434,6 +436,17 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         }
     }
 
+    // MARK: - Help
+    
+    open override var helpTitle : String {
+        get {
+            return "\(title) Help"
+        }
+        set {
+            super.helpTitle = newValue
+        }
+    }
+    
 }
 
 // MARK: - Iteration
