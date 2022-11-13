@@ -18,6 +18,7 @@
 		21FFE2FD29131DA500A79F8F /* AIELoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE2FC29131DA500A79F8F /* AIELoop.swift */; };
 		21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */; };
 		21FFE301291320F200A79F8F /* AIELoop.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE300291320F200A79F8F /* AIELoop.inspector */; };
+		21FFE313291F3E7A00A79F8F /* AIEConvolution.md in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE312291F3D8D00A79F8F /* AIEConvolution.md */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
 		25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC039425D7D499008A4DE4 /* AIELoss.inspector */; };
@@ -147,6 +148,7 @@
 		21FFE2FC29131DA500A79F8F /* AIELoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELoop.swift; sourceTree = "<group>"; };
 		21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIEBranch.inspector; sourceTree = "<group>"; };
 		21FFE300291320F200A79F8F /* AIELoop.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIELoop.inspector; sourceTree = "<group>"; };
+		21FFE312291F3D8D00A79F8F /* AIEConvolution.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AIEConvolution.md; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
 		25EC039425D7D499008A4DE4 /* AIELoss.inspector */ = {isa = PBXFileReference; lastKnownFileType = text; path = AIELoss.inspector; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 			isa = PBXGroup;
 			children = (
 				25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */,
+				21FFE312291F3D8D00A79F8F /* AIEConvolution.md */,
 				FA18B4D425AEA305000DEF0C /* AIEConvolution.swift */,
 				FA18B4D225AEA305000DEF0C /* AIEConvolutionTool.swift */,
 				25EC03B625DF0438008A4DE4 /* AIELSTM.inspector */,
@@ -645,6 +648,7 @@
 				25EC03B725DF0438008A4DE4 /* AIELSTM.inspector in Resources */,
 				25EC03AB25DE231C008A4DE4 /* AIEReshape.inspector in Resources */,
 				210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */,
+				21FFE313291F3E7A00A79F8F /* AIEConvolution.md in Resources */,
 				25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */,
 				FA18B4D825AEA305000DEF0C /* AIExplorer.ajrplugindata in Resources */,
 				25EC039925D87D11008A4DE4 /* AIEUpsample.inspector in Resources */,
