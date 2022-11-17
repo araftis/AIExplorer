@@ -8,6 +8,7 @@
 
 * Item A
 * Item B
+  * Item B2
 * Item C
 
 **Purus ut faucibus** pulvinar elementum integer enim. Tortor consequat id porta nibh. Lacus vel facilisis volutpat est velit egestas dui id. Lectus magna fringilla urna porttitor rhoncus. Aenean pharetra magna ac placerat. In dictum non consectetur a erat nam at lectus urna. Nunc faucibus a pellentesque sit amet. Vitae suscipit tellus mauris a diam maecenas sed. Volutpat odio facilisis mauris sit amet massa vitae tortor condimentum. Urna nunc id cursus metus aliquam eleifend mi. Sit amet nulla facilisi morbi tempus iaculis urna. Duis ultricies lacus sed turpis tincidunt id aliquet.
