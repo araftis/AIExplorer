@@ -19,6 +19,8 @@
 		21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */; };
 		21FFE301291320F200A79F8F /* AIELoop.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE300291320F200A79F8F /* AIELoop.inspector */; };
 		21FFE313291F3E7A00A79F8F /* AIEConvolution.md in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE312291F3D8D00A79F8F /* AIEConvolution.md */; };
+		21FFE3152924284700A79F8F /* AIEBranch.md in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE3142924277A00A79F8F /* AIEBranch.md */; };
+		21FFE3172925811700A79F8F /* AIEActivation.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE3162925811700A79F8F /* AIEActivation.rtf */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
 		25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC039425D7D499008A4DE4 /* AIELoss.inspector */; };
@@ -149,6 +151,8 @@
 		21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIEBranch.inspector; sourceTree = "<group>"; };
 		21FFE300291320F200A79F8F /* AIELoop.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIELoop.inspector; sourceTree = "<group>"; };
 		21FFE312291F3D8D00A79F8F /* AIEConvolution.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AIEConvolution.md; sourceTree = "<group>"; };
+		21FFE3142924277A00A79F8F /* AIEBranch.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AIEBranch.md; sourceTree = "<group>"; };
+		21FFE3162925811700A79F8F /* AIEActivation.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = AIEActivation.rtf; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
 		25EC039425D7D499008A4DE4 /* AIELoss.inspector */ = {isa = PBXFileReference; lastKnownFileType = text; path = AIELoss.inspector; sourceTree = "<group>"; };
@@ -274,6 +278,7 @@
 			children = (
 				21FFE2FE2913208C00A79F8F /* AIEBranch.inspector */,
 				21FFE2FA29131D9B00A79F8F /* AIEBranch.swift */,
+				21FFE3142924277A00A79F8F /* AIEBranch.md */,
 				21FFE2F829131D7700A79F8F /* AIELogicTool.swift */,
 				21FFE300291320F200A79F8F /* AIELoop.inspector */,
 				21FFE2FC29131DA500A79F8F /* AIELoop.swift */,
@@ -286,6 +291,7 @@
 			children = (
 				25EC03A625DE02E6008A4DE4 /* AIEActivation.inspector */,
 				FA02BF4E25B78505001EFBBA /* AIEActivation.swift */,
+				21FFE3162925811700A79F8F /* AIEActivation.rtf */,
 				FA02BF5C25B78578001EFBBA /* AIEActivationTool.swift */,
 				FA02BF5425B7851C001EFBBA /* AIEMultiheadAttention.swift */,
 				25EC03BC25E26613008A4DE4 /* AIESoftmax.inspector */,
@@ -633,6 +639,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21FFE3172925811700A79F8F /* AIEActivation.rtf in Resources */,
 				25EC03B325DEFE85008A4DE4 /* AIELayerNormalization.inspector in Resources */,
 				25EC03C125E305BF008A4DE4 /* AIEReduction.inspector in Resources */,
 				25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */,
@@ -652,6 +659,7 @@
 				25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */,
 				FA18B4D825AEA305000DEF0C /* AIExplorer.ajrplugindata in Resources */,
 				25EC039925D87D11008A4DE4 /* AIEUpsample.inspector in Resources */,
+				21FFE3152924284700A79F8F /* AIEBranch.md in Resources */,
 				FA0F525F25D38F5900DD0F3D /* AIEGraphic.inspector in Resources */,
 				25EC039F25D882F8008A4DE4 /* AIEPooling.inspector in Resources */,
 				FABD166525C8E931000294E3 /* AIEValidationAccessory.xib in Resources */,
