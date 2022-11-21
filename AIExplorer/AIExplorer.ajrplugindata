@@ -99,12 +99,8 @@
             <language identifier="python" name="Python">
                 <extension extension="py" uti="public.python-script" />
             </language>
-            <language identifier="c" name="C">
-                <extension extension="c" uti="public.c-source" />
-            </language>
-            <language identifier="c++" name="C++">
-                <extension extension="cpp" uti="public.c-plus-plus-source" />
-                <extension extension="h" uti="public.c-header" />
+            <language identifier="ipynb" name="Jupyter Notebook">
+                <extension extension="ipynb" uti="public.jupyter-notebook" />
             </language>
         </code-generator>
     </aie-library>
