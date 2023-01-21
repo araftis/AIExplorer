@@ -1,0 +1,10 @@
+/* 
+  AIEInspectorSliceIntegerSize.strings
+  AIExplorer
+
+  Created by AJ Raftis on 12/4/22.
+*/
+
+"Width" = "Ancho";
+"Height" = "Altura";
+"Channels" = "Canales";

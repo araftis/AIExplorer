@@ -115,4 +115,26 @@ open class AIECodeGenerator: NSObject {
     open func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
     }
 
+    // MARK: - Conveniences
+
+    open func iterateNode(in node: AIEGraphic, using block: (_ node: AIEGraphic) throws -> Void) rethrows -> Void {
+        var iterator = node.makeIterator()
+
+        while let node = iterator.next() {
+            try block(node as! AIEGraphic)
+        }
+    }
+
+    open func iterateRoots(using block: (_ root: AIEGraphic) throws -> Void) rethrows -> Void {
+        for root in roots {
+            try block(root)
+        }
+    }
+
+    open func iterateAllNodes(using block: (_ node: AIEGraphic) throws -> Void) rethrows -> Void {
+        try iterateRoots { node in
+            try iterateNode(in: node, using: block)
+        }
+    }
+
 }

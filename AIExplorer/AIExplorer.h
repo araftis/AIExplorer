@@ -39,4 +39,6 @@ FOUNDATION_EXPORT const unsigned char AIExplorerVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AIExplorer/PublicHeader.h>
 
+#import <AIExplorer/AIEShape.h>
+
 

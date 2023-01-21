@@ -88,23 +88,29 @@ open class AIEConvolution: AIEGraphic {
 
     // MARK: - Properties
     open var type : `Type` = .standard
-    open var width : Int = 0
-    open var height : Int = 0
+    open var size : AIEShape = .zero
     open var depth : Int = 0
-    open var inputFeatureChannels : Int = 0
     open var outputFeatureChannels : Int = 0
-    open var dilation : Int = 0
-    open var stride : Int = 0
+    open var dilation : AIEShape = .identity
+    open var stride : AIEShape = .identity
     open var paddingPolicy : PaddingPolicy = .same
-    open var paddingSize : Int = 0
+    open var paddingSize : AIEShape = .zero
+
+    open var inputFeatureChannels : Int {
+        if let inputShape,
+           inputShape.count > 0 {
+            return inputShape[inputShape.count - 1]
+        }
+        return 0
+    }
 
     // MARK: - Creation
 
     public convenience init(width: Int, height: Int, depth: Int, step : Int) {
         self.init()
 
-        self.width = width
-        self.height = height
+        self.size.width = width
+        self.size.height = height
         self.depth = height
         self.stride = stride
     }
@@ -119,60 +125,71 @@ open class AIEConvolution: AIEGraphic {
 
     // MARK: - AIEGraphic
 
+    internal func sizeString(for size: AIEShape, min: Int = 0) -> String? {
+        if size.width > min && size.height > min {
+            if size.width == size.height {
+                return "\(size.width)"
+            } else {
+                return "\(size.width) ✕ \(size.height)"
+            }
+        }
+        return nil
+    }
+
     open override var displayedProperties : [Property] {
         weak var weakSelf = self
         return [Property("Type", {
-                        if let self = weakSelf {
-                            return self.type.localizedDescription
-                        }
-                        return nil
-                    }),
+            if let self = weakSelf {
+                return self.type.localizedDescription
+            }
+            return nil
+        }),
                 Property("Size", {
-                        if let self = weakSelf {
-                            var string = ""
-                            if self.width > 0 || self.height > 0 {
-                                string += "\(self.width) ✕ \(self.height)"
-                            }
-                            if self.depth > 0 {
-                                if !string.isEmpty {
-                                    string += " ✕ "
-                                }
-                                string += "\(self.depth)"
-                            }
-                            return string.isEmpty ? nil : string
-                        }
-                        return nil
-                    }),
+            if let self = weakSelf {
+                var string = ""
+                if self.size.width > 0 || self.size.height > 0 {
+                    string += "\(self.size.width) ✕ \(self.size.height)"
+                }
+                if self.depth > 0 {
+                    if !string.isEmpty {
+                        string += " ✕ "
+                    }
+                    string += "\(self.depth)"
+                }
+                return string.isEmpty ? nil : string
+            }
+            return nil
+        }),
                 Property("FC", {
-                        if let self = weakSelf {
-                            if self.inputFeatureChannels > 0 || self.outputFeatureChannels > 0 {
-                                return "\(self.inputFeatureChannels) → \(self.outputFeatureChannels)"
-                            }
-                        }
-                        return nil
-                    }),
+            if let self = weakSelf {
+                if self.inputFeatureChannels > 0 || self.outputFeatureChannels > 0 {
+                    return "\(self.inputFeatureChannels) → \(self.outputFeatureChannels)"
+                }
+            }
+            return nil
+        }),
                 Property("Dilation", {
-                        if let self = weakSelf {
-                            return self.dilation > 0 ? String(describing: self.dilation) : nil
-                        }
-                        return nil
-                    }),
+            if let self = weakSelf {
+                return self.sizeString(for: self.dilation, min: 1)
+            }
+            return nil
+        }),
                 Property("Stride", {
-                        if let self = weakSelf {
-                            return self.stride > 0 ? String(describing: self.stride) : nil
-                        }
-                        return nil
-                    }),
+            if let self = weakSelf {
+                return self.sizeString(for: self.stride, min: 1)
+            }
+            return nil
+        }),
                 Property("Pad", {
-                        if let self = weakSelf {
-                            if self.paddingPolicy == .usePaddingSize {
-                                return String(describing: self.paddingSize)
-                            } else {
-                                return self.paddingPolicy.localizedDescription
-                            }
-                        }
-                        return nil
-                    }),
+            if let self = weakSelf {
+                if self.paddingPolicy == .usePaddingSize {
+                    return self.sizeString(for: self.paddingSize)
+                } else {
+                    return self.paddingPolicy.localizedDescription
+                }
+            }
+            return nil
+        }),
         ]
     }
 
@@ -195,30 +212,32 @@ open class AIEConvolution: AIEGraphic {
             self.type = value ?? .standard
         }
         coder.decodeInteger(forKey: "width") { (value) in
-            self.width = value
+            // Backwards compatibility
+            self.size.width = value
         }
         coder.decodeInteger(forKey: "height") { (value) in
-            self.height = value
+            // Backwards compatibility
+            self.size.height = value
+        }
+        coder.decodeShape(forKey: "size") { value in
+            self.size = value
         }
         coder.decodeInteger(forKey: "depth") { (value) in
             self.depth = value
         }
-        coder.decodeInteger(forKey: "inputFeatureChannels") { (value) in
-            self.inputFeatureChannels = value
-        }
         coder.decodeInteger(forKey: "outputFeatureChannels") { (value) in
             self.outputFeatureChannels = value
         }
-        coder.decodeInteger(forKey: "dilation") { (value) in
+        coder.decodeShape(forKey: "dilation") { value in
             self.dilation = value
         }
-        coder.decodeInteger(forKey: "stride") { (value) in
+        coder.decodeShape(forKey: "stride") { value in
             self.stride = value
         }
         coder.decodeEnumeration(forKey: "paddingPolicy") { (value : PaddingPolicy?) in
             self.paddingPolicy = value ?? .same
         }
-        coder.decodeInteger(forKey: "paddingSize") { value in
+        coder.decodeShape(forKey: "paddingSize") { value in
             self.paddingSize = value
         }
     }
@@ -229,37 +248,78 @@ open class AIEConvolution: AIEGraphic {
         if type != .standard {
             coder.encode(type, forKey: "type")
         }
-        if width != 0 {
-            coder.encode(width, forKey: "width")
-        }
-        if height != 0 {
-            coder.encode(height, forKey: "height")
+        if size.width != 0 || size.height != 0 {
+            coder.encode(size, forKey: "size")
         }
         if depth != 0 {
             coder.encode(depth, forKey: "depth")
         }
-        if inputFeatureChannels != 0 {
-            coder.encode(inputFeatureChannels, forKey: "inputFeatureChannels")
-        }
         if outputFeatureChannels != 0 {
             coder.encode(outputFeatureChannels, forKey: "outputFeatureChannels")
         }
-        if dilation != 0 {
-            coder.encode(stride, forKey: "dilation")
+        if dilation != .zero {
+            coder.encode(dilation, forKey: "dilation")
         }
-        if stride != 0 {
+        if stride != .zero {
             coder.encode(stride, forKey: "stride")
         }
         if paddingPolicy != .same {
             coder.encode(paddingPolicy, forKey: "paddingPolicy")
         }
-        if paddingSize != 0 {
+        if paddingSize != .zero {
             coder.encode(paddingSize, forKey: "paddingSize")
         }
     }
 
     open class override var ajr_nameForXMLArchiving: String {
         return "aieConvolution"
+    }
+
+    // MARK: - Shape
+
+    open override var outputShape: [Int] {
+        if let inputShape {
+            var outputShape = AIEConvolution.output(from: inputShape, size: size, padding: paddingPolicy, paddingSize: paddingSize, stride: stride, dilation: dilation)
+            outputShape[outputShape.count - 1] = outputFeatureChannels
+            return outputShape
+        }
+        return []
+    }
+
+    // MARK: - Utilities
+
+    public static func outputLength(from inputLength: Int, size: Int, padding: PaddingPolicy, paddingSize: Int, stride: Int, dilation: Int = 1) -> Int {
+        // NOTE: Adapted from conv_utils.py:conv_output_length from the Keras source on github: https://github.com/keras-team/keras/blob/master/keras/utils/conv_utils.py
+        let dilatedFilterSize = size + (size - 1) * (dilation - 1)
+        var outputLength = 0
+        if padding == .same {
+            outputLength = inputLength
+        } else if padding == .valid {
+            outputLength = inputLength - dilatedFilterSize + 1
+        } else if padding == .usePaddingSize {
+            AJRLog.warning("We're not computing with PaddingPolicy.usePaddingSize and paddingSize.")
+            // This was original the if case for "full", so that's this computation. We're not support full, but I left this here for right now.
+            outputLength = inputLength + dilatedFilterSize - 1
+        }
+        return (outputLength + stride - 1) / stride
+    }
+
+    public static func output(from input: [Int], size: AIEShape, padding: PaddingPolicy, paddingSize: AIEShape, stride: AIEShape, dilation: AIEShape = .identity) -> [Int] {
+        assert(input.count >= 3 && input.count <= 5, "input size must be between 3 and 5.")
+        var output = input
+
+        if input.count == 3 {
+            output[1] = outputLength(from: output[1], size: size.width, padding: padding, paddingSize: paddingSize.width, stride: stride.width)
+        } else if input.count == 4 {
+            output[1] = outputLength(from: output[1], size: size.height, padding: padding, paddingSize: paddingSize.height, stride: stride.height)
+            output[2] = outputLength(from: output[2], size: size.width, padding: padding, paddingSize: paddingSize.width, stride: stride.width)
+        } else if input.count == 5 {
+            output[1] = outputLength(from: output[1], size: size.depth, padding: padding, paddingSize: paddingSize.depth, stride: stride.depth)
+            output[2] = outputLength(from: output[2], size: size.height, padding: padding, paddingSize: paddingSize.height, stride: stride.height)
+            output[3] = outputLength(from: output[3], size: size.width, padding: padding, paddingSize: paddingSize.width, stride: stride.width)
+        }
+
+        return output
     }
 
 }

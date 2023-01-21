@@ -194,4 +194,16 @@ open class AIEFullyConnected: AIEGraphic {
         return "aieFullyConnected"
     }
 
+    // MARK: - Shape
+
+    open override var outputShape: [Int] {
+        if let inputShape {
+            if inputShape.count > 2 {
+                return [inputShape[0], outputFeatureChannels]
+            }
+            return inputShape
+        }
+        return []
+    }
+
 }

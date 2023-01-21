@@ -93,6 +93,11 @@
 		FA8E368325BF8D0000EB554F /* AIELibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368225BF8D0000EB554F /* AIELibrary.swift */; };
 		FA8E368925BF8DE900EB554F /* AIETensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */; };
 		FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */; };
+		FABB13B7293C4FD4002DD56B /* AIEIO.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FABB13B6293C4FD4002DD56B /* AIEIO.inspector */; };
+		FABB13BA293D6F65002DD56B /* AIEShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB13B9293D6F65002DD56B /* AIEShape.swift */; };
+		FABB13BD293D7185002DD56B /* AIEShape.h in Headers */ = {isa = PBXBuildFile; fileRef = FABB13BB293D7185002DD56B /* AIEShape.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABB13BE293D7185002DD56B /* AIEShape.m in Sources */ = {isa = PBXBuildFile; fileRef = FABB13BC293D7185002DD56B /* AIEShape.m */; };
+		FABB13C1293D8D02002DD56B /* AIEInspectorSliceShape.strings in Resources */ = {isa = PBXBuildFile; fileRef = FABB13C3293D8D02002DD56B /* AIEInspectorSliceShape.strings */; };
 		FABD163D25C78722000294E3 /* AIECodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD163C25C78722000294E3 /* AIECodeGenerator.swift */; };
 		FABD164125C7874B000294E3 /* AIEMLComputeCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD164025C7874B000294E3 /* AIEMLComputeCodeGenerator.swift */; };
 		FABD164525C78761000294E3 /* AIETensorFlowCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABD164425C78761000294E3 /* AIETensorFlowCodeGenerator.swift */; };
@@ -230,6 +235,12 @@
 		FA8E368825BF8DE900EB554F /* AIETensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlow.swift; sourceTree = "<group>"; };
 		FA8E369025BF8E0400EB554F /* AIEMLCompute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLCompute.swift; sourceTree = "<group>"; };
 		FA8E36CC25C0C4FB00EB554F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FABB13B6293C4FD4002DD56B /* AIEIO.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEIO.inspector; sourceTree = "<group>"; };
+		FABB13B9293D6F65002DD56B /* AIEShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEShape.swift; sourceTree = "<group>"; };
+		FABB13BB293D7185002DD56B /* AIEShape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIEShape.h; sourceTree = "<group>"; };
+		FABB13BC293D7185002DD56B /* AIEShape.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIEShape.m; sourceTree = "<group>"; };
+		FABB13C2293D8D02002DD56B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AIEInspectorSliceShape.strings; sourceTree = "<group>"; };
+		FABB13C4293D8DA0002DD56B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AIEInspectorSliceShape.strings; sourceTree = "<group>"; };
 		FABD163C25C78722000294E3 /* AIECodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIECodeGenerator.swift; sourceTree = "<group>"; };
 		FABD164025C7874B000294E3 /* AIEMLComputeCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeCodeGenerator.swift; sourceTree = "<group>"; };
 		FABD164425C78761000294E3 /* AIETensorFlowCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETensorFlowCodeGenerator.swift; sourceTree = "<group>"; };
@@ -388,6 +399,7 @@
 				FABD168325C9FFCE000294E3 /* Document */,
 				FA8E368125BF8CE100EB554F /* Libraries */,
 				FA18B4C825AEA305000DEF0C /* Tools */,
+				FABB13B8293D6F52002DD56B /* Types */,
 				FA88824425F5D76B00DFE50B /* User Interface */,
 				FA18B49B25AEA257000DEF0C /* AIExplorer.h */,
 				FA18B49C25AEA257000DEF0C /* Info.plist */,
@@ -430,6 +442,7 @@
 				FA18B4CD25AEA305000DEF0C /* AIEAudioIO.swift */,
 				FA0F526225D392FD00DD0F3D /* AIEImageIO.inspector */,
 				FA18B4CC25AEA305000DEF0C /* AIEImageIO.swift */,
+				FABB13B6293C4FD4002DD56B /* AIEIO.inspector */,
 				2169BA2E2748799B00A5407D /* AIEIO.swift */,
 				FA18B4CF25AEA305000DEF0C /* AIEIOTool.swift */,
 				FA02BF4725B783CB001EFBBA /* AIEKnowledgeGraphIO.swift */,
@@ -519,6 +532,17 @@
 			path = "ML Compute";
 			sourceTree = "<group>";
 		};
+		FABB13B8293D6F52002DD56B /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				FABB13BB293D7185002DD56B /* AIEShape.h */,
+				FABB13BC293D7185002DD56B /* AIEShape.m */,
+				FABB13B9293D6F65002DD56B /* AIEShape.swift */,
+				FABB13C3293D8D02002DD56B /* AIEInspectorSliceShape.strings */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 		FABD165725C8E8B6000294E3 /* Accessories */ = {
 			isa = PBXGroup;
 			children = (
@@ -554,6 +578,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FABB13BD293D7185002DD56B /* AIEShape.h in Headers */,
 				FA18B4A925AEA257000DEF0C /* AIExplorer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -608,7 +633,7 @@
 				TargetAttributes = {
 					FA18B49725AEA257000DEF0C = {
 						CreatedOnToolsVersion = 12.3;
-						LastSwiftMigration = 1300;
+						LastSwiftMigration = 1410;
 					};
 					FA18B4A025AEA257000DEF0C = {
 						CreatedOnToolsVersion = 12.3;
@@ -622,6 +647,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = FA18B48E25AEA256000DEF0C;
 			productRefGroup = FA18B49925AEA257000DEF0C /* Products */;
@@ -650,6 +676,7 @@
 				FABD167525C8E9D7000294E3 /* AIETrainingAccessory.xib in Resources */,
 				FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */,
 				FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */,
+				FABB13C1293D8D02002DD56B /* AIEInspectorSliceShape.strings in Resources */,
 				FABD166B25C8E947000294E3 /* AIETestingAccessory.xib in Resources */,
 				FA88826E25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib in Resources */,
 				25EC03B725DF0438008A4DE4 /* AIELSTM.inspector in Resources */,
@@ -669,6 +696,7 @@
 				25EC03BD25E26613008A4DE4 /* AIESoftmax.inspector in Resources */,
 				25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */,
 				21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */,
+				FABB13B7293C4FD4002DD56B /* AIEIO.inspector in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +727,7 @@
 				210F8F8B2730A7F5004A939D /* AIEMessagesInspector.swift in Sources */,
 				FA02BFB225B7AC4D001EFBBA /* AIEBatchNormalization.swift in Sources */,
 				FA02BF7825B7A7C6001EFBBA /* AIEMatrixMultiplication.swift in Sources */,
+				FABB13BE293D7185002DD56B /* AIEShape.m in Sources */,
 				FA18B4DA25AEA305000DEF0C /* AIEFilter.swift in Sources */,
 				FABD165925C8E8D8000294E3 /* AIESourceCodeAccessory.swift in Sources */,
 				FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */,
@@ -725,6 +754,7 @@
 				FA02BF5525B7851C001EFBBA /* AIEMultiheadAttention.swift in Sources */,
 				FA02BFB625B7AC5B001EFBBA /* AIEGroupNormalization.swift in Sources */,
 				FABD16A425CA578C000294E3 /* AIEDocumentStorage.swift in Sources */,
+				FABB13BA293D6F65002DD56B /* AIEShape.swift in Sources */,
 				FA88825025F5E8FC00DFE50B /* AIEDocumentTemplate.swift in Sources */,
 				21FFE2FD29131DA500A79F8F /* AIELoop.swift in Sources */,
 				FA02BF8725B7AAA4001EFBBA /* AIETransformationTool.swift in Sources */,
@@ -772,11 +802,24 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		FABB13C3293D8D02002DD56B /* AIEInspectorSliceShape.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FABB13C2293D8D02002DD56B /* en */,
+				FABB13C4293D8DA0002DD56B /* es */,
+			);
+			name = AIEInspectorSliceShape.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		FA18B4AA25AEA257000DEF0C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -840,6 +883,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

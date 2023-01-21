@@ -137,7 +137,7 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     }
 
     private var _variableName : String?
-    open var variableName : String! {
+    open var variableName : String {
         get {
             return _variableName ?? generatedVariableName
         }
@@ -316,19 +316,23 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
     // MARK: - Graph Traversal
 
     open var sourceObjects : [AIEGraphic] {
-        var sourceObjects = [AIEGraphic]()
+        return entryLinks.map { return $0.source as! AIEGraphic }
+    }
+
+    open var entryLinks : [DrawLink] {
+        var sourceLinks = [DrawLink]()
         var objectsToRemove = [DrawGraphic]()
         for related in self.relatedGraphics {
             if let drawLink = related as? DrawLink {
                 if (drawLink.destination === self && drawLink.sourceCap == nil
-                        && drawLink.destinationCap != nil), let source = drawLink.source as? AIEGraphic {
+                        && drawLink.destinationCap != nil), drawLink.source is AIEGraphic {
                     if drawLink.document == nil {
                         // We've got a delete issue, so we're going to "clean" our document here, along with a warning. We will, obviously, want to fix this. This is probably happening because when a link is deleted, it's not deleting itself from it's related graphics.
                         AJRLog.warning("Graphic \(drawLink) in \(self) is no longer a member of the document.")
                         self.document?.remove(drawLink)
                         objectsToRemove.append(drawLink)
                     } else {
-                        sourceObjects.append(source)
+                        sourceLinks.append(drawLink)
                     }
                 }
             }
@@ -338,7 +342,7 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
                 remove(fromRelatedGraphics: object)
             }
         }
-        return sourceObjects
+        return sourceLinks
     }
     /**
      Returns an array of related objects from this graphic.
@@ -410,6 +414,21 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
                 traverse(graph: root, visited: &visited, counts: &counts)
             }
         }
+    }
+
+    // MARK: - Tensor Shape
+
+    open var inputShape : [Int]? {
+        let sources = sourceObjects
+        if sources.count == 1 {
+            return sources[0].outputShape
+        }
+        // We should do something more sane here.
+        return nil
+    }
+
+    open var outputShape : [Int] {
+        return inputShape ?? []
     }
 
     // MARK: - Help
@@ -505,5 +524,5 @@ open class AIEGraphicIterator<UserData> : IteratorProtocol {
         }
         return nil
     }
-    
+
 }

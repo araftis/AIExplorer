@@ -66,15 +66,11 @@ open class AIEPooling: AIEGraphic {
 
     // MARK: - Properties
 
-    open var width : Int = 0
-    open var height : Int = 0
-    open var strideX : Int = 0
-    open var strideY : Int = 0
-    open var dilationX : Int = 0
-    open var dilationY : Int = 0
+    open var size : AIEShape = .zero
+    open var stride : AIEShape = .zero
+    open var dilation : AIEShape = .zero
     open var paddingPolicy : AIEConvolution.PaddingPolicy = .same
-    open var paddingX : Int = 0
-    open var paddingY : Int = 0
+    open var padding : AIEShape = .zero
     open var countIncludesPadding : Bool = false
 
     // MARK: - Creation
@@ -94,8 +90,8 @@ open class AIEPooling: AIEGraphic {
         return [Property("Size", {
                         if let self = weakSelf {
                             var string = ""
-                            if self.width > 0 || self.height > 0 {
-                                string += "\(self.width) ✕ \(self.height)"
+                            if self.size.width > 0 || self.size.height > 0 {
+                                string += "\(self.size.width) ✕ \(self.size.height)"
                             }
                             return string.isEmpty ? nil : string
                         }
@@ -104,8 +100,8 @@ open class AIEPooling: AIEGraphic {
                 Property("Stride", {
                         if let self = weakSelf {
                             var string = ""
-                            if self.strideX > 0 || self.strideY > 0 {
-                                string += "\(self.strideX) ✕ \(self.strideY)"
+                            if self.stride.width > 1 || self.stride.height > 1 {
+                                string += "\(self.stride.width) ✕ \(self.stride.height)"
                             }
                             return string.isEmpty ? nil : string
                         }
@@ -113,8 +109,8 @@ open class AIEPooling: AIEGraphic {
                     }),
                 Property("Dilation", {
                         if let self = weakSelf {
-                            if self.dilationX != 0 || self.dilationY != 0 {
-                                return "\(self.dilationX) ✕ \(self.dilationY)"
+                            if self.dilation.width != 1 || self.dilation.height != 1 {
+                                return "\(self.dilation.width) ✕ \(self.dilation.height)"
                             }
                         }
                         return nil
@@ -122,7 +118,7 @@ open class AIEPooling: AIEGraphic {
                 Property("Pad", {
                         if let self = weakSelf {
                             if self.paddingPolicy == .usePaddingSize {
-                                return "\(self.paddingX) ✕ \(self.paddingY)"
+                                return "\(self.padding.width) ✕ \(self.padding.height)"
                             } else {
                                 return self.paddingPolicy.localizedDescription
                             }
@@ -148,31 +144,51 @@ open class AIEPooling: AIEGraphic {
         super.decode(with: coder)
 
         coder.decodeInteger(forKey: "width") { (value) in
-            self.width = value
+            // For backwards compatibility
+            self.size.width = value
         }
         coder.decodeInteger(forKey: "height") { (value) in
-            self.height = value
+            // For backwards compatibility
+            self.size.height = value
+        }
+        coder.decodeShape(forKey: "size") { value in
+            self.size = value
         }
         coder.decodeInteger(forKey: "strideX") { (value) in
-            self.strideX = value
+            // For backwards compatibility
+            self.stride.width = value
         }
         coder.decodeInteger(forKey: "strideY") { (value) in
-            self.strideX = value
+            // For backwards compatibility
+            self.stride.height = value
+        }
+        coder.decodeShape(forKey: "stride") { value in
+            self.stride = value
         }
         coder.decodeInteger(forKey: "dilationX") { (value) in
-            self.dilationX = value
+            // For backwards compatibility
+            self.dilation.width = value
         }
         coder.decodeInteger(forKey: "dilationY") { (value) in
-            self.dilationY = value
+            // For backwards compatibility
+            self.dilation.height = value
+        }
+        coder.decodeShape(forKey: "dilation") { value in
+            self.dilation = value
         }
         coder.decodeEnumeration(forKey: "paddingPolicy") { (value: AIEConvolution.PaddingPolicy?) in
             self.paddingPolicy = value ?? .same
         }
         coder.decodeInteger(forKey: "paddingX") { (value) in
-            self.paddingX = value
+            // For backwards compatibility
+            self.padding.width = value
         }
         coder.decodeInteger(forKey: "paddingY") { (value) in
-            self.paddingY = value
+            // For backwards compatibility
+            self.padding.height = value
+        }
+        coder.decodeShape(forKey: "padding") { value in
+            self.padding = value
         }
         coder.decodeBool(forKey: "countIncludesPadding") { (value) in
             self.countIncludesPadding = value
@@ -182,20 +198,25 @@ open class AIEPooling: AIEGraphic {
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
 
-        coder.encode(width, forKey: "width")
-        coder.encode(height, forKey: "height")
-        coder.encode(strideX, forKey: "strideX")
-        coder.encode(strideY, forKey: "strideY")
-        coder.encode(dilationX, forKey: "dilationX")
-        coder.encode(dilationY, forKey: "dilationY")
+        coder.encode(size, forKey: "size")
+        coder.encode(stride, forKey: "stride")
+        coder.encode(dilation, forKey: "dilation")
         coder.encode(paddingPolicy, forKey: "paddingPolicy")
-        coder.encode(paddingX, forKey: "paddingX")
-        coder.encode(paddingY, forKey: "paddingY")
+        coder.encode(padding, forKey: "padding")
         coder.encode(countIncludesPadding, forKey: "countIncludesPadding")
     }
 
     open class override var ajr_nameForXMLArchiving: String {
         return "aiePoolingLayer"
+    }
+
+    // MARK: - Shape
+
+    open override var outputShape: [Int] {
+        if let inputShape {
+            return AIEConvolution.output(from: inputShape, size: size, padding: paddingPolicy, paddingSize: padding, stride: stride, dilation: dilation)
+        }
+        return []
     }
 
 }

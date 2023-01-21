@@ -9,24 +9,23 @@
             </slice>
         </group>
         <group title="Dimensions">
-            <slice type="integer" label="Size" subtitle="Width" valueKeyPath="controller.selection.width" />
-            <slice type="integer" subtitle="Height" valueKeyPath="controller.selection.height" />
+            <slice type="shape" label="Size" valueKeyPath="controller.selection.size" />
             <slice type="integer" label="Depth" valueKeyPath="controller.selection.depth" />
         </group>
         <group title="Feature Channels">
-            <slice type="integer" label="Input" valueKeyPath="controller.selection.inputFeatureChannels" />
+            <slice type="integer" label="Input" enabled="false" valueKeyPath="controller.selection.inputFeatureChannels" />
             <slice type="integer" label="Output" valueKeyPath="controller.selection.outputFeatureChannels" />
         </group>
         <group title="Stride">
-            <slice type="integer" label="Dilation" valueKeyPath="controller.selection.dilation" />
-            <slice type="integer" label="Stride" valueKeyPath="controller.selection.stride" />
+            <slice type="shape" label="Dilation" valueKeyPath="controller.selection.dilation" />
+            <slice type="shape" label="Stride" valueKeyPath="controller.selection.stride" />
         </group>
         <group title="Padding">
             <slice type="choice" label="Policy" valueKeyPath="controller.selection.paddingPolicy" style="popUp" valueType="integer">
                 <choice title="Same" value="0" />
                 <choice title="Valid" value="1" />
                 <choice title="Use Padding Size" value="2">
-                    <slice type="integer" label="Size" valueKeyPath="controller.selection.paddingSize" />
+                    <slice type="shape" label="Size" valueKeyPath="controller.selection.paddingSize" />
                 </choice>
             </slice>
         </group>

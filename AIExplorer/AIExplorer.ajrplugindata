@@ -123,6 +123,7 @@
     <ajr_inspector xml="AIEDocument" identifier="aieDocument" />
     <ajr_inspector xml="AIEGraphic" identifier="aieGraphic" />
     <ajr_inspector xml="AIEImageIO" identifier="aieImageIO" />
+    <ajr_inspector xml="AIEIO" identifier="aieIO" />
     <ajr_inspector xml="AIEConvolution" identifier="aieConvolution" />
     <ajr_inspector xml="AIEUpsample" identifier="aieUpsample" />
     <ajr_inspector xml="AIEPooling" identifier="aiePooling" />
@@ -136,6 +137,11 @@
     <ajr_inspector xml="AIEReduction" identifier="aieReduction" />
     <ajr_inspector xml="AIELoop" identifier="aieLoop" />
     <ajr_inspector xml="AIEBranch" identifier="aieBranch" />
+
+    <!-- This first registers us with the "Geometry" inspector slice type, so the main plugin will recognize us. -->
+    <ajr_inspector_slice type="shape" class="AJRInterface.AJRInspectorSliceGeometry" />
+    <!-- This second registers our specific geometry type with the geometry slice class. -->
+    <ajr_inspector_geometry_slice type="shape" class="AIExplorer.AIEInspectorSliceShape" />
 
     <draw-structure-inspector name="Messages" icon="inspectorMessages" id="messages" priority="3.0" inspectorClass="AIExplorer.AIEMessagesInspector" />
 

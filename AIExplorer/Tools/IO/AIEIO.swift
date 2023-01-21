@@ -29,7 +29,11 @@
  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Cocoa
+import Draw
+
+public extension AJRInspectorIdentifier {
+    static var aieIO = AJRInspectorIdentifier("aieIO")
+}
 
 @objcMembers
 open class AIEIO: AIEGraphic {
@@ -41,12 +45,40 @@ open class AIEIO: AIEGraphic {
         case text
         case video
         case knowledgeGraph
+        case data
     }
     
     open var type : AIEIO.Kind { return .unknown }
-    
+    open var batchSize : Int = 0
+
     open class override var ajr_nameForXMLArchiving: String {
         return "aieIO" // Never used, but we need to avoid returning our superclass' name.
+    }
+
+    // MARK: - AJRInspector
+
+    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
+        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
+        if inspectorContentIdentifier == .graphic {
+            supers.append(.aieIO)
+        }
+        return supers
+    }
+
+    // MARK: - AJRXMLCoding
+
+    open override func encode(with coder: AJRXMLCoder) {
+        super.encode(with: coder)
+        if batchSize != 0 {
+            coder.encode(batchSize, forKey: "batchSize")
+        }
+    }
+
+    open override func decode(with coder: AJRXMLCoder) {
+        super.decode(with: coder)
+        coder.decodeInteger(forKey: "batchSize") { value in
+            self.batchSize = value
+        }
     }
 
 }

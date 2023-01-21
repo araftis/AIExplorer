@@ -133,4 +133,10 @@ open class AIEImageIO: AIEIO {
 
     open override var type : AIEIO.Kind { return .image }
 
+    // MARK: - Shape
+
+    open override var outputShape: [Int] {
+        return [batchSize, width, height, depth]
+    }
+
 }
