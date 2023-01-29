@@ -38,8 +38,6 @@ public extension AJRInspectorIdentifier {
 @objcMembers
 open class AIEBranch: AIEGraphic {
 
-    open var conditions = [AJREvaluation]()
-
     // MARK: - AJRInspector
 
     open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
@@ -75,18 +73,11 @@ open class AIEBranch: AIEGraphic {
 
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
-        coder.decodeObject(forKey: "conditions") { object in
-            if let objects = object as? [AJREvaluation] {
-                self.conditions.append(contentsOf: objects)
-            }
-        }
     }
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
-        if conditions.count > 0 {
-            coder.encode(conditions, forKey: "conditions")
-        }
+        // Our conditions are stored as part of the exit links. Keeps things cleaner that way, but leaving this method, because we'll probably add some properties, eventually.
     }
 
     open class override var ajr_nameForXMLArchiving: String {

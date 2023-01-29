@@ -3,7 +3,7 @@
     <group title="Branch">
         <group title="Conditions" forEachKeyPath="controller.selection.exitLinks">
             <slice type="string" label="Desintation" valueKeyPath="controller.selection.destination.title" editable="false"/>
-            <slice type="choice" label="Condition" style="popUp" valueType="object" objectsKeyPath="controller.selection.variables" choiceTitleKeyPath="name" valueKeyPath="controller.selection.extendedProperties.condition" allowsNil="true" titleWhenNil="Always False"/>
+            <slice type="choice" label="Condition" style="popUp" valueType="object" objectsKeyPath="controller.selection.variables" choiceTitleKeyPath="name" valueKeyPath="controller.selection.extendedProperties.condition" allowsNil="true" titleWhenNil="Else"/>
         </group>
     </group>
 </inspector>
