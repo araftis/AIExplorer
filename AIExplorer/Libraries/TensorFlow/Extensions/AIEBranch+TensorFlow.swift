@@ -34,21 +34,32 @@ extension AIEBranch : AIETensorFlowCodeWriter {
     }
     
     func generateCode(for links : [DrawLink], context: AIETensorFlowContext) throws -> Void {
-        for link in links {
+        for (index, link) in links.enumerated() {
             if let child = link.destination as? AIEGraphic {
                 // We'll quietly ignore any exit links that aren't NN objects.
                 context.push(self)
-                context.incrementIndent()
                 if let child = child as? AIETensorFlowCodeWriter {
-                    let generatedCode : Bool
-                    generatedCode = try child.generateCode(context: context)
-                    if generatedCode {
-                        context.generatedCode = true
+                    let condition = link.extendedProperties["condition"] as? AJREvaluation
+                    if let condition {
+                        if index == 0 {
+                            try context.writeIndented("if \(condition):\n")
+                        } else {
+                            try context.write(" elif \(condition):\n")
+                        }
+                    } else {
+                        try context.writeIndented("else:\n")
                     }
+                    context.incrementIndent()
+                    let generatedCode = try child.generateCode(context: context)
+                    if  generatedCode {
+                        context.generatedCode = true
+                    } else {
+                        try context.writeIndented("pass\n")
+                    }
+                    context.decrementIndent()
                 } else {
                     context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
                 }
-                context.decrementIndent()
                 context.pop()
             }
         }

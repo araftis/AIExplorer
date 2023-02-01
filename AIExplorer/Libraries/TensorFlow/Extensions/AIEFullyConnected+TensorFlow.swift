@@ -4,12 +4,9 @@ import Foundation
 extension AIEFullyConnected : AIETensorFlowCodeWriter {
     
     internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        try appendShapes(context: context)
-        try context.output.indent(context.indent).write("\(variableName) = layers.Dense(\(outputFeatureChannels))")
-        if let parent = context.parent {
-            try context.output.write("(Flatten()(\(parent.variableName)))")
+        try appendStandardCode(context: context) {
+            try context.write("[layers.Flatten(), layers.Dense(\(outputFeatureChannels))]")
         }
-        try context.output.write("\n")
         try progressToChild(context: context)
         
         return true

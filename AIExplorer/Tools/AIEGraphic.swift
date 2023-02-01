@@ -39,6 +39,21 @@ public extension AJRInspectorIdentifier {
 
 @objcMembers
 open class AIEGraphic: DrawGraphic, AIEMessageObject {
+
+    /// Describes the type of node we're dealing with.
+    @objc public enum Kind : Int, AJRXMLEncodableEnum {
+        /// Nodes that are neural network objects. There are layers like convolution, softmax, etc...
+        case neuralNetwork
+        /// Nodes that control the flow through the neural network. This are like branch and loop.
+        case flowControl
+        
+        public var description: String {
+            switch self {
+            case .neuralNetwork: return "neuralNetwork"
+            case .flowControl: return "flowControl"
+            }
+        }
+    }
     
     open override class var propertiesToIgnore: Set<String>? {
         if var properties = super.propertiesToIgnore {
@@ -105,9 +120,15 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         return nil
     }
 
+    // TODO: This can probably be removed. I decided not to do things this way.
     open var activity : Activity = .any {
         willSet { willChangeValue(forKey: "activity") }
         didSet { didChangeValue(forKey: "activity") }
+    }
+    
+    /// Returns the kind of node the receiver is. By default, all nodes are `.neuralNetwork`. Subclasses can override this property to return something else, which would currently be `.flowControl`.
+    open var kind : Kind {
+        return .neuralNetwork
     }
 
     open class var baseVariableName : String {

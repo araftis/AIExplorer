@@ -64,4 +64,10 @@ open class AIELoop: AIEGraphic {
         return "aieLoop"
     }
 
+    // MARK: - AIEGraphic
+    
+    open override var kind : Kind {
+        return .flowControl
+    }
+
 }

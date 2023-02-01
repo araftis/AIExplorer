@@ -29,8 +29,11 @@ internal protocol AIETensorFlowCodeWriter : AIEMessageObject {
     var variableName : String { get }
     var inputShape : [Int]? { get }
     var outputShape : [Int] { get }
+    var kind : AIEGraphic.Kind { get }
     func validateSingleChild(context: AIETensorFlowContext) -> Void
     func appendShapes(context: AIETensorFlowContext) throws -> Void
+
+    func appendStandardCode(context: AIETensorFlowContext, _ block: () throws -> Void) throws -> Void
 
 }
 
@@ -42,7 +45,7 @@ extension AIETensorFlowCodeWriter {
     
     func appendParent(context: AIETensorFlowContext) throws -> Void {
         if let parent = context.parent {
-            try context.output.write("(\(parent.variableName))")
+            try context.write("\(parent.variableName))")
         }
     }
 
@@ -58,8 +61,8 @@ extension AIETensorFlowCodeWriter {
 
         if children.count == 1 {
             // We have one child, so let's do our thing.
-            context.push(self)
             if let child = children.first as? AIETensorFlowCodeWriter {
+                context.push(self)
                 let generatedCode : Bool
                 switch context.stage {
                 case .initialization:
@@ -70,10 +73,10 @@ extension AIETensorFlowCodeWriter {
                 if generatedCode {
                     context.generatedCode = true
                 }
+                context.pop()
             } else if let child = children.first {
                 context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
             }
-            context.pop()
         }
     }
 
@@ -89,5 +92,13 @@ extension AIETensorFlowCodeWriter {
         }
     }
 
+    func appendStandardCode(context: AIETensorFlowContext, _ block: () throws -> Void) throws -> Void {
+        try self.appendShapes(context: context)
+        try context.writeIndented("\(variableName) = ")
+        try block()
+        try context.write("\n")
+        try context.writeIndented("rawModel.append(\(variableName))\n")
+    }
+    
 }
 

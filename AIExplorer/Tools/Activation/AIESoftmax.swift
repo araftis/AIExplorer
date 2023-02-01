@@ -138,4 +138,14 @@ open class AIESoftmax: AIEGraphic {
         return "aieSoftmaxLayer"
     }
 
+    // MARK: - Shape
+
+    open override var outputShape: [Int] {
+        if let inputShape {
+            // We just return the input shape, but in reality, softmax only works if we have one output channel (other than the batch size channel).
+            return inputShape
+        }
+        return []
+    }
+
 }

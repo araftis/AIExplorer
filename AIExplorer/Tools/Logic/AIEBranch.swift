@@ -84,4 +84,10 @@ open class AIEBranch: AIEGraphic {
         return "aieBranch"
     }
 
+    // MARK: - AIEGraphic
+    
+    open override var kind : Kind {
+        return .flowControl
+    }
+    
 }

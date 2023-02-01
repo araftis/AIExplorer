@@ -199,9 +199,10 @@ open class AIEFullyConnected: AIEGraphic {
     open override var outputShape: [Int] {
         if let inputShape {
             if inputShape.count > 2 {
+                // TODO: Not sure this is correct just yet...
                 return [inputShape[0], outputFeatureChannels]
             }
-            return inputShape
+            return [inputShape[0], outputFeatureChannels]
         }
         return []
     }

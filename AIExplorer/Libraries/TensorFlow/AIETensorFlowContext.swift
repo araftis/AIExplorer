@@ -85,8 +85,8 @@ internal class AIETensorFlowContext {
 
     // MARK: - Stack
 
-    func push(_ parent: AIETensorFlowCodeWriter) -> Void {
-        path.append(parent)
+    func push(_ current: AIETensorFlowCodeWriter) -> Void {
+        path.append(current)
     }
     
     @discardableResult
@@ -96,8 +96,26 @@ internal class AIETensorFlowContext {
         return last
     }
 
-    open var parent : AIETensorFlowCodeWriter? {
+    open var currentNode : AIETensorFlowCodeWriter? {
         return path.last
+    }
+    
+    /**
+     Returns the "parent" object on the current path.
+     
+     This reverse enumerates the current path and returns the first (last?) object that is of `kind` `.neuralNetwork`. Other types are ignored. This basically means that we'd skip something like `AIEBranch`, but return most other nodes.
+     */
+    open var parent : AIETensorFlowCodeWriter? {
+        for (index, ancestor) in path.reversed().enumerated() {
+            if index == path.count {
+                // Skip the current object, since we want it's parent.
+                continue
+            }
+            if ancestor.kind == .neuralNetwork {
+                return ancestor
+            }
+        }
+        return nil
     }
     
     // MARK: - Messages
@@ -117,5 +135,15 @@ internal class AIETensorFlowContext {
             indent -= 1
         }
     }
-
+    
+    // MARK: - Writing Conveniences
+    
+    func write(_ string: String) throws -> Void {
+        try output.write(string)
+    }
+    
+    func writeIndented(_ string: String) throws -> Void {
+        try output.indent(indent).write(string)
+    }
+    
 }

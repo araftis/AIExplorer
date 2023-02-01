@@ -64,23 +64,30 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 try outputStream.indent(0).write("class \(info[.codeName] ?? "Anonymous"):\n")
                 try outputStream.indent(0).write("\n")
                 
-                let context = AIETensorFlowContext(outputStream: outputStream, indent: 2)
+                let context = AIETensorFlowContext(outputStream: outputStream, indent: 1)
                 
                 // Create the init method.
-                try outputStream.indent(1).write("def __init__(self):\n")
+                try context.writeIndented("def __init__(self):\n")
                 context.stage = .initialization
+                context.incrementIndent()
                 let wroteCode = try node.generateCreationInsideInit(context: context)
                 messages.append(contentsOf: context.messages)
                 if !wroteCode  {
-                    try outputStream.indent(2).write("pass\n")
+                    try context.writeIndented("pass\n")
                 }
+                context.decrementIndent()
 
                 // OK, now we can generate the "build" method.
-                try outputStream.indent(0).write("\n")
-                try outputStream.indent(1).write("def buildModel(self, isTraining=False):\n")
+                try context.write("\n")
+                try context.writeIndented("def buildModel(self, isTraining=False):\n")
+                context.incrementIndent()
+                try context.writeIndented("rawModel = []\n")
                 context.stage = .build
                 try node.generateCode(context: context)
+                try context.write("\n")
+                try context.writeIndented("return models.Sequential(layers)")
                 messages.append(contentsOf: context.messages)
+                context.decrementIndent()
             } else {
                 messages.append(AIEMessage(type: .error, message: "\(Swift.type(of:node)) is not supported with TensorFlow.", on: node))
                 try outputStream.indent(1).write("// \(Swift.type(of:node)) is not supported with TensorFlow.\n")

@@ -10,7 +10,7 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
         if let inputShape {
             try context.output.indent(context.indent).write("# Input Shape: \(inputShape)\n")
         }
-        try context.output.indent(2).write("\(variableName) = Input(shape=(\(height), \(width), \(depth)))\n")
+        try context.output.indent(2).write("\(variableName) = layers.Input(shape=(\(height), \(width), \(depth)))\n")
         try progressToChild(context: context)
         
         return true
