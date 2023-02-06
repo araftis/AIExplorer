@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector-include>
+    <group title="Optimizer">
+        <slice type="choice" style="popUp" label="Type" valueType="object" valueKeyPath="controller.selection.inspectedOptimizer" objectsKeyPath="controller.selection.inspectedAllOptimizers" choiceTitleKeyPath="localizedName">
+        </slice>
+        <slice type="float" label="Learning Rate" valueKeyPath="controller.selection.optimizer.learningRate"/>
+        <slice type="float" label="Gradient Rescale" valueKeyPath="controller.selection.optimizer.inspectedGradientRescale" placeholderString="Unset"/>
+        <group title="Gradient Clipping">
+            <slice type="boolean" valueKeyPath="controller.selection.optimizer.appliesGradientClipping" title="Applies Gradient Clipping"/>
+            <group visibleKeyPath="controller.selection.optimizer.appliesGradientClipping">
+                <slice type="choice" style="popUp" label="Type" valueType="integer" valueKeyPath="controller.selection.optimizer.gradientClippingType">
+                    <choice title="By Value" value="0" />
+                    <choice title="By Norm" value="1" />
+                    <choice title="By Global Norm" value="2" />
+                </slice>
+                <slice type="float" label="Clipping" valueKeyPath="controller.selection.optimizer.inspectedGradientClipMin" subtitle="Min" placeholderString="Unset"/>
+                <slice type="float" valueKeyPath="controller.selection.optimizer.inspectedGradientClipMax" subtitle="Max" placeholderString="Unset"/>
+                <slice type="float" label="Max Norm" valueKeyPath="controller.selection.optimizer.inspectedMaximumClippingNorm" placeholderString="Unset"/>
+                <slice type="float" label="Custom Global Norm" valueKeyPath="controller.selection.optimizer.inspectedCustomGlobalNorm" placeholderString="Unset"/>
+            </group>
+        </group>
+        <group title="Regularization">
+            <slice type="choice" style="popUp" label="Type" valueType="integer" valueKeyPath="controller.selection.optimizer.regularizationType">
+                <choice title="None" value="0" />
+                <choice title="L1" value="1" />
+                <choice title="L2" value="2" />
+            </slice>
+            <slice type="float" label="Scale" valueKeyPath="controller.selection.optimizer.inspectedRegularizationScale" placeholderString="Unset"/>
+        </group>
+    </group>
+</inspector-include>

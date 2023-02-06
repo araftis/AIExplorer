@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector>
+    <group title="Terminus">
+        <include file="AIELoss"/>
+        <include file="AIEOptimizer"/>
+    </group>
+</inspector>

@@ -32,7 +32,7 @@ extension AIEConvolution : AIETensorFlowCodeWriter {
                 // Not sure how to handle this with TensorFlow just yet.
                 context.add(message: AIEMessage(type: .warning, message: "We don't handle the padding policy \"Use Padding Size\" in TensorFlow yet.", on: self))
             }
-            try context.output.write(")")
+            try context.output.write(", name='\(variableName)')")
         }
         try progressToChild(context: context)
         

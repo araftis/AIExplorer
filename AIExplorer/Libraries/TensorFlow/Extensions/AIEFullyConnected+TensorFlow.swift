@@ -5,7 +5,7 @@ extension AIEFullyConnected : AIETensorFlowCodeWriter {
     
     internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
         try appendStandardCode(context: context) {
-            try context.write("[layers.Flatten(), layers.Dense(\(outputFeatureChannels))]")
+            try context.write("models.Sequential([layers.Flatten(), layers.Dense(\(outputFeatureChannels))], name='\(variableName)')")
         }
         try progressToChild(context: context)
         

@@ -97,7 +97,7 @@ extension AIETensorFlowCodeWriter {
         try context.writeIndented("\(variableName) = ")
         try block()
         try context.write("\n")
-        try context.writeIndented("rawModel.append(\(variableName))\n")
+        try context.writeIndented("model.add(\(variableName))\n")
     }
     
 }

@@ -20,6 +20,13 @@
             </element>
         </element>
     </extension-point>
+    
+    <!-- Defines the various optimizer classes. -->
+    <extension-point name="aie-optimizer" class="AIExplorer.AIEOptimizer" registrySelector="registerOptimizer:properties:">
+        <attribute name="class" type="class" required="true" />
+        <attribute name="name" type="string" required="true" />
+        <attribute name="id" type="string" required="true" />
+    </extension-point>
 
     <draw-filter class="AIExplorer.AIEFilter">
         <readType type="nn" />
@@ -84,14 +91,13 @@
         <action title="Upsample" icon="toolUpsample" tag="3" graphicClass="AIExplorer.AIEUpsample" />
     </draw-tool>
 
-    <draw-tool class="AIExplorer.AIELossTool" name="Loss" id="loss" toolset="neuralNet" displayPriority="8" addsViaDrag="NO" newGraphicSize="{72,90}" activationKey="l">
-        <action title="Loss" icon="toolLoss" tag="0" graphicClass="AIExplorer.AIELoss" />
-        <action title="YOLO Loss" icon="toolYOLOLoss" tag="1" graphicClass="AIExplorer.AIEYOLOLoss" />
-    </draw-tool>
-
-    <draw-tool class="AIExplorer.AIELogicTool" name="Logic" id="logic" toolset="neuralNet" displayPriority="9" addsViaDrag="NO" newGraphicSize="{48,48}" activationKey="L">
+    <draw-tool class="AIExplorer.AIELogicTool" name="Logic" id="logic" toolset="neuralNet" displayPriority="8" addsViaDrag="NO" newGraphicSize="{48,48}" activationKey="L">
         <action title="Loop" icon="toolLoop" tag="0" graphicClass="AIExplorer.AIELoop" />
         <action title="Branch" icon="toolBranch" tag="1" graphicClass="AIExplorer.AIEBranch" />
+    </draw-tool>
+
+    <draw-tool class="AIExplorer.AIETerminalTool" name="Terminal" id="terminal" toolset="neuralNet" displayPriority="9" addsViaDrag="NO" newGraphicSize="{72,72}" activationKey="T">
+        <action title="Terminus" icon="toolTerminus" tag="0" graphicClass="AIExplorer.AIETerminus" />
     </draw-tool>
 
     <aie-library name="TensorFlow" id="tensorflow" class="AIExplorer.AIETensorFlow" url="https://www.tensorflow.org">
@@ -137,6 +143,7 @@
     <ajr_inspector xml="AIEReduction" identifier="aieReduction" />
     <ajr_inspector xml="AIELoop" identifier="aieLoop" />
     <ajr_inspector xml="AIEBranch" identifier="aieBranch" />
+    <ajr_inspector xml="AIETerminus" identifier="aieTerminus" />
 
     <!-- This first registers us with the "Geometry" inspector slice type, so the main plugin will recognize us. -->
     <ajr_inspector_slice type="shape" class="AJRInterface.AJRInspectorSliceGeometry" />
@@ -144,5 +151,11 @@
     <ajr_inspector_geometry_slice type="shape" class="AIExplorer.AIEInspectorSliceShape" />
 
     <draw-structure-inspector name="Messages" icon="inspectorMessages" id="messages" priority="3.0" inspectorClass="AIExplorer.AIEMessagesInspector" />
+    
+    <!-- Our Optimizers -->
+    <aie-optimizer name="Adam" id="adam" class="AIExplorer.AIEAdamOptimizer"/>
+    <aie-optimizer name="Adam w/Weight Decay" id="adamW" class="AIExplorer.AIEAdamWOptimizer"/>
+    <aie-optimizer name="Stochastic Gradient Descent" id="sgd" class="AIExplorer.AIESGDOptimizer"/>
+    <aie-optimizer name="Root Mean Squared Propgation" id="rmsProp" class="AIExplorer.AIERMSPropOptimizer"/>
 
 </plugindata>

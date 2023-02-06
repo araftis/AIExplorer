@@ -38,28 +38,30 @@ extension AIEBranch : AIETensorFlowCodeWriter {
             if let child = link.destination as? AIEGraphic {
                 // We'll quietly ignore any exit links that aren't NN objects.
                 context.push(self)
+                let condition = link.extendedProperties["condition"] as? AJREvaluation
+                if let condition {
+                    if index == 0 {
+                        try context.writeIndented("if \(condition):\n")
+                    } else {
+                        try context.write(" elif \(condition):\n")
+                    }
+                } else {
+                    try context.writeIndented("else:\n")
+                }
+                context.incrementIndent()
+                let generatedCode : Bool
                 if let child = child as? AIETensorFlowCodeWriter {
-                    let condition = link.extendedProperties["condition"] as? AJREvaluation
-                    if let condition {
-                        if index == 0 {
-                            try context.writeIndented("if \(condition):\n")
-                        } else {
-                            try context.write(" elif \(condition):\n")
-                        }
-                    } else {
-                        try context.writeIndented("else:\n")
-                    }
-                    context.incrementIndent()
-                    let generatedCode = try child.generateCode(context: context)
-                    if  generatedCode {
-                        context.generatedCode = true
-                    } else {
-                        try context.writeIndented("pass\n")
-                    }
-                    context.decrementIndent()
+                    generatedCode = try child.generateCode(context: context)
                 } else {
                     context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
+                    generatedCode = false
                 }
+                if  generatedCode {
+                    context.generatedCode = true
+                } else {
+                    try context.writeIndented("pass\n")
+                }
+                context.decrementIndent()
                 context.pop()
             }
         }

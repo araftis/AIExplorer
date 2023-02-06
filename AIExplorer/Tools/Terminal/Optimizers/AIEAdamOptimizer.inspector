@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector-include>
+    <slice type="float" label="Beta 1" valueKeyPath="controller.selection.optimizer.beta1"/>
+    <slice type="float" label="Beta 2" valueKeyPath="controller.selection.optimizer.beta2"/>
+    <slice type="float" label="Epsilon" valueKeyPath="controller.selection.optimizer.epsilon"/>
+    <slice type="integer" label="Time Step" valueKeyPath="controller.selection.optimizer.timeStep"/>
+    <slice type="boolean" valueKeyPath="controller.selection.optimizer.usesAMSGrad" title="Use AMS Gradient"/>
+</inspector-include>

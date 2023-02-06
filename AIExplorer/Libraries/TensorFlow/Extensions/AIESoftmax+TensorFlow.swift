@@ -9,7 +9,7 @@ extension AIESoftmax : AIETensorFlowCodeWriter {
                 context.add(message: AIEMessage(type: .error, message: "The input shape \(inputShape) to the soft max layer has too many dimension. It should have just two, [<batch_size>, <dimension>].", on: self))
             }
             try appendStandardCode(context: context) {
-                try context.write("layers.Softmax()")
+                try context.write("layers.Softmax(name='\(variableName)')")
             }
             try progressToChild(context: context)
         }

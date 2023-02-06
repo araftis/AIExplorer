@@ -55,6 +55,8 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         try outputStream.indent(0).write("from tensorflow.keras import layers\n")
         try outputStream.indent(0).write("from tensorflow.keras import optimizers\n")
         try outputStream.indent(0).write("from tensorflow.keras import models\n")
+        try outputStream.indent(0).write("from tensorflow.keras import losses\n")
+        try outputStream.indent(0).write("from tensorflow.keras import optimizers\n")
 
         // TODO: Make this smarter. If we're going to allow multiple roots, we need to make sure we generate a class for each root, but that also means we need to attach the name of the neural net to the root node, which is an I/O node? Need to think about that last thing.
         try iterateRoots(using: { node in
@@ -77,15 +79,33 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 }
                 context.decrementIndent()
 
-                // OK, now we can generate the "build" method.
+                // Declare the build method. This actually builds and compiles.
                 try context.write("\n")
                 try context.writeIndented("def buildModel(self, isTraining=False):\n")
                 context.incrementIndent()
-                try context.writeIndented("rawModel = []\n")
+
+                // Write the declaration for loss. This is used when we call out to the compile method, if it's been defined.
+                try context.writeIndented("# Define 'loss'. If we encounter a loss layer, this will be initialized.\n")
+                try context.writeIndented("loss = None")
+                try context.write("\n")
+
+                // Write the model declaration.
+                try context.writeIndented("# Define the model as a Sequential model. This should cover most situations,\n")
+                try context.writeIndented("# but there's a good chance we'll need to improve this in the future.\n")
+                try context.writeIndented("model = models.Sequential(")
+                if let name = info[.codeName] {
+                    try context.write("name='\(name)'")
+                }
+                try context.write(")\n")
+                try context.write("\n")
+                
+                // And generate the model.
                 context.stage = .build
                 try node.generateCode(context: context)
                 try context.write("\n")
-                try context.writeIndented("return models.Sequential(layers)")
+                
+                // And finally return the model.
+                try context.writeIndented("return model")
                 messages.append(contentsOf: context.messages)
                 context.decrementIndent()
             } else {

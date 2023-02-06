@@ -32,13 +32,8 @@
 import Cocoa
 import Draw
 
-
-public extension AJRInspectorIdentifier {
-    static var aieLoss = AJRInspectorIdentifier("aieLoss")
-}
-
 @objcMembers
-open class AIELoss: AIEGraphic {
+open class AIELoss: NSObject, AJRXMLCoding {
 
     @objc
     public enum LossType : Int, AJRXMLEncodableEnum {
@@ -126,7 +121,8 @@ open class AIELoss: AIEGraphic {
     }
 
     // MARK: - Properties
-    open var type : LossType = .softmaxCrossEntropy
+    
+    open var type : LossType = .categoricalCrossEntropy
     open var reductionType : ReductionType = .none
     open var weight : Float = 0.001
     open var labelSmoothing : Float = 0.001
@@ -142,89 +138,74 @@ open class AIELoss: AIEGraphic {
         self.type = type
     }
 
-    public required init() {
+    public required override init() {
         super.init()
     }
 
-    public required init(frame: NSRect) {
-        super.init(frame: frame)
-    }
-
-    // MARK: - AIEGraphic
-
-    open override var displayedProperties : [Property] {
-        weak var weakSelf = self
-        return [Property("Type", {
-                        if let self = weakSelf {
-                            return self.type.localizedDescription
-                        }
-                        return nil
-                    }),
-                Property("Reduction", {
-                        if let self = weakSelf {
-                            return self.reductionType.localizedDescription
-                        }
-                        return nil
-                    }),
-                Property("Smooth", {
-                        if let self = weakSelf {
-                            if self.type == .softmaxCrossEntropy
-                                || self.type == .categoricalCrossEntropy
-                                || self.type == .sigmoidCrossEntropy {
-                                return String(describing: self.labelSmoothing)
-                            }
-                        }
-                        return nil
-                    }),
-                Property("Class Count", {
-                        if let self = weakSelf {
-                            if self.type == .categoricalCrossEntropy
-                                || self.type == .softmaxCrossEntropy {
-                                return String(describing: self.classCount)
-                            }
-                        }
-                        return nil
-                    }),
-                Property("Epsilon", {
-                        if let self = weakSelf {
-                            if self.type == .log {
-                                return String(describing: self.epsilon)
-                            }
-                        }
-                        return nil
-                    }),
-                Property("Delta", {
-                        if let self = weakSelf {
-                            if self.type == .huber {
-                                return String(describing: self.delta)
-                            }
-                        }
-                        return nil
-                    }),
-                Property("Weight", {
-                        if let self = weakSelf {
-                            return String(describing: self.weight)
-                        }
-                        return nil
-                    }),
-        ]
-    }
-
-    // MARK: - AJRInspector
-
-    open override func inspectorIdentifiers(forInspectorContent inspectorContentIdentifier: AJRInspectorContentIdentifier?) -> [AJRInspectorIdentifier] {
-        var supers = super.inspectorIdentifiers(forInspectorContent: inspectorContentIdentifier)
-        if inspectorContentIdentifier == .graphic {
-            supers.append(.aieLoss)
-        }
-        return supers
-    }
-
+// TODO: Move to AIETerminus
+//     MARK: - AIEGraphic
+//
+//    open override var displayedProperties : [Property] {
+//        weak var weakSelf = self
+//        return [Property("Type", {
+//                        if let self = weakSelf {
+//                            return self.type.localizedDescription
+//                        }
+//                        return nil
+//                    }),
+//                Property("Reduction", {
+//                        if let self = weakSelf {
+//                            return self.reductionType.localizedDescription
+//                        }
+//                        return nil
+//                    }),
+//                Property("Smooth", {
+//                        if let self = weakSelf {
+//                            if self.type == .softmaxCrossEntropy
+//                                || self.type == .categoricalCrossEntropy
+//                                || self.type == .sigmoidCrossEntropy {
+//                                return String(describing: self.labelSmoothing)
+//                            }
+//                        }
+//                        return nil
+//                    }),
+//                Property("Class Count", {
+//                        if let self = weakSelf {
+//                            if self.type == .categoricalCrossEntropy
+//                                || self.type == .softmaxCrossEntropy {
+//                                return String(describing: self.classCount)
+//                            }
+//                        }
+//                        return nil
+//                    }),
+//                Property("Epsilon", {
+//                        if let self = weakSelf {
+//                            if self.type == .log {
+//                                return String(describing: self.epsilon)
+//                            }
+//                        }
+//                        return nil
+//                    }),
+//                Property("Delta", {
+//                        if let self = weakSelf {
+//                            if self.type == .huber {
+//                                return String(describing: self.delta)
+//                            }
+//                        }
+//                        return nil
+//                    }),
+//                Property("Weight", {
+//                        if let self = weakSelf {
+//                            return String(describing: self.weight)
+//                        }
+//                        return nil
+//                    }),
+//        ]
+//    }
+//
     // MARK: - AJRXMLCoding
 
-    open override func decode(with coder: AJRXMLCoder) {
-        super.decode(with: coder)
-
+    open func decode(with coder: AJRXMLCoder) {
         coder.decodeEnumeration(forKey: "type") { (value: LossType?) in
             self.type = value ?? .softmaxCrossEntropy
         }
@@ -248,9 +229,7 @@ open class AIELoss: AIEGraphic {
         }
     }
 
-    open override func encode(with coder: AJRXMLCoder) {
-        super.encode(with: coder)
-
+    open func encode(with coder: AJRXMLCoder) {
         coder.encode(type, forKey: "type")
         coder.encode(reductionType, forKey: "reductionType")
         coder.encode(weight, forKey: "weight")

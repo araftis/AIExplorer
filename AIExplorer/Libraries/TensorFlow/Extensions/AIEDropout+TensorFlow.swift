@@ -9,7 +9,7 @@ extension AIEDropout : AIETensorFlowCodeWriter {
             if seed != 0 {
                 try context.output.write(", seed=\(seed)")
             }
-            try context.output.write(")")
+            try context.output.write(", name='\(variableName)')")
         }
         try progressToChild(context: context)
         
