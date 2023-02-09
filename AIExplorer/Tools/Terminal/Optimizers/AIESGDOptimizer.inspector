@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector-include>
-    <slice type="float" label="Momentum Scale" valueKeyPath="controller.selection.optimizer.momentumScale"/>
+    <slice type="float" label="*p* Scale" valueKeyPath="controller.selection.optimizer.momentumScale"/>
     <slice type="boolean" valueKeyPath="controller.selection.optimizer.usesNesterovMomentum" title="Uses Nesterov Momentum"/>
 </inspector-include>
