@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector-include>
+    <slice type="float" label="Momentum Scale" valueKeyPath="controller.selection.optimizer.momentumScale"/>
+    <slice type="float" label="Alpha" valueKeyPath="controller.selection.optimizer.alpha"/>
+    <slice type="float" label="Epsilon" valueKeyPath="controller.selection.optimizer.epsilon"/>
+    <slice type="boolean" valueKeyPath="controller.selection.optimizer.isCentered" title="Is Centered"/>
 </inspector-include>
