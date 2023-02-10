@@ -25,7 +25,7 @@ open class AIETerminus: AIEGraphic {
     open var inspectedAllOptimizers : [AIEOptimizer.OptimizerPlaceholder] {
         return AIEOptimizer.allOptimizers
     }
-    
+
     open var inspectedOptimizer : AIEOptimizer.OptimizerPlaceholder? {
         get {
             return AIEOptimizer.optimizer(forClass: type(of: optimizer))
@@ -33,6 +33,27 @@ open class AIETerminus: AIEGraphic {
         set {
             if let newValue {
                 optimizer = newValue.optimizerClass.init()
+            }
+        }
+    }
+
+    open var inspectedAllLosses : [AIELoss.LossPlaceholder] {
+        return AIELoss.allLosses
+    }
+
+    open var inspectedLoss : AIELoss.LossPlaceholder? {
+        get {
+            return AIELoss.loss(forClass: type(of: loss))
+        }
+        set {
+            if let newValue {
+                loss = newValue.lossClass.init()
+                if type(of: loss).propertiesToObserve.contains("classCount") {
+                    if let inputShape,
+                       inputShape.count == 2 {
+                        loss.setValue(inputShape[1], forKey: "classCount")
+                    }
+                }
             }
         }
     }

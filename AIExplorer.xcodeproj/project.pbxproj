@@ -118,6 +118,24 @@
 		FA18B51125AEA375000DEF0C /* AJRInterfaceFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51025AEA375000DEF0C /* AJRInterfaceFoundation.framework */; };
 		FA18B51325AEA375000DEF0C /* Draw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B51225AEA375000DEF0C /* Draw.framework */; };
 		FA18B52325AEA433000DEF0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA18B52225AEA433000DEF0C /* Cocoa.framework */; };
+		FA37E0F52995E49C000DB105 /* AIELossCategoricalCrossentropy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E0F42995E49C000DB105 /* AIELossCategoricalCrossentropy.swift */; };
+		FA37E0F72995E4AE000DB105 /* AIELossCosineDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E0F62995E4AE000DB105 /* AIELossCosineDistance.swift */; };
+		FA37E0F92995E4B8000DB105 /* AIELossHinge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E0F82995E4B8000DB105 /* AIELossHinge.swift */; };
+		FA37E0FB2995E4C4000DB105 /* AIELossHuber.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E0FA2995E4C4000DB105 /* AIELossHuber.swift */; };
+		FA37E0FD2995E4DB000DB105 /* AIELossLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E0FC2995E4DB000DB105 /* AIELossLog.swift */; };
+		FA37E0FF2995E4EC000DB105 /* AIELossMeanAbsoluteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E0FE2995E4EC000DB105 /* AIELossMeanAbsoluteError.swift */; };
+		FA37E1012995E4FC000DB105 /* AIELossMeanSquaredError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E1002995E4FC000DB105 /* AIELossMeanSquaredError.swift */; };
+		FA37E1032995E511000DB105 /* AIELossSigmoidCrossentropy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E1022995E511000DB105 /* AIELossSigmoidCrossentropy.swift */; };
+		FA37E1052995E51F000DB105 /* AIELossSoftmaxCrossentropy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E1042995E51F000DB105 /* AIELossSoftmaxCrossentropy.swift */; };
+		FA37E1072995ED15000DB105 /* AIELossCategoricalCrossentropy.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E1062995ED15000DB105 /* AIELossCategoricalCrossentropy.inspector */; };
+		FA37E1092995ED59000DB105 /* AIELossCosineDistance.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E1082995ED59000DB105 /* AIELossCosineDistance.inspector */; };
+		FA37E10B2995ED86000DB105 /* AIELossHinge.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E10A2995ED86000DB105 /* AIELossHinge.inspector */; };
+		FA37E10D2995ED9C000DB105 /* AIELossHuber.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E10C2995ED9C000DB105 /* AIELossHuber.inspector */; };
+		FA37E10F2995EDD8000DB105 /* AIELossLog.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E10E2995EDD8000DB105 /* AIELossLog.inspector */; };
+		FA37E1112995EE2D000DB105 /* AIELossMeanAbsoluteError.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E1102995EE2D000DB105 /* AIELossMeanAbsoluteError.inspector */; };
+		FA37E1132995EE52000DB105 /* AIELossMeanSquaredError.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E1122995EE52000DB105 /* AIELossMeanSquaredError.inspector */; };
+		FA37E1152995EE66000DB105 /* AIELossSigmoidCrossentropy.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E1142995EE66000DB105 /* AIELossSigmoidCrossentropy.inspector */; };
+		FA37E1172995EE8D000DB105 /* AIELossSoftmaxCrossentropy.inspector in Resources */ = {isa = PBXBuildFile; fileRef = FA37E1162995EE8D000DB105 /* AIELossSoftmaxCrossentropy.inspector */; };
 		FA3C316B274D780E00B1A338 /* AIEProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C316A274D780E00B1A338 /* AIEProperties.swift */; };
 		FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */; };
 		FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */; };
@@ -292,6 +310,24 @@
 		FA18B51225AEA375000DEF0C /* Draw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Draw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA18B52225AEA433000DEF0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FA2877082611768E00F5BBE8 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		FA37E0F42995E49C000DB105 /* AIELossCategoricalCrossentropy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossCategoricalCrossentropy.swift; sourceTree = "<group>"; };
+		FA37E0F62995E4AE000DB105 /* AIELossCosineDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossCosineDistance.swift; sourceTree = "<group>"; };
+		FA37E0F82995E4B8000DB105 /* AIELossHinge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossHinge.swift; sourceTree = "<group>"; };
+		FA37E0FA2995E4C4000DB105 /* AIELossHuber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossHuber.swift; sourceTree = "<group>"; };
+		FA37E0FC2995E4DB000DB105 /* AIELossLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossLog.swift; sourceTree = "<group>"; };
+		FA37E0FE2995E4EC000DB105 /* AIELossMeanAbsoluteError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossMeanAbsoluteError.swift; sourceTree = "<group>"; };
+		FA37E1002995E4FC000DB105 /* AIELossMeanSquaredError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossMeanSquaredError.swift; sourceTree = "<group>"; };
+		FA37E1022995E511000DB105 /* AIELossSigmoidCrossentropy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossSigmoidCrossentropy.swift; sourceTree = "<group>"; };
+		FA37E1042995E51F000DB105 /* AIELossSoftmaxCrossentropy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELossSoftmaxCrossentropy.swift; sourceTree = "<group>"; };
+		FA37E1062995ED15000DB105 /* AIELossCategoricalCrossentropy.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIELossCategoricalCrossentropy.inspector; sourceTree = "<group>"; };
+		FA37E1082995ED59000DB105 /* AIELossCosineDistance.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossCosineDistance.inspector; sourceTree = "<group>"; };
+		FA37E10A2995ED86000DB105 /* AIELossHinge.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossHinge.inspector; sourceTree = "<group>"; };
+		FA37E10C2995ED9C000DB105 /* AIELossHuber.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossHuber.inspector; sourceTree = "<group>"; };
+		FA37E10E2995EDD8000DB105 /* AIELossLog.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossLog.inspector; sourceTree = "<group>"; };
+		FA37E1102995EE2D000DB105 /* AIELossMeanAbsoluteError.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossMeanAbsoluteError.inspector; sourceTree = "<group>"; };
+		FA37E1122995EE52000DB105 /* AIELossMeanSquaredError.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossMeanSquaredError.inspector; sourceTree = "<group>"; };
+		FA37E1142995EE66000DB105 /* AIELossSigmoidCrossentropy.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossSigmoidCrossentropy.inspector; sourceTree = "<group>"; };
+		FA37E1162995EE8D000DB105 /* AIELossSoftmaxCrossentropy.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIELossSoftmaxCrossentropy.inspector; sourceTree = "<group>"; };
 		FA3C316A274D780E00B1A338 /* AIEProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEProperties.swift; sourceTree = "<group>"; };
 		FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplateChooser.swift; sourceTree = "<group>"; };
 		FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooser.xib; sourceTree = "<group>"; };
@@ -421,6 +457,24 @@
 			children = (
 				FA02BFC625B7ADD6001EFBBA /* AIELoss.swift */,
 				25EC039425D7D499008A4DE4 /* AIELoss.inspector */,
+				FA37E0F42995E49C000DB105 /* AIELossCategoricalCrossentropy.swift */,
+				FA37E1062995ED15000DB105 /* AIELossCategoricalCrossentropy.inspector */,
+				FA37E0F62995E4AE000DB105 /* AIELossCosineDistance.swift */,
+				FA37E1082995ED59000DB105 /* AIELossCosineDistance.inspector */,
+				FA37E0F82995E4B8000DB105 /* AIELossHinge.swift */,
+				FA37E10A2995ED86000DB105 /* AIELossHinge.inspector */,
+				FA37E0FA2995E4C4000DB105 /* AIELossHuber.swift */,
+				FA37E10C2995ED9C000DB105 /* AIELossHuber.inspector */,
+				FA37E0FC2995E4DB000DB105 /* AIELossLog.swift */,
+				FA37E10E2995EDD8000DB105 /* AIELossLog.inspector */,
+				FA37E0FE2995E4EC000DB105 /* AIELossMeanAbsoluteError.swift */,
+				FA37E1102995EE2D000DB105 /* AIELossMeanAbsoluteError.inspector */,
+				FA37E1002995E4FC000DB105 /* AIELossMeanSquaredError.swift */,
+				FA37E1122995EE52000DB105 /* AIELossMeanSquaredError.inspector */,
+				FA37E1022995E511000DB105 /* AIELossSigmoidCrossentropy.swift */,
+				FA37E1142995EE66000DB105 /* AIELossSigmoidCrossentropy.inspector */,
+				FA37E1042995E51F000DB105 /* AIELossSoftmaxCrossentropy.swift */,
+				FA37E1162995EE8D000DB105 /* AIELossSoftmaxCrossentropy.inspector */,
 			);
 			path = Loss;
 			sourceTree = "<group>";
@@ -804,22 +858,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA37E1092995ED59000DB105 /* AIELossCosineDistance.inspector in Resources */,
 				21FFE3172925811700A79F8F /* AIEActivation.rtf in Resources */,
 				25EC03B325DEFE85008A4DE4 /* AIELayerNormalization.inspector in Resources */,
 				25EC03C125E305BF008A4DE4 /* AIEReduction.inspector in Resources */,
+				FA37E1172995EE8D000DB105 /* AIELossSoftmaxCrossentropy.inspector in Resources */,
 				25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */,
 				FAD9250525AEA5ED00079DAB /* AIExplorer.xcassets in Resources */,
 				25EC03A325D8874C008A4DE4 /* AIEBatchNormalization.inspector in Resources */,
+				FA37E10F2995EDD8000DB105 /* AIELossLog.inspector in Resources */,
 				25EC03AF25DEFAED008A4DE4 /* AIEDropout.inspector in Resources */,
+				FA37E1112995EE2D000DB105 /* AIELossMeanAbsoluteError.inspector in Resources */,
 				FABD166F25C8E9BA000294E3 /* AIESourceCodeAccessory.xib in Resources */,
 				FABD167525C8E9D7000294E3 /* AIETrainingAccessory.xib in Resources */,
+				FA37E1152995EE66000DB105 /* AIELossSigmoidCrossentropy.inspector in Resources */,
 				FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */,
+				FA37E1132995EE52000DB105 /* AIELossMeanSquaredError.inspector in Resources */,
 				21FFE348298C6CB900A79F8F /* AIETerminus.inspector in Resources */,
 				FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */,
 				FABB13C1293D8D02002DD56B /* AIEInspectorSliceShape.strings in Resources */,
 				FABD166B25C8E947000294E3 /* AIETestingAccessory.xib in Resources */,
 				FA88826E25F82ABF00DFE50B /* AIEDocumentTemplateChooserItem.xib in Resources */,
 				25EC03B725DF0438008A4DE4 /* AIELSTM.inspector in Resources */,
+				FA37E10D2995ED9C000DB105 /* AIELossHuber.inspector in Resources */,
 				25EC03AB25DE231C008A4DE4 /* AIEReshape.inspector in Resources */,
 				210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */,
 				21FFE35E29909C2D00A79F8F /* AIESGDOptimizer.inspector in Resources */,
@@ -829,6 +890,7 @@
 				FA18B4D825AEA305000DEF0C /* AIExplorer.ajrplugindata in Resources */,
 				25EC039925D87D11008A4DE4 /* AIEUpsample.inspector in Resources */,
 				21FFE3152924284700A79F8F /* AIEBranch.md in Resources */,
+				FA37E10B2995ED86000DB105 /* AIELossHinge.inspector in Resources */,
 				21FFE34F298C875D00A79F8F /* AIEOptimizer.inspector in Resources */,
 				FA0F525F25D38F5900DD0F3D /* AIEGraphic.inspector in Resources */,
 				25EC039F25D882F8008A4DE4 /* AIEPooling.inspector in Resources */,
@@ -838,6 +900,7 @@
 				FA0F526325D392FD00DD0F3D /* AIEImageIO.inspector in Resources */,
 				25EC03BD25E26613008A4DE4 /* AIESoftmax.inspector in Resources */,
 				25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */,
+				FA37E1072995ED15000DB105 /* AIELossCategoricalCrossentropy.inspector in Resources */,
 				21FFE358299098E900A79F8F /* AIEAdamOptimizer.inspector in Resources */,
 				21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */,
 				21FFE35C29909C2500A79F8F /* AIERMSPropOptimizer.inspector in Resources */,
@@ -867,6 +930,7 @@
 				FA02BF7C25B7A7D9001EFBBA /* AIEFullyConnected.swift in Sources */,
 				21FFE2F929131D7700A79F8F /* AIELogicTool.swift in Sources */,
 				FA18B4E125AEA305000DEF0C /* AIEPooling.swift in Sources */,
+				FA37E0F92995E4B8000DB105 /* AIELossHinge.swift in Sources */,
 				FABD168925CA5556000294E3 /* AIEDocument.swift in Sources */,
 				FA02BF9925B7AAEA001EFBBA /* AIESlice.swift in Sources */,
 				FABD166A25C8E947000294E3 /* AIETestingAccessory.swift in Sources */,
@@ -879,6 +943,8 @@
 				210F8F8B2730A7F5004A939D /* AIEMessagesInspector.swift in Sources */,
 				21FFE3282983493B00A79F8F /* AIEConvolution+TensorFlow.swift in Sources */,
 				FA02BFB225B7AC4D001EFBBA /* AIEBatchNormalization.swift in Sources */,
+				FA37E1052995E51F000DB105 /* AIELossSoftmaxCrossentropy.swift in Sources */,
+				FA37E0FB2995E4C4000DB105 /* AIELossHuber.swift in Sources */,
 				21FFE36C2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift in Sources */,
 				FA02BF7825B7A7C6001EFBBA /* AIEMatrixMultiplication.swift in Sources */,
 				FABB13BE293D7185002DD56B /* AIEShape.m in Sources */,
@@ -907,17 +973,21 @@
 				21FFE3662995A72900A79F8F /* AIEOptimizer+TensorFlow.swift in Sources */,
 				21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */,
 				FA02BF4825B783CB001EFBBA /* AIEKnowledgeGraphIO.swift in Sources */,
+				FA37E0F52995E49C000DB105 /* AIELossCategoricalCrossentropy.swift in Sources */,
 				FABD166425C8E931000294E3 /* AIEValidationAccessory.swift in Sources */,
+				FA37E0F72995E4AE000DB105 /* AIELossCosineDistance.swift in Sources */,
 				FADD1CFF270FD5B9000C49DA /* AIECodeDefinition.swift in Sources */,
 				FA02BF9125B7AACA001EFBBA /* AIEConcatenation.swift in Sources */,
 				2169BA2F2748799B00A5407D /* AIEIO.swift in Sources */,
 				21FFE33C29834A9000A79F8F /* AIELayerNormalization+TensorFlow.swift in Sources */,
 				FA02BF9525B7AAD9001EFBBA /* AIEReshape.swift in Sources */,
 				21FFE346298C650E00A79F8F /* AIETerminus.swift in Sources */,
+				FA37E1012995E4FC000DB105 /* AIELossMeanSquaredError.swift in Sources */,
 				FA02BFA125B7AAFF001EFBBA /* AIEPadding.swift in Sources */,
 				FA18B4D925AEA305000DEF0C /* AIEToolSet.swift in Sources */,
 				FA02BF5525B7851C001EFBBA /* AIEMultiheadAttention.swift in Sources */,
 				21FFE36A2995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift in Sources */,
+				FA37E1032995E511000DB105 /* AIELossSigmoidCrossentropy.swift in Sources */,
 				FA02BFB625B7AC5B001EFBBA /* AIEGroupNormalization.swift in Sources */,
 				FABD16A425CA578C000294E3 /* AIEDocumentStorage.swift in Sources */,
 				FABB13BA293D6F65002DD56B /* AIEShape.swift in Sources */,
@@ -925,6 +995,8 @@
 				21FFE2FD29131DA500A79F8F /* AIELoop.swift in Sources */,
 				21FFE34D298C831000A79F8F /* AIEAdamOptimizer.swift in Sources */,
 				FA02BF8725B7AAA4001EFBBA /* AIETransformationTool.swift in Sources */,
+				FA37E0FD2995E4DB000DB105 /* AIELossLog.swift in Sources */,
+				FA37E0FF2995E4EC000DB105 /* AIELossMeanAbsoluteError.swift in Sources */,
 				FA02BF7025B7A796001EFBBA /* AIEArithmetic.swift in Sources */,
 				FA18B4DD25AEA305000DEF0C /* AIETextIO.swift in Sources */,
 				FA18B4DF25AEA305000DEF0C /* AIEUpsample.swift in Sources */,

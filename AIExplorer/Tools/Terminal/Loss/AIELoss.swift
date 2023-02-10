@@ -32,48 +32,95 @@
 import Cocoa
 import Draw
 
+public struct AIELossIndentifier : RawRepresentable, Equatable, Hashable {
+
+    public typealias RawValue = String
+
+    public var rawValue: String
+
+    public init(_ rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+
+    public init(rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+
+    static var unknown = AIELossIndentifier("unknown")
+}
+
 @objcMembers
 open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
 
-    @objc
-    public enum LossType : Int, AJRXMLEncodableEnum {
-        case categoricalCrossEntropy
-        case cosineDistance
-        case hinge
-        case huber
-        case log
-        case meanAbsoluteError
-        case meanSquaredError
-        case sigmoidCrossEntropy
-        case softmaxCrossEntropy
+    @objcMembers
+    public class LossPlaceholder : NSObject, AJRInspectorContentProvider {
 
-        public var description: String {
-            switch self {
-            case .categoricalCrossEntropy: return "categoricalCrossEntropy"
-            case .cosineDistance: return "cosineDistance"
-            case .hinge: return "hinge"
-            case .huber: return "huber"
-            case .log: return "log"
-            case .meanAbsoluteError: return "meanAbsoluteError"
-            case .meanSquaredError: return "meanSquaredError"
-            case .sigmoidCrossEntropy: return "sigmoidCrossEntropy"
-            case .softmaxCrossEntropy: return "softmaxCrossEntropy"
-            }
+        var lossClass: AIELoss.Type
+        var name: String
+        var id: AIELossIndentifier
+        var localizedName : String {
+            // TODO: If we ever get around to localizing, localize this.
+            return name
         }
 
-        public var localizedDescription: String {
-            switch self {
-            case .categoricalCrossEntropy: return "Categorical Cross Entropy"
-            case .cosineDistance: return "Cosine Distance"
-            case .hinge: return "Hinge"
-            case .huber: return "Huber"
-            case .log: return "Log"
-            case .meanAbsoluteError: return "Mean Absolute Error"
-            case .meanSquaredError: return "Mean Squared Error"
-            case .sigmoidCrossEntropy: return "Sigmoid Cross Entropy"
-            case .softmaxCrossEntropy: return "Softmax Cross Entropy"
+        public init(lossClass: AIELoss.Type, name: String, id: AIELossIndentifier) {
+            self.lossClass = lossClass
+            self.name = name
+            self.id = id
+        }
+
+        public var inspectorFilename: String? {
+            return AJRStringFromClassSansModule(lossClass)
+        }
+
+        public var inspectorBundle: Bundle? {
+            return Bundle(for: lossClass)
+        }
+
+    }
+
+    // MARK: - Factory
+
+    internal static var lossesById = [AIELossIndentifier:LossPlaceholder]()
+
+    @objc(registerLoss:properties:)
+    open class func register(loss: AIELoss.Type, properties: [String:Any]) -> Void {
+        if let lossClass = properties["class"] as? AIELoss.Type,
+           let rawId = properties["id"] as? String,
+           let name = properties["name"] as? String {
+            let identifier = AIELossIndentifier(rawValue: rawId)
+            let placeholder = LossPlaceholder(lossClass: lossClass, name: name, id: identifier)
+            lossesById[identifier] = placeholder
+            AJRLog.in(domain: DrawPlugInLogDomain, level: .debug, message: "Loss: \(name) (\(lossClass))")
+        } else {
+            AJRLog.in(domain: DrawPlugInLogDomain, level: .error, message: "Received nonsense properties: \(properties)")
+        }
+    }
+
+    open class var allLosses : [LossPlaceholder] {
+        return lossesById.values.sorted { left, right in
+            return left.name < right.name
+        }
+    }
+
+    open class func loss(forId id: AIELossIndentifier) -> LossPlaceholder? {
+        return lossesById[id]
+    }
+
+    open class func loss(forClass class: AIELoss.Type) -> LossPlaceholder? {
+        for (_, value) in lossesById {
+            if value.lossClass == `class` {
+                return value
             }
         }
+        return nil
+    }
+
+    open class func lossId(forClass class: AIELoss.Type) -> AIELossIndentifier? {
+        if let placeholder = loss(forClass: `class`) {
+            return placeholder.id
+        }
+        return nil
     }
 
     @objc
@@ -122,21 +169,10 @@ open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
 
     // MARK: - Properties
     
-    open var type : LossType = .categoricalCrossEntropy
     open var reductionType : ReductionType = .none
     open var weight : Float = 0.001
-    open var labelSmoothing : Float = 0.001
-    open var classCount : Int = 1
-    open var epsilon : Float = 0.001
-    open var delta : Float = 0.001
 
     // MARK: - Creation
-
-    public convenience init(type: LossType) {
-        self.init()
-
-        self.type = type
-    }
 
     public required override init() {
         super.init()
@@ -206,40 +242,23 @@ open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
     // MARK: - AJRXMLCoding
 
     open func decode(with coder: AJRXMLCoder) {
-        coder.decodeEnumeration(forKey: "type") { (value: LossType?) in
-            self.type = value ?? .softmaxCrossEntropy
-        }
         coder.decodeEnumeration(forKey: "reductionType") { (value: ReductionType?) in
             self.reductionType = value ?? .none
         }
         coder.decodeFloat(forKey: "weight") { value in
             self.weight = value
         }
-        coder.decodeFloat(forKey: "labelSmoothing") { value in
-            self.labelSmoothing = value
-        }
-        coder.decodeInteger(forKey: "classCount") { value in
-            self.classCount = value
-        }
-        coder.decodeFloat(forKey: "epsilon") { value in
-            self.epsilon = value
-        }
-        coder.decodeFloat(forKey: "delta") { value in
-            self.delta = value
-        }
     }
 
     open func encode(with coder: AJRXMLCoder) {
-        coder.encode(type, forKey: "type")
         coder.encode(reductionType, forKey: "reductionType")
         coder.encode(weight, forKey: "weight")
-        coder.encode(labelSmoothing, forKey: "labelSmoothing")
-        coder.encode(classCount, forKey: "classCount")
-        coder.encode(epsilon, forKey: "epsilon")
-        coder.encode(delta, forKey: "delta")
     }
 
     open class override var ajr_nameForXMLArchiving: String {
+        if let id = lossId(forClass: self.self) {
+            return "aie" + id.rawValue.capitalized
+        }
         return "aieLoss"
     }
 

@@ -42,32 +42,32 @@ extension AIELoss : AIETensorFlowLossCodeWriter {
     internal func generateCategoricalCrossentropy(context: AIETensorFlowContext) throws -> Void {
         try context.writeFunction(name: "losses.CategoricalCrossentropy") {
             try context.writeArgument(reductionType != .none, "reduction=\(reductionType.tensorFlowDescription)")
-            try context.writeArgument(labelSmoothing != 0.0, "label_smoothing=\(labelSmoothing)")
+            //try context.writeArgument(labelSmoothing != 0.0, "label_smoothing=\(labelSmoothing)")
         }
     }
     
     internal func generateLossCode(context: AIETensorFlowContext) throws -> Bool {
         try context.writeIndented("\(variableName) = ")
-        switch type {
-        case .categoricalCrossEntropy:
-            try generateCategoricalCrossentropy(context: context)
-        case .cosineDistance:
-            try context.write("losses.CosineSimilarity()")
-        case .hinge:
-            try context.write("losses.Hinge()")
-        case .huber:
-            try context.write("losses.Huber()")
-        case .log:
-            try context.write("losses.LogCosh()")
-        case .meanAbsoluteError:
-            try context.write("losses.MeanAbsoluteError()")
-        case .meanSquaredError:
-            try context.write("losses.MeanSquaredError()")
-        case .sigmoidCrossEntropy:
-            try context.write("losses.CategoricalCrossentropy()")
-        case .softmaxCrossEntropy:
-            try context.write("losses.CategoricalCrossentropy()")
-        }
+//        switch type {
+//        case .categoricalCrossEntropy:
+//            try generateCategoricalCrossentropy(context: context)
+//        case .cosineDistance:
+//            try context.write("losses.CosineSimilarity()")
+//        case .hinge:
+//            try context.write("losses.Hinge()")
+//        case .huber:
+//            try context.write("losses.Huber()")
+//        case .log:
+//            try context.write("losses.LogCosh()")
+//        case .meanAbsoluteError:
+//            try context.write("losses.MeanAbsoluteError()")
+//        case .meanSquaredError:
+//            try context.write("losses.MeanSquaredError()")
+//        case .sigmoidCrossEntropy:
+//            try context.write("losses.CategoricalCrossentropy()")
+//        case .softmaxCrossEntropy:
+//            try context.write("losses.CategoricalCrossentropy()")
+//        }
         try context.write("\n")
         
         return true

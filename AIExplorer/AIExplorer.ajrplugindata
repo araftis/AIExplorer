@@ -28,6 +28,13 @@
         <attribute name="id" type="string" required="true" />
     </extension-point>
 
+    <!-- Defines the various loss classes. -->
+    <extension-point name="aie-loss" class="AIExplorer.AIELoss" registrySelector="registerLoss:properties:">
+        <attribute name="class" type="class" required="true" />
+        <attribute name="name" type="string" required="true" />
+        <attribute name="id" type="string" required="true" />
+    </extension-point>
+
     <draw-filter class="AIExplorer.AIEFilter">
         <readType type="nn" />
         <readType type="com.ajr.neuralnet" />
@@ -157,5 +164,16 @@
     <aie-optimizer name="Adam w/Weight Decay" id="adamW" class="AIExplorer.AIEAdamWOptimizer"/>
     <aie-optimizer name="Stochastic Gradient Descent" id="sgd" class="AIExplorer.AIESGDOptimizer"/>
     <aie-optimizer name="Root Mean Squared Propgation" id="rmsProp" class="AIExplorer.AIERMSPropOptimizer"/>
+
+    <!-- Our Loss Functions -->
+    <aie-loss name="Categorical Crossentropy" id="categoricalCrossentropy" class="AIExplorer.AIELossCategoricalCrossentropy"/>
+    <aie-loss name="Cosine Distance" id="cosineDistance" class="AIExplorer.AIELossCosineDistance"/>
+    <aie-loss name="Hinge" id="hinge" class="AIExplorer.AIELossHinge"/>
+    <aie-loss name="Huber" id="huber" class="AIExplorer.AIELossHuber"/>
+    <aie-loss name="Log" id="log" class="AIExplorer.AIELossLog"/>
+    <aie-loss name="Mean Absolute Error" id="meanAbsoluteError" class="AIExplorer.AIELossMeanAbsoluteError"/>
+    <aie-loss name="Mean Squared Error" id="meanSquaredError" class="AIExplorer.AIELossMeanSquaredError"/>
+    <aie-loss name="Sigmoid Cross Entropy" id="sigmoidCrossentropy" class="AIExplorer.AIELossSigmoidCrossentropy"/>
+    <aie-loss name="Softmax Cross Entropy" id="softmaxCrossentropy" class="AIExplorer.AIELossSoftmaxCrossentropy"/>
 
 </plugindata>

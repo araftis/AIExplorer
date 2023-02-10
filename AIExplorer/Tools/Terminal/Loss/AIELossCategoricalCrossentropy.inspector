@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inspector-include>
+    <slice type="float" label="Smoothing" increment="0.1"  valueKeyPath="controller.selection.loss.labelSmoothing" />
+    <slice type="integer" label="Class Count" valueKeyPath="controller.selection.loss.classCount" />
+</inspector-include>
+

@@ -27,7 +27,6 @@ public struct AIEOptimizerIndentifier : RawRepresentable, Equatable, Hashable {
 @objcMembers
 open class AIEOptimizer: NSObject, AJRXMLCoding, AIEMessageObject {
     
-    // TODO: Needs to be an object, so that I can bind to it?
     @objcMembers
     public class OptimizerPlaceholder : NSObject, AJRInspectorContentProvider {
         var optimizerClass: AIEOptimizer.Type
