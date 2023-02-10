@@ -60,10 +60,24 @@ open class AIETerminus: AIEGraphic {
 
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
+        
+        coder.decodeObject(forKey: "loss") { value in
+            if let value = value as? AIELoss {
+                self.loss = value
+            }
+        }
+        coder.decodeObject(forKey: "optimizer") { value in
+            if let value = value as? AIEOptimizer {
+                self.optimizer = value
+            }
+        }
     }
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
+        
+        coder.encode(loss, forKey: "loss")
+        coder.encode(optimizer, forKey: "optimizer")
     }
 
     open class override var ajr_nameForXMLArchiving: String {

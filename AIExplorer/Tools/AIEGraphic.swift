@@ -46,11 +46,14 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         case neuralNetwork
         /// Nodes that control the flow through the neural network. This are like branch and loop.
         case flowControl
+        /// Secondary objects used by graphics, such as loss or optimizers.
+        case support
         
         public var description: String {
             switch self {
             case .neuralNetwork: return "neuralNetwork"
             case .flowControl: return "flowControl"
+            case .support: return "support"
             }
         }
     }

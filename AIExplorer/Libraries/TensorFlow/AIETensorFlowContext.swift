@@ -146,4 +146,39 @@ internal class AIETensorFlowContext {
         try output.indent(indent).write(string)
     }
     
+    // MARK: - Arguments
+
+    var argumentsWritten : Int = 0
+    
+    func startWritingFunction(name: String) throws -> Void {
+        argumentsWritten = 0
+        try write("\(name)(")
+    }
+    
+    func writeArgument(_ condition : @autoclosure () -> Bool, _ string: String) throws -> Void {
+        if condition() {
+            if argumentsWritten > 0 {
+                try write(", ")
+            }
+            try write(string)
+            argumentsWritten += 1
+        }
+    }
+    
+    func stopWritingFunctionArguments() throws -> Void {
+        argumentsWritten = 0
+        try write(")")
+    }
+    
+    func writeFunction(name: String, arguments block : () throws -> Void) throws -> Void {
+        do {
+            try startWritingFunction(name: name)
+            try block()
+            try stopWritingFunctionArguments()
+        } catch {
+            argumentsWritten = 0
+            throw error
+        }
+    }
+    
 }

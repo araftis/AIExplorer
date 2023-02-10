@@ -53,4 +53,14 @@ open class AIEAdamOptimizer: AIEOptimizer {
         }
     }
     
+    open override var ajr_nameForXMLArchiving: String {
+        return "aieAdamOptimizer"
+    }
+    
+    // MARK: - AIEMessageObject
+    
+    open override var messagesTitle: String {
+        return "Adam Optimizer"
+    }
+    
 }

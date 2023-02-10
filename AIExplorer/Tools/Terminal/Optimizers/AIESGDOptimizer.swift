@@ -29,4 +29,14 @@ open class AIESGDOptimizer: AIEOptimizer {
         }
     }
     
+    open override var ajr_nameForXMLArchiving: String {
+        return "aieSGDOptimizer"
+    }
+    
+    // MARK: - AIEMessageObject
+    
+    open override var messagesTitle: String {
+        return "SGD Optimizer"
+    }
+    
 }

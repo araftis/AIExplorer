@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector-include>
-    <slice type="float" label="*p* Scale" valueKeyPath="controller.selection.optimizer.momentumScale"/>
-    <slice type="float" label="Alpha" valueKeyPath="controller.selection.optimizer.alpha"/>
-    <slice type="float" label="Epsilon" valueKeyPath="controller.selection.optimizer.epsilon"/>
+    <slice type="float" label="*ρ*" increment="0.01" valueKeyPath="controller.selection.optimizer.alpha"/>
+    <slice type="float" label="Momentum" increment="0.01" valueKeyPath="controller.selection.optimizer.momentumScale"/>
+    <slice type="float" label="Epsilon" increment="0.0000001" format="#.##E0" valueKeyPath="controller.selection.optimizer.epsilon"/>
     <slice type="boolean" valueKeyPath="controller.selection.optimizer.isCentered" title="Is Centered"/>
 </inspector-include>

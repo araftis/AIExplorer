@@ -33,7 +33,7 @@ import Cocoa
 import Draw
 
 @objcMembers
-open class AIELoss: NSObject, AJRXMLCoding {
+open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
 
     @objc
     public enum LossType : Int, AJRXMLEncodableEnum {
@@ -243,4 +243,14 @@ open class AIELoss: NSObject, AJRXMLCoding {
         return "aieLoss"
     }
 
+    // MARK: - AIEMessageObject
+    
+    open var messagesTitle: String {
+        return "Loss"
+    }
+    
+    open var messagesImage: NSImage? {
+        return nil
+    }
+    
 }

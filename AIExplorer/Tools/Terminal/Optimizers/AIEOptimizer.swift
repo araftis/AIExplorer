@@ -25,7 +25,7 @@ public struct AIEOptimizerIndentifier : RawRepresentable, Equatable, Hashable {
 }
 
 @objcMembers
-open class AIEOptimizer: NSObject, AJRXMLCoding {
+open class AIEOptimizer: NSObject, AJRXMLCoding, AIEMessageObject {
     
     // TODO: Needs to be an object, so that I can bind to it?
     @objcMembers
@@ -238,6 +238,20 @@ open class AIEOptimizer: NSObject, AJRXMLCoding {
         if let customGlobalNorm {
             coder.encode(customGlobalNorm, forKey: "customGlobalNorm")
         }
+    }
+    
+    open override var ajr_nameForXMLArchiving: String {
+        return "aieOptimizer"
+    }
+    
+    // MARK: - AIEMessageObject
+    
+    open var messagesTitle: String {
+        return "Optimizer"
+    }
+    
+    open var messagesImage: NSImage? {
+        return nil
     }
     
 }

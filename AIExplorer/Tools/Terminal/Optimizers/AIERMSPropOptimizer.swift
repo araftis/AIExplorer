@@ -7,9 +7,9 @@ open class AIERMSPropOptimizer: AIEOptimizer {
     /// A hyper-parameter that specifies the momentum factor.
     var momentumScale: Float = 0.0
     /// The constant for smoothing.
-    var alpha: Float = 0.99
+    var alpha: Float = 0.9
     /// The epsilon value you use to improve numerical stability.
-    var epsilon: Float = 1e-8
+    var epsilon: Float = 1e-7
     /// A Boolean that indicates whether you compute the centered RMSProp.
     var isCentered: Bool = false
     
@@ -43,6 +43,16 @@ open class AIERMSPropOptimizer: AIEOptimizer {
         if isCentered {
             coder.encode(isCentered, forKey: "isCentered")
         }
+    }
+    
+    open override var ajr_nameForXMLArchiving: String {
+        return "aieRMSPropOptimizer"
+    }
+    
+    // MARK: - AIEMessageObject
+    
+    open override var messagesTitle: String {
+        return "RMS Prop Optimizer"
     }
     
 }

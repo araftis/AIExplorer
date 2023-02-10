@@ -50,6 +50,11 @@
 		21FFE35A29909C1C00A79F8F /* AIEAdamWOptimizer.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE35929909C1C00A79F8F /* AIEAdamWOptimizer.inspector */; };
 		21FFE35C29909C2500A79F8F /* AIERMSPropOptimizer.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE35B29909C2500A79F8F /* AIERMSPropOptimizer.inspector */; };
 		21FFE35E29909C2D00A79F8F /* AIESGDOptimizer.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE35D29909C2D00A79F8F /* AIESGDOptimizer.inspector */; };
+		21FFE3642995A4D000A79F8F /* AIELoss+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE3632995A4D000A79F8F /* AIELoss+TensorFlow.swift */; };
+		21FFE3662995A72900A79F8F /* AIEOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE3652995A72900A79F8F /* AIEOptimizer+TensorFlow.swift */; };
+		21FFE3682995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE3672995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift */; };
+		21FFE36A2995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE3692995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift */; };
+		21FFE36C2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE36B2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
 		25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC039425D7D499008A4DE4 /* AIELoss.inspector */; };
@@ -215,6 +220,11 @@
 		21FFE35929909C1C00A79F8F /* AIEAdamWOptimizer.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIEAdamWOptimizer.inspector; sourceTree = "<group>"; };
 		21FFE35B29909C2500A79F8F /* AIERMSPropOptimizer.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIERMSPropOptimizer.inspector; sourceTree = "<group>"; };
 		21FFE35D29909C2D00A79F8F /* AIESGDOptimizer.inspector */ = {isa = PBXFileReference; explicitFileType = text.xml; path = AIESGDOptimizer.inspector; sourceTree = "<group>"; };
+		21FFE3632995A4D000A79F8F /* AIELoss+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIELoss+TensorFlow.swift"; sourceTree = "<group>"; };
+		21FFE3652995A72900A79F8F /* AIEOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
+		21FFE3672995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEAdamOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
+		21FFE3692995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIERMSPropOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
+		21FFE36B2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIESGDOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
 		25EC039425D7D499008A4DE4 /* AIELoss.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIELoss.inspector; sourceTree = "<group>"; };
@@ -356,6 +366,8 @@
 		21FFE3242983490100A79F8F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				21FFE3612995A4B600A79F8F /* Losses */,
+				21FFE3622995A4BB00A79F8F /* Optimizers */,
 				21FFE33529834A0A00A79F8F /* AIEActivation+TensorFlow.swift */,
 				21FFE33929834A7500A79F8F /* AIEBatchNormalization+TensorFlow.swift */,
 				21FFE33F29834C3C00A79F8F /* AIEBranch+TensorFlow.swift */,
@@ -411,6 +423,25 @@
 				25EC039425D7D499008A4DE4 /* AIELoss.inspector */,
 			);
 			path = Loss;
+			sourceTree = "<group>";
+		};
+		21FFE3612995A4B600A79F8F /* Losses */ = {
+			isa = PBXGroup;
+			children = (
+				21FFE3632995A4D000A79F8F /* AIELoss+TensorFlow.swift */,
+			);
+			path = Losses;
+			sourceTree = "<group>";
+		};
+		21FFE3622995A4BB00A79F8F /* Optimizers */ = {
+			isa = PBXGroup;
+			children = (
+				21FFE3652995A72900A79F8F /* AIEOptimizer+TensorFlow.swift */,
+				21FFE3672995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift */,
+				21FFE3692995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift */,
+				21FFE36B2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift */,
+			);
+			path = Optimizers;
 			sourceTree = "<group>";
 		};
 		FA02BF4D25B784EC001EFBBA /* Activation */ = {
@@ -829,6 +860,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21FFE33E29834AB500A79F8F /* AIEDropout+TensorFlow.swift in Sources */,
+				21FFE3682995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift in Sources */,
 				21FFE3262983491200A79F8F /* AIEImageIO+TensorFlow.swift in Sources */,
 				210F8F922742ECF1004A939D /* AIEMLComputeObjCGenerator.swift in Sources */,
 				21FFE34029834C3C00A79F8F /* AIEBranch+TensorFlow.swift in Sources */,
@@ -847,6 +879,7 @@
 				210F8F8B2730A7F5004A939D /* AIEMessagesInspector.swift in Sources */,
 				21FFE3282983493B00A79F8F /* AIEConvolution+TensorFlow.swift in Sources */,
 				FA02BFB225B7AC4D001EFBBA /* AIEBatchNormalization.swift in Sources */,
+				21FFE36C2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift in Sources */,
 				FA02BF7825B7A7C6001EFBBA /* AIEMatrixMultiplication.swift in Sources */,
 				FABB13BE293D7185002DD56B /* AIEShape.m in Sources */,
 				FA18B4DA25AEA305000DEF0C /* AIEFilter.swift in Sources */,
@@ -863,6 +896,7 @@
 				FA02BFC725B7ADD6001EFBBA /* AIELoss.swift in Sources */,
 				FA18B4E025AEA305000DEF0C /* AIEConvolutionTool.swift in Sources */,
 				21FFE352298C8AFD00A79F8F /* AIESGDOptimizer.swift in Sources */,
+				21FFE3642995A4D000A79F8F /* AIELoss+TensorFlow.swift in Sources */,
 				FA02BF4F25B78505001EFBBA /* AIEActivation.swift in Sources */,
 				FA02BF7425B7A7B3001EFBBA /* AIEReduction.swift in Sources */,
 				FA18B4DC25AEA305000DEF0C /* AIEAudioIO.swift in Sources */,
@@ -870,6 +904,7 @@
 				FA02BF6125B7973B001EFBBA /* AIETool.swift in Sources */,
 				21FFE34B298C79D000A79F8F /* AIEOptimizer.swift in Sources */,
 				21FFE332298349D900A79F8F /* AIEFullyConnected+TensorFlow.swift in Sources */,
+				21FFE3662995A72900A79F8F /* AIEOptimizer+TensorFlow.swift in Sources */,
 				21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */,
 				FA02BF4825B783CB001EFBBA /* AIEKnowledgeGraphIO.swift in Sources */,
 				FABD166425C8E931000294E3 /* AIEValidationAccessory.swift in Sources */,
@@ -882,6 +917,7 @@
 				FA02BFA125B7AAFF001EFBBA /* AIEPadding.swift in Sources */,
 				FA18B4D925AEA305000DEF0C /* AIEToolSet.swift in Sources */,
 				FA02BF5525B7851C001EFBBA /* AIEMultiheadAttention.swift in Sources */,
+				21FFE36A2995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift in Sources */,
 				FA02BFB625B7AC5B001EFBBA /* AIEGroupNormalization.swift in Sources */,
 				FABD16A425CA578C000294E3 /* AIEDocumentStorage.swift in Sources */,
 				FABB13BA293D6F65002DD56B /* AIEShape.swift in Sources */,

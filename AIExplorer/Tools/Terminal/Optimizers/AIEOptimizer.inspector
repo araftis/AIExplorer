@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inspector-include>
     <group title="Optimizer">
+        <slice type="float" label="Learning Rate" valueKeyPath="controller.selection.optimizer.learningRate"/>
         <slice type="choice" style="popUp" label="Type" valueType="object" valueKeyPath="controller.selection.inspectedOptimizer" objectsKeyPath="controller.selection.inspectedAllOptimizers" choiceTitleKeyPath="localizedName">
         </slice>
-        <slice type="float" label="Learning Rate" valueKeyPath="controller.selection.optimizer.learningRate"/>
-        <slice type="float" label="Gradient Rescale" valueKeyPath="controller.selection.optimizer.inspectedGradientRescale" placeholderString="Unset"/>
+        <slice type="float" label="Grad. Rescale" valueKeyPath="controller.selection.optimizer.inspectedGradientRescale" placeholderString="Unset"/>
         <group title="Gradient Clipping">
             <slice type="boolean" valueKeyPath="controller.selection.optimizer.appliesGradientClipping" title="Applies Gradient Clipping"/>
             <group visibleKeyPath="controller.selection.optimizer.appliesGradientClipping">

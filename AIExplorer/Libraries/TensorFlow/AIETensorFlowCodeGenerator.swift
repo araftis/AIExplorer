@@ -84,11 +84,6 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 try context.writeIndented("def buildModel(self, isTraining=False):\n")
                 context.incrementIndent()
 
-                // Write the declaration for loss. This is used when we call out to the compile method, if it's been defined.
-                try context.writeIndented("# Define 'loss'. If we encounter a loss layer, this will be initialized.\n")
-                try context.writeIndented("loss = None")
-                try context.write("\n")
-
                 // Write the model declaration.
                 try context.writeIndented("# Define the model as a Sequential model. This should cover most situations,\n")
                 try context.writeIndented("# but there's a good chance we'll need to improve this in the future.\n")
