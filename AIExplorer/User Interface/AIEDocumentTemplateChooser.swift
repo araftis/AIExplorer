@@ -2,7 +2,7 @@
  AIEDocumentTemplateChooser.swift
  AIExplorer
 
- Copyright © 2021, AJ Raftis and AIExplorer authors
+ Copyright © 2023, AJ Raftis and AIExplorer authors
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without modification,
