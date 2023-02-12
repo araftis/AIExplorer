@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var huber = AIELossIndentifier("huber")
+}
+
 @objcMembers
 open class AIELossHuber: AIELoss {
 

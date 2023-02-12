@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var softmaxCrossentropy = AIELossIndentifier("softmaxCrossentropy")
+}
+
 @objcMembers
 open class AIELossSoftmaxCrossentropy: AIELoss {
 

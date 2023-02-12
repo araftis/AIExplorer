@@ -243,6 +243,12 @@ open class AIEOptimizer: NSObject, AJRXMLCoding, AIEMessageObject {
         return "aieOptimizer"
     }
     
+    // MARK: Conveniences
+
+    open var localizedName : String? {
+        return AIEOptimizer.optimizer(forClass: Self.self)?.localizedName
+    }
+
     // MARK: - AIEMessageObject
     
     open var messagesTitle: String {

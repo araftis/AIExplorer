@@ -8,7 +8,6 @@ extension AIEAdamOptimizer : AIETensorFlowOptimizerCodeWriter {
         if type(of: self) == AIEAdamWOptimizer.self {
             name = "AdamW"
         }
-        try context.writeIndented("\(variableName) = ")
         try context.writeFunction(name: "optimizers.\(name)") {
             try context.writeArgument(learningRate != 0.001, "learning_rate=\(learningRate)")
             try context.writeArgument(beta1 != 0.9, "beta_1=\(beta1)")

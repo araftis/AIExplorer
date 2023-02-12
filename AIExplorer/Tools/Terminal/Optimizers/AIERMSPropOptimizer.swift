@@ -1,6 +1,10 @@
 
 import Draw
 
+public extension AIEOptimizerIndentifier {
+    static var rmsProp = AIEOptimizerIndentifier("rmsProp")
+}
+
 @objcMembers
 open class AIERMSPropOptimizer: AIEOptimizer {
 

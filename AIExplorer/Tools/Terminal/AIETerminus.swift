@@ -58,7 +58,24 @@ open class AIETerminus: AIEGraphic {
         }
     }
 
-    // MARK: - DrawGraphic
+    // MARK: - AIEGraphic
+
+    open override var displayedProperties : [Property] {
+        weak var weakSelf = self
+        return [Property("Loss", {
+                        if let self = weakSelf {
+                            return self.loss.localizedName
+                        }
+                        return nil
+                    }),
+                Property("Optimizer", {
+                        if let self = weakSelf {
+                            return self.optimizer.localizedName
+                        }
+                        return nil
+                    }),
+        ]
+    }
 
     open override func updatePath() -> Void {
         let insetX = frame.size.width / 4.0

@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var hinge = AIELossIndentifier("hinge")
+}
+
 @objcMembers
 open class AIELossHinge: AIELoss {
 

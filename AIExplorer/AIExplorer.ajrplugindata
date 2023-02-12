@@ -35,6 +35,13 @@
         <attribute name="id" type="string" required="true" />
     </extension-point>
 
+    <!-- Defines the image data sources / loaders. -->
+    <extension-point name="aie-image-datasource" class="AIExplorer.AIEImageDataSource" registrySelector="registerDataSource:properties:">
+        <attribute name="class" type="class" required="true" />
+        <attribute name="name" type="string" required="true" />
+        <attribute name="id" type="string" required="true" />
+    </extension-point>
+
     <draw-filter class="AIExplorer.AIEFilter">
         <readType type="nn" />
         <readType type="com.ajr.neuralnet" />
@@ -175,5 +182,10 @@
     <aie-loss name="Mean Squared Error" id="meanSquaredError" class="AIExplorer.AIELossMeanSquaredError"/>
     <aie-loss name="Sigmoid Cross Entropy" id="sigmoidCrossentropy" class="AIExplorer.AIELossSigmoidCrossentropy"/>
     <aie-loss name="Softmax Cross Entropy" id="softmaxCrossentropy" class="AIExplorer.AIELossSoftmaxCrossentropy"/>
+
+    <!-- Possible Image Data Sources -->
+    <aie-image-datasource name="CIFAR10" id="image.CIFAR10" class="AIExplorer.AIEImageDataSourceCIFAR10"/>
+    <aie-image-datasource name="MNIST" id="image.MNIST" class="AIExplorer.AIEImageDataSourceMNIST"/>
+    <aie-image-datasource name="Path" id="image.path" class="AIExplorer.AIEImageDataSourcePath"/>
 
 </plugindata>

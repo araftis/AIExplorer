@@ -1,6 +1,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var categoricalCrossentropy = AIELossIndentifier("categoricalCrossentropy")
+}
+
 @objcMembers
 open class AIELossCategoricalCrossentropy: AIELoss {
 

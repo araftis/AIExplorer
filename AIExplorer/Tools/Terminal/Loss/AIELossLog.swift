@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var log = AIELossIndentifier("log")
+}
+
 @objcMembers
 open class AIELossLog: AIELoss {
 

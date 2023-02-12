@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var meanAbsoluteError = AIELossIndentifier("meanAbsoluteError")
+}
+
 @objcMembers
 open class AIELossMeanAbsoluteError: AIELoss {
 

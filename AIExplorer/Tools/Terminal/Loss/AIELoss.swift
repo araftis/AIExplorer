@@ -46,7 +46,7 @@ public struct AIELossIndentifier : RawRepresentable, Equatable, Hashable {
         self.rawValue = rawValue
     }
 
-    static var unknown = AIELossIndentifier("unknown")
+    public static var unknown = AIELossIndentifier("unknown")
 }
 
 @objcMembers
@@ -123,6 +123,8 @@ open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
         return nil
     }
 
+    // MARK: -
+
     @objc
     public enum ReductionType : Int, AJRXMLEncodableEnum {
         case all
@@ -176,6 +178,12 @@ open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
 
     public required override init() {
         super.init()
+    }
+
+    // MARK: Conveniences
+
+    open var localizedName : String? {
+        return AIELoss.loss(forClass: Self.self)?.localizedName
     }
 
 // TODO: Move to AIETerminus

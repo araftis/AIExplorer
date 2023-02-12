@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var meanSquaredError = AIELossIndentifier("meanSquaredError")
+}
+
 @objcMembers
 open class AIELossMeanSquaredError: AIELoss {
 

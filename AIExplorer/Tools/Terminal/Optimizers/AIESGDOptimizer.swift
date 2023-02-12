@@ -1,6 +1,10 @@
 
 import Draw
 
+public extension AIEOptimizerIndentifier {
+    static var sgd = AIEOptimizerIndentifier("sgd")
+}
+
 @objc
 open class AIESGDOptimizer: AIEOptimizer {
     

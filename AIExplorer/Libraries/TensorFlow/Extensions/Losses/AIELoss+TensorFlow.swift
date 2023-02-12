@@ -37,17 +37,10 @@ internal extension AIELoss.ReductionType {
     
 }
 
-extension AIELoss : AIETensorFlowLossCodeWriter {
-    
-    internal func generateCategoricalCrossentropy(context: AIETensorFlowContext) throws -> Void {
-        try context.writeFunction(name: "losses.CategoricalCrossentropy") {
-            try context.writeArgument(reductionType != .none, "reduction=\(reductionType.tensorFlowDescription)")
-            //try context.writeArgument(labelSmoothing != 0.0, "label_smoothing=\(labelSmoothing)")
-        }
-    }
-    
-    internal func generateLossCode(context: AIETensorFlowContext) throws -> Bool {
-        try context.writeIndented("\(variableName) = ")
+//extension AIELoss : AIETensorFlowLossCodeWriter {
+//
+//    internal func generateLossCode(context: AIETensorFlowContext) throws -> Bool {
+//        try context.writeIndented("\(variableName) = ")
 //        switch type {
 //        case .categoricalCrossEntropy:
 //            try generateCategoricalCrossentropy(context: context)
@@ -68,9 +61,9 @@ extension AIELoss : AIETensorFlowLossCodeWriter {
 //        case .softmaxCrossEntropy:
 //            try context.write("losses.CategoricalCrossentropy()")
 //        }
-        try context.write("\n")
-        
-        return true
-    }
-    
-}
+//        try context.write("\n")
+//
+//        return true
+//    }
+//    
+//}

@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var sigmoidCrossentropy = AIELossIndentifier("sigmoidCrossentropy")
+}
+
 @objcMembers
 open class AIELossSigmoidCrossentropy: AIELoss {
 

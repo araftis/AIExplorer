@@ -1,6 +1,10 @@
 
 import Draw
 
+public extension AIEOptimizerIndentifier {
+    static var adam = AIEOptimizerIndentifier("adam")
+}
+
 @objcMembers
 open class AIEAdamOptimizer: AIEOptimizer {
 

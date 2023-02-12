@@ -7,6 +7,10 @@
 
 import Cocoa
 
+public extension AIELossIndentifier {
+    static var cosineDistance = AIELossIndentifier("cosineDistance")
+}
+
 @objcMembers
 open class AIELossCosineDistance: AIELoss {
 

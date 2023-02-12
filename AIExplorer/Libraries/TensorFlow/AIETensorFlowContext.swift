@@ -40,7 +40,7 @@ internal class AIETensorFlowContext {
     // MARK: - Output
     
     var output : OutputStream {
-        assert(outputStreams.count >= 1, "The code write over popped the output stream, which is fatal.")
+        assert(outputStreams.count >= 1, "The code writer over popped the output stream, which is fatal.")
         return outputStreams.last!
     }
     
