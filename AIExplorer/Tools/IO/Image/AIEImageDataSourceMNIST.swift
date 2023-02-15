@@ -38,13 +38,25 @@ public extension AIEDataSourceIndentifier.image {
 @objcMembers
 open class AIEImageDataSourceMNIST: AIEImageDataSource {
 
-    open override var width: Int? {
+    open class override var defaultWidth : Int { return 32 }
+    open class override var defaultHeight : Int { return 32 }
+    open class override var defaultDepth : Int { return 1 }
+
+    open override var width: Int {
         get { return super.width }
         set { super.width = 28 }
     }
-    open override var height: Int? {
+    open override var height: Int {
         get { return super.height }
         set { super.height = 28 }
     }
+    open override var depth: Int {
+        get { return super.depth }
+        set { super.depth = 1 }
+    }
 
+    open override var ajr_nameForXMLArchiving: String {
+        return "aieImageDataSourceMNIST"
+    }
+    
 }

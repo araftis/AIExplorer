@@ -49,7 +49,7 @@ public struct AIEDataSourceIndentifier : RawRepresentable, Equatable, Hashable {
 
 
 @objcMembers
-open class AIEDataSource: NSObject {
+open class AIEDataSource: AJREditableObject {
 
     @objcMembers
     public class Placeholder : NSObject, AJRInspectorContentProvider {
@@ -74,6 +74,10 @@ open class AIEDataSource: NSObject {
 
         public var inspectorBundle: Bundle? {
             return Bundle(for: dataSourceClass)
+        }
+        
+        public static func == (left: Placeholder, right: Placeholder) -> Bool {
+            return left.id == right.id
         }
 
     }
@@ -135,6 +139,12 @@ open class AIEDataSource: NSObject {
             return placeholder.id
         }
         return nil
+    }
+    
+    // MARK: - Creation
+    
+    required public override init() {
+        super.init()
     }
 
 }

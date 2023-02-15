@@ -13,8 +13,7 @@
             <choice title="Sum" value="8" />
             <choice title="L1 Norm" value="9" />
         </slice>
-        <slice type="choice" style="popUp" label="Type" valueType="object" valueKeyPath="controller.selection.inspectedLoss" objectsKeyPath="controller.selection.inspectedAllLosses" choiceTitleKeyPath="localizedName">
-        </slice>
+        <slice type="choice" style="popUp" label="Type" valueType="object" valueKeyPath="controller.selection.inspectedLoss" objectsKeyPath="controller.selection.inspectedAllLosses" choiceTitleKeyPath="localizedName"/>
         <slice type="float" label="Weight" increment="0.001"  valueKeyPath="controller.selection.loss.weight" />
     </group>
 </inspector-include>

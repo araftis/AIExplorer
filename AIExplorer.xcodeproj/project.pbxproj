@@ -55,6 +55,10 @@
 		21FFE3682995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE3672995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift */; };
 		21FFE36A2995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE3692995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift */; };
 		21FFE36C2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE36B2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift */; };
+		21FFE36E2999BDC900A79F8F /* AIEImageDataSource.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE36D2999BDC900A79F8F /* AIEImageDataSource.inspector */; };
+		21FFE3702999BDE400A79F8F /* AIEImageDataSourceCIFAR10.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE36F2999BDE400A79F8F /* AIEImageDataSourceCIFAR10.inspector */; };
+		21FFE3722999BDFA00A79F8F /* AIEImageDataSourceMNIST.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE3712999BDFA00A79F8F /* AIEImageDataSourceMNIST.inspector */; };
+		21FFE3742999BE0600A79F8F /* AIEImageDataSourcePath.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 21FFE3732999BE0600A79F8F /* AIEImageDataSourcePath.inspector */; };
 		25EC038B25D63212008A4DE4 /* AIEConvolution.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */; };
 		25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */; };
 		25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */ = {isa = PBXBuildFile; fileRef = 25EC039425D7D499008A4DE4 /* AIELoss.inspector */; };
@@ -257,6 +261,10 @@
 		21FFE3672995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEAdamOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
 		21FFE3692995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIERMSPropOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
 		21FFE36B2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIESGDOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
+		21FFE36D2999BDC900A79F8F /* AIEImageDataSource.inspector */ = {isa = PBXFileReference; lastKnownFileType = file; name = AIEImageDataSource.inspector; path = AIExplorer/Tools/IO/Image/AIEImageDataSource.inspector; sourceTree = SOURCE_ROOT; };
+		21FFE36F2999BDE400A79F8F /* AIEImageDataSourceCIFAR10.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEImageDataSourceCIFAR10.inspector; sourceTree = "<group>"; };
+		21FFE3712999BDFA00A79F8F /* AIEImageDataSourceMNIST.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEImageDataSourceMNIST.inspector; sourceTree = "<group>"; };
+		21FFE3732999BE0600A79F8F /* AIEImageDataSourcePath.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEImageDataSourcePath.inspector; sourceTree = "<group>"; };
 		25EC038A25D63212008A4DE4 /* AIEConvolution.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEConvolution.inspector; sourceTree = "<group>"; };
 		25EC038E25D659AD008A4DE4 /* AIEFullyConnected.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIEFullyConnected.inspector; sourceTree = "<group>"; };
 		25EC039425D7D499008A4DE4 /* AIELoss.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AIELoss.inspector; sourceTree = "<group>"; };
@@ -710,12 +718,16 @@
 		FA37E12A29988A32000DB105 /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				FA0F526225D392FD00DD0F3D /* AIEImageIO.inspector */,
 				FA18B4CC25AEA305000DEF0C /* AIEImageIO.swift */,
+				FA0F526225D392FD00DD0F3D /* AIEImageIO.inspector */,
 				FA37E13029988B03000DB105 /* AIEImageDataSource.swift */,
+				21FFE36D2999BDC900A79F8F /* AIEImageDataSource.inspector */,
 				FA37E13429988FA1000DB105 /* AIEImageDataSourceCIFAR10.swift */,
+				21FFE36F2999BDE400A79F8F /* AIEImageDataSourceCIFAR10.inspector */,
 				FA37E13229988F90000DB105 /* AIEImageDataSourceMNIST.swift */,
+				21FFE3712999BDFA00A79F8F /* AIEImageDataSourceMNIST.inspector */,
 				FA37E13629988FAD000DB105 /* AIEImageDataSourcePath.swift */,
+				21FFE3732999BE0600A79F8F /* AIEImageDataSourcePath.inspector */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -947,6 +959,7 @@
 				FABD167525C8E9D7000294E3 /* AIETrainingAccessory.xib in Resources */,
 				FA37E1152995EE66000DB105 /* AIELossSigmoidCrossentropy.inspector in Resources */,
 				FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */,
+				21FFE3742999BE0600A79F8F /* AIEImageDataSourcePath.inspector in Resources */,
 				FA37E1132995EE52000DB105 /* AIELossMeanSquaredError.inspector in Resources */,
 				21FFE348298C6CB900A79F8F /* AIETerminus.inspector in Resources */,
 				FABD16A825CA59CB000294E3 /* AIEDocument.inspector in Resources */,
@@ -958,12 +971,14 @@
 				25EC03AB25DE231C008A4DE4 /* AIEReshape.inspector in Resources */,
 				210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */,
 				21FFE35E29909C2D00A79F8F /* AIESGDOptimizer.inspector in Resources */,
+				21FFE3722999BDFA00A79F8F /* AIEImageDataSourceMNIST.inspector in Resources */,
 				21FFE313291F3E7A00A79F8F /* AIEConvolution.md in Resources */,
 				25EC039525D7D499008A4DE4 /* AIELoss.inspector in Resources */,
 				21FFE35A29909C1C00A79F8F /* AIEAdamWOptimizer.inspector in Resources */,
 				FA18B4D825AEA305000DEF0C /* AIExplorer.ajrplugindata in Resources */,
 				25EC039925D87D11008A4DE4 /* AIEUpsample.inspector in Resources */,
 				21FFE3152924284700A79F8F /* AIEBranch.md in Resources */,
+				21FFE3702999BDE400A79F8F /* AIEImageDataSourceCIFAR10.inspector in Resources */,
 				FA37E10B2995ED86000DB105 /* AIELossHinge.inspector in Resources */,
 				21FFE34F298C875D00A79F8F /* AIEOptimizer.inspector in Resources */,
 				FA0F525F25D38F5900DD0F3D /* AIEGraphic.inspector in Resources */,
@@ -978,6 +993,7 @@
 				21FFE358299098E900A79F8F /* AIEAdamOptimizer.inspector in Resources */,
 				21FFE2FF2913208C00A79F8F /* AIEBranch.inspector in Resources */,
 				21FFE35C29909C2500A79F8F /* AIERMSPropOptimizer.inspector in Resources */,
+				21FFE36E2999BDC900A79F8F /* AIEImageDataSource.inspector in Resources */,
 				FABB13B7293C4FD4002DD56B /* AIEIO.inspector in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -35,22 +35,54 @@ public extension AJRInspectorIdentifier {
     static var aieImageIO = AJRInspectorIdentifier("aieImageIO")
 }
 
+// Convenience
+internal extension Int {
+    var anyIf0 : String {
+        return self == 0 ? "Any" : String(describing: self)
+    }
+}
+
 @objcMembers
 open class AIEImageIO: AIEIO {
-
+    
     // MARK: - Properties
-    open var width : Int = 0
-    open var height : Int = 0
-    open var depth : Int = 0
+    
+    open var dataSource : AIEImageDataSource = AIEImageDataSource()
+    
+    open var inspectedDataSource : AIEDataSource.Placeholder? {
+        get {
+            let placeholder = AIEImageDataSource.dataSource(forClass: Swift.type(of: dataSource))
+            return placeholder
+        }
+        set {
+            document?.removeObject(fromEditingContext: dataSource)
+            if let newValue {
+                let width = dataSource.width
+                let height = dataSource.height
+                let depth = dataSource.depth
+                if let newDataSource = newValue.dataSourceClass.init() as? AIEImageDataSource {
+                    newDataSource.width = width
+                    newDataSource.height = height
+                    newDataSource.depth = depth
+                    dataSource = newDataSource
+                    document?.addObject(toEditingContext: dataSource)
+                }
+            }
+        }
+    }
+    
+    open var inspectedAllDataSources : [AIEDataSource.Placeholder] {
+        return AIEImageDataSource.allDataSources
+    }
 
     // MARK: - Creation
 
     public convenience init(width: Int, height: Int, depth: Int) {
         self.init()
 
-        self.width = width
-        self.height = height
-        self.depth = depth
+        self.dataSource.width = width
+        self.dataSource.height = height
+        self.dataSource.depth = depth
     }
 
     public required init() {
@@ -65,16 +97,17 @@ open class AIEImageIO: AIEIO {
 
     open override var displayedProperties : [Property] {
         weak var weakSelf = self
-        return [Property("Size", {
+        return [Property("Source", {
+                        return weakSelf?.dataSource.localizedName
+                    }),
+                Property("Size", {
                         if let self = weakSelf {
                             var string = ""
-                            string += "\(self.width == 0 ? "Any" : String(describing: self.width)) ✕ \(self.height == 0 ? "Any" : String(describing: self.height))"
-                            if self.depth > 0 {
-                                if !string.isEmpty {
-                                    string += " ✕ "
-                                }
-                                string += "\(self.depth)"
-                            }
+                            string += self.dataSource.width.anyIf0
+                            string += "✕"
+                            string += self.dataSource.height.anyIf0
+                            string += "✕"
+                            string += self.dataSource.depth.anyIf0
                             return string.isEmpty ? nil : string
                         }
                         return nil
@@ -107,24 +140,31 @@ open class AIEImageIO: AIEIO {
 
     open override func decode(with coder: AJRXMLCoder) {
         super.decode(with: coder)
+        
+        coder.decodeObject(forKey: "dataSource") { value in
+            if let value = value as? AIEImageDataSource {
+                self.dataSource = value
+            } else {
+                self.dataSource = AIEImageDataSource()
+            }
+        }
 
+        // NOTE: These are here for backwards compatibility, and won't generally be called, as these parameters are no longer written as part of the AIEImageIO class, but as part of the data source.
         coder.decodeInteger(forKey: "width") { (value) in
-            self.width = value
+            self.dataSource.width = value
         }
         coder.decodeInteger(forKey: "height") { (value) in
-            self.height = value
+            self.dataSource.height = value
         }
         coder.decodeInteger(forKey: "depth") { (value) in
-            self.depth = value
+            self.dataSource.depth = value
         }
     }
-
+    
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
 
-        coder.encode(width, forKey: "width")
-        coder.encode(height, forKey: "height")
-        coder.encode(depth, forKey: "depth")
+        coder.encode(dataSource, forKey: "dataSource")
     }
 
     open class override var ajr_nameForXMLArchiving: String {
@@ -136,11 +176,29 @@ open class AIEImageIO: AIEIO {
     // MARK: - Shape
     
     open override var inputShape: [Int]? {
-        return [batchSize, width, height, depth]
+        return [batchSize, dataSource.height, dataSource.width, dataSource.depth]
     }
 
     open override var outputShape: [Int] {
-        return [batchSize, width, height, depth]
+        return [batchSize, dataSource.height, dataSource.width, dataSource.depth]
+    }
+    
+    // MARK: - Editing Context Lifecycle
+    
+    open override func didAdd(to context: AJREditingContext) {
+        document?.addObject(toEditingContext: dataSource)
+    }
+    
+    open override func didRemove(from context: AJREditingContext) {
+        document?.removeObject(fromEditingContext: dataSource)
+    }
+    
+    open override func addObserver(_ observer: AJREditObserver) {
+        super.addObserver(observer)
+    }
+    
+    open override func removeObserver(_ observer: AJREditObserver) {
+        super.removeObserver(observer)
     }
 
 }

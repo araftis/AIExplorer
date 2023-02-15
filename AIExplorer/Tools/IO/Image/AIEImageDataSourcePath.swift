@@ -48,9 +48,14 @@ open class AIEImageDataSourcePath: AIEImageDataSource {
     }
 
     open override func decode(with coder: AJRXMLCoder) {
+        super.decode(with: coder)
         coder.decodeString(forKey: "path") { value in
             self.path = value
         }
     }
 
+    open override var ajr_nameForXMLArchiving: String {
+        return "aieImageDataSourcePath"
+    }
+    
 }

@@ -39,7 +39,12 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
         if let inputShape {
             try context.output.indent(context.indent).write("# Input Shape: \(inputShape)\n")
         }
-        try context.output.indent(2).write("\(variableName) = layers.Input(shape=(\(height), \(width), \(depth)), name='\(variableName)')\n")
+        if let shape = inputShape {
+            try context.output.indent(2).write("\(variableName) = layers.Input(shape=(\(shape[1]), \(shape[2]), \(shape[3])), name='\(variableName)')\n")
+            if shape[1] == 0 || shape[2] == 0 || shape[3] == 0 {
+                context.add(message: AIEMessage(type: .warning, message: "The input shape must define a width, height, and depth.", on: self))
+            }
+        }
         try context.writeIndented("model.add(\(variableName))\n")
         try progressToChild(context: context)
         

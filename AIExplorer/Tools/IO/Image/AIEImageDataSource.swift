@@ -41,32 +41,81 @@ public extension AIEDataSourceIndentifier {
 
 @objcMembers
 open class AIEImageDataSource: AIEDataSource, AJRXMLCoding {
+    
+    open class var defaultWidth : Int { return 0 }
+    open class var defaultHeight : Int { return 0 }
+    open class var defaultDepth : Int { return 0 }
 
-    open var width : Int? = nil
-    open var inspectedWidth : NSNumber? {
-        get { return width == nil ? nil : NSNumber(value: width!) }
-        set { if let newValue { width = newValue.intValue } else { width = nil } }
+    open class func keyPathsForValuesAffectingInspectedWidth() -> Set<String> {
+        return ["inspectedShape"]
     }
-    open var height : Int? = nil
-    open var inspectedHeight : NSNumber? {
-        get { return height == nil ? nil : NSNumber(value: height!) }
-        set { if let newValue { height = newValue.intValue } else { height = nil } }
+    open var width : Int = 0 {
+        willSet {
+            willChangeValue(forKey: "width")
+        }
+        didSet {
+            didChangeValue(forKey: "width")
+        }
+    }
+    open class func keyPathsForValuesAffectingInspectedHeight() -> Set<String> {
+        return ["inspectedShape"]
+    }
+    open var height : Int = 0
+    open class func keyPathsForValuesAffectingInspectedDepth() -> Set<String> {
+        return ["inspectedShape"]
+    }
+    open var depth : Int = 0
+    
+    open class func keyPathsForValuesAffectingInspectedShape() -> Set<String> {
+        return ["width", "height", "depth"]
+    }
+    
+    open var inspectedShape : AIEShape {
+        get {
+            return AIEShape(width: width, height: height, depth: depth)
+        }
+        set {
+            willChangeValue(forKey: "inspectedShape")
+            width = newValue.width
+            height = newValue.height
+            depth = newValue.depth
+            didChangeValue(forKey: "inspectedShape")
+        }
+    }
+    
+    open override class var propertiesToIgnore: Set<String>? {
+        if var properties = super.propertiesToIgnore {
+            properties.insert("inspectedShape")
+            properties.insert("localizedName")
+            return properties
+        }
+        return nil
+    }
+
+    open var localizedName : String {
+        return AIEImageDataSource.dataSource(forClass: type(of: self))?.localizedName ?? String(describing: type(of: self))
     }
 
     // MARK: - Creation
 
-    required public override init() {
+    required public init() {
+        self.width = Self.defaultWidth
+        self.height = Self.defaultHeight
+        self.depth = Self.defaultDepth
         super.init()
     }
 
     // MARK: - AJRXMLCoding
 
     open func encode(with coder: AJRXMLCoder) {
-        if let width {
+        if width != Self.defaultWidth {
             coder.encode(width, forKey: "width")
         }
-        if let height {
+        if height != Self.defaultHeight {
             coder.encode(height, forKey: "height")
+        }
+        if depth != Self.defaultDepth {
+            coder.encode(depth, forKey: "depth")
         }
     }
 
@@ -77,10 +126,25 @@ open class AIEImageDataSource: AIEDataSource, AJRXMLCoding {
         coder.decodeInteger(forKey: "height") { value in
             self.height = value
         }
+        coder.decodeInteger(forKey: "depth") { value in
+            self.depth = value
+        }
     }
 
     open override var ajr_nameForXMLArchiving: String {
         return "aieImageDataSource"
+    }
+    
+    // MARK: - NSObject
+    
+    open override var description: String {
+        var string = "<" + descriptionPrefix
+        string += ", type: \(localizedName)"
+        string += ", width: \(width)"
+        string += ", height: \(width)"
+        string += ", depth: \(depth)"
+        string += ">"
+        return string
     }
 
 }

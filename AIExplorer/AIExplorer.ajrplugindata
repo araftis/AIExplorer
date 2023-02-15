@@ -184,6 +184,7 @@
     <aie-loss name="Softmax Cross Entropy" id="softmaxCrossentropy" class="AIExplorer.AIELossSoftmaxCrossentropy"/>
 
     <!-- Possible Image Data Sources -->
+    <aie-image-datasource name="None" id="image.none" class="AIExplorer.AIEImageDataSource"/>
     <aie-image-datasource name="CIFAR10" id="image.CIFAR10" class="AIExplorer.AIEImageDataSourceCIFAR10"/>
     <aie-image-datasource name="MNIST" id="image.MNIST" class="AIExplorer.AIEImageDataSourceMNIST"/>
     <aie-image-datasource name="Path" id="image.path" class="AIExplorer.AIEImageDataSourcePath"/>
