@@ -42,12 +42,47 @@ internal extension Int {
     }
 }
 
+/**
+ This property wrapper manages an editable object contained by an editable object. In this circumstance, you'd like the "friend" to also be added to the owner's editing context, as well as observed by owner so that changes to the "friend" can be propagated to the owner's observers.
+
+ */
+// TODO: Move into AJRFoundation. I'm just doing this here, for now, because it's close to the test case.
+@propertyWrapper
+public struct AJREditableFriend<EditableValue: AJREditableObject> {
+
+    private var value : EditableValue? = nil
+
+    public static subscript<EditableOwner: AJREditableObject>(
+        _enclosingInstance instance: EditableOwner,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<EditableOwner, EditableValue>,
+        storage storageKeyPath: ReferenceWritableKeyPath<EditableOwner, Self>
+    ) -> EditableValue {
+        get {
+            return instance[keyPath: storageKeyPath].value!
+        }
+        set {
+            instance[keyPath: storageKeyPath].value = newValue
+        }
+    }
+
+    @available(*, unavailable, message: "@AJREditableFriend can only be applied to classes.")
+    public var wrappedValue : EditableValue {
+        get { fatalError("You called @AJREditableFriend's getter, which shouldn't be possible.") }
+        set { fatalError("You called @AJREditableFriend's setter, which shouldn't be possible.") }
+    }
+
+    public init(wrappedValue: EditableValue) {
+        self.value = wrappedValue
+    }
+
+}
+
 @objcMembers
 open class AIEImageIO: AIEIO {
     
     // MARK: - Properties
-    
-    open var dataSource : AIEImageDataSource = AIEImageDataSource()
+
+    @AJREditableFriend open var dataSource : AIEImageDataSource = AIEImageDataSource()
     
     open var inspectedDataSource : AIEDataSource.Placeholder? {
         get {
@@ -65,7 +100,6 @@ open class AIEImageIO: AIEIO {
                     newDataSource.height = height
                     newDataSource.depth = depth
                     dataSource = newDataSource
-                    document?.addObject(toEditingContext: dataSource)
                 }
             }
         }
@@ -119,12 +153,13 @@ open class AIEImageIO: AIEIO {
 
     // MARK: - AJREditableObject
 
-    open override class func populateProperties(toObserve propertiesSet: NSMutableSet) {
-        propertiesSet.add("width")
-        propertiesSet.add("height")
-        propertiesSet.add("depth")
-        super.populateProperties(toObserve: propertiesSet)
-    }
+// TODO: Remove
+//    open override class func populateProperties(toObserve propertiesSet: NSMutableSet) {
+//        propertiesSet.add("width")
+//        propertiesSet.add("height")
+//        propertiesSet.add("depth")
+//        super.populateProperties(toObserve: propertiesSet)
+//    }
 
     // MARK: - AJRInspector
 
@@ -193,12 +228,4 @@ open class AIEImageIO: AIEIO {
         document?.removeObject(fromEditingContext: dataSource)
     }
     
-    open override func addObserver(_ observer: AJREditObserver) {
-        super.addObserver(observer)
-    }
-    
-    open override func removeObserver(_ observer: AJREditObserver) {
-        super.removeObserver(observer)
-    }
-
 }
