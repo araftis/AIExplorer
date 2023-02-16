@@ -49,7 +49,7 @@ public struct AIEOptimizerIndentifier : RawRepresentable, Equatable, Hashable {
 }
 
 @objcMembers
-open class AIEOptimizer: NSObject, AJRXMLCoding, AIEMessageObject {
+open class AIEOptimizer: AJREditableObject, AJRXMLCoding, AIEMessageObject {
     
     @objcMembers
     public class OptimizerPlaceholder : NSObject, AJRInspectorContentProvider {

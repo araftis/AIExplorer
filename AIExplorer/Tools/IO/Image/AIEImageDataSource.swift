@@ -49,36 +49,34 @@ open class AIEImageDataSource: AIEDataSource, AJRXMLCoding {
     open class func keyPathsForValuesAffectingInspectedWidth() -> Set<String> {
         return ["inspectedShape"]
     }
-    open var width : Int = 0 {
-        willSet {
-            willChangeValue(forKey: "width")
-        }
-        didSet {
-            didChangeValue(forKey: "width")
-        }
-    }
+    @AJRObjCObservable(key: "width") open var width : Int = 0
     open class func keyPathsForValuesAffectingInspectedHeight() -> Set<String> {
         return ["inspectedShape"]
     }
-    open var height : Int = 0
+    @AJRObjCObservable(key: "height") open var height : Int = 0
     open class func keyPathsForValuesAffectingInspectedDepth() -> Set<String> {
         return ["inspectedShape"]
     }
-    open var depth : Int = 0
+    @AJRObjCObservable(key: "depth") open var depth : Int = 0
     
     open class func keyPathsForValuesAffectingInspectedShape() -> Set<String> {
         return ["width", "height", "depth"]
     }
-    
     open var inspectedShape : AIEShape {
         get {
             return AIEShape(width: width, height: height, depth: depth)
         }
         set {
             willChangeValue(forKey: "inspectedShape")
-            width = newValue.width
-            height = newValue.height
-            depth = newValue.depth
+            if width != newValue.width {
+                width = newValue.width
+            }
+            if height != newValue.height {
+                height = newValue.height
+            }
+            if depth != newValue.depth {
+                depth = newValue.depth
+            }
             didChangeValue(forKey: "inspectedShape")
         }
     }

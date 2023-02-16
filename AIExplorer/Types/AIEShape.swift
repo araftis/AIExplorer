@@ -158,39 +158,39 @@ open class AIEInspectorSliceShape : AJRInspectorSliceThreeValues<AIEShape> {
 
     @IBAction open override func setValue1(_ sender: NSControl?) {
         if valueKey?.selectionType == .single,
-            var size = valueKey!.value {
+            var shape = valueKey!.value {
             let newValue = sender?.integerValue ?? 0
-            if size.width != newValue {
-                size.width = newValue
+            if shape.width != newValue {
+                shape.width = newValue
                 if linkedButton1.state == .on {
-                    size.height = newValue
+                    shape.height = newValue
                 }
-                valueKey?.value = size
+                valueKey?.value = shape
             }
         }
     }
 
     @IBAction open override func setValue2(_ sender: NSControl?) {
         if valueKey?.selectionType == .single,
-            var size = valueKey!.value {
+            var shape = valueKey!.value {
             let newValue = sender?.integerValue ?? 0
-            if size.height != newValue {
+            if shape.height != newValue {
                 if linkedButton1.state == .on {
-                    size.width = newValue
+                    shape.width = newValue
                 }
-                size.height = newValue
-                valueKey?.value = size
+                shape.height = newValue
+                valueKey?.value = shape
             }
         }
     }
 
     @IBAction open override func setValue3(_ sender: NSControl?) {
         if valueKey?.selectionType == .single,
-            var size = valueKey!.value {
+            var shape = valueKey!.value {
             let newValue = sender?.integerValue ?? 0
-            if size.depth != newValue {
-                size.depth = newValue
-                valueKey?.value = size
+            if shape.depth != newValue {
+                shape.depth = newValue
+                valueKey?.value = shape
             }
         }
     }

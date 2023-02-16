@@ -48,20 +48,38 @@ internal extension Int {
  */
 // TODO: Move into AJRFoundation. I'm just doing this here, for now, because it's close to the test case.
 @propertyWrapper
-public struct AJREditableFriend<EditableValue: AJREditableObject> {
+public class AJREditableFriend<EditableValue: AJREditableObject> : AJREditObserver {
 
-    private var value : EditableValue? = nil
-
+    private var value : EditableValue? = nil {
+        willSet {
+            value?.removeObserver(self)
+        }
+        didSet {
+            value?.addObserver(self)
+        }
+    }
+    
     public static subscript<EditableOwner: AJREditableObject>(
         _enclosingInstance instance: EditableOwner,
         wrapped wrappedKeyPath: ReferenceWritableKeyPath<EditableOwner, EditableValue>,
-        storage storageKeyPath: ReferenceWritableKeyPath<EditableOwner, Self>
+        storage storageKeyPath: ReferenceWritableKeyPath<EditableOwner, AJREditableFriend>
     ) -> EditableValue {
         get {
             return instance[keyPath: storageKeyPath].value!
         }
         set {
+            // First, see if our existing value exists and has and editingContext. If it doesn't, then remove it from the object.
+            if let oldValue = instance[keyPath: storageKeyPath].value,
+               let editingContext = oldValue.editingContext {
+                editingContext.forgetObject(oldValue)
+            }
+            // Now store the new value.
             instance[keyPath: storageKeyPath].value = newValue
+            // And finally, if our owner has an editing context, add the new value to that editing context.
+            if let editingContext = instance.editingContext {
+                editingContext.addObject(newValue)
+                instance.synchronizeObservationState(withFriend: newValue)
+            }
         }
     }
 
@@ -75,6 +93,10 @@ public struct AJREditableFriend<EditableValue: AJREditableObject> {
         self.value = wrappedValue
     }
 
+    public func object(_ object: Any, didEditKey key: String, withChange change: [AnyHashable : Any]) {
+        print("change: \(key): \(change)")
+    }
+    
 }
 
 @objcMembers
