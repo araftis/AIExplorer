@@ -42,69 +42,12 @@ internal extension Int {
     }
 }
 
-/**
- This property wrapper manages an editable object contained by an editable object. In this circumstance, you'd like the "friend" to also be added to the owner's editing context, as well as observed by owner so that changes to the "friend" can be propagated to the owner's observers.
-
- */
-// TODO: Move into AJRFoundation. I'm just doing this here, for now, because it's close to the test case.
-@propertyWrapper
-public class AJREditableFriend<EditableValue: AJREditableObject> : AJREditObserver {
-
-    private var value : EditableValue? = nil {
-        willSet {
-            value?.removeObserver(self)
-        }
-        didSet {
-            value?.addObserver(self)
-        }
-    }
-    
-    public static subscript<EditableOwner: AJREditableObject>(
-        _enclosingInstance instance: EditableOwner,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<EditableOwner, EditableValue>,
-        storage storageKeyPath: ReferenceWritableKeyPath<EditableOwner, AJREditableFriend>
-    ) -> EditableValue {
-        get {
-            return instance[keyPath: storageKeyPath].value!
-        }
-        set {
-            // First, see if our existing value exists and has and editingContext. If it doesn't, then remove it from the object.
-            if let oldValue = instance[keyPath: storageKeyPath].value,
-               let editingContext = oldValue.editingContext {
-                editingContext.forgetObject(oldValue)
-            }
-            // Now store the new value.
-            instance[keyPath: storageKeyPath].value = newValue
-            // And finally, if our owner has an editing context, add the new value to that editing context.
-            if let editingContext = instance.editingContext {
-                editingContext.addObject(newValue)
-                instance.synchronizeObservationState(withFriend: newValue)
-            }
-        }
-    }
-
-    @available(*, unavailable, message: "@AJREditableFriend can only be applied to classes.")
-    public var wrappedValue : EditableValue {
-        get { fatalError("You called @AJREditableFriend's getter, which shouldn't be possible.") }
-        set { fatalError("You called @AJREditableFriend's setter, which shouldn't be possible.") }
-    }
-
-    public init(wrappedValue: EditableValue) {
-        self.value = wrappedValue
-    }
-
-    public func object(_ object: Any, didEditKey key: String, withChange change: [AnyHashable : Any]) {
-        print("change: \(key): \(change)")
-    }
-    
-}
-
 @objcMembers
 open class AIEImageIO: AIEIO {
     
     // MARK: - Properties
 
-    @AJREditableFriend open var dataSource : AIEImageDataSource = AIEImageDataSource()
+    @AJREditableFriend(key: "dataSource") open var dataSource : AIEImageDataSource = AIEImageDataSource()
     
     open var inspectedDataSource : AIEDataSource.Placeholder? {
         get {
@@ -170,18 +113,6 @@ open class AIEImageIO: AIEIO {
                     }),
         ]
     }
-
-
-
-    // MARK: - AJREditableObject
-
-// TODO: Remove
-//    open override class func populateProperties(toObserve propertiesSet: NSMutableSet) {
-//        propertiesSet.add("width")
-//        propertiesSet.add("height")
-//        propertiesSet.add("depth")
-//        super.populateProperties(toObserve: propertiesSet)
-//    }
 
     // MARK: - AJRInspector
 
