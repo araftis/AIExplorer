@@ -31,40 +31,202 @@
 
 import AJRInterface
 
-extension AIEShape : Equatable {
+@objcMembers
+public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, AJREquatable {
+    
+    public private(set) var count : Int = 3
+    internal var labels : [AIEShapeLabel] = [.height, .width, .depth]
+    internal var values : [Int] = [ 0, 0, 0 ]
+    
+    // MARK: - Creation
+    
+    open class func shape(width: Int, height: Int, depth: Int) -> AIEShape {
+        return AIEShape(width: width, height: height, depth: depth)
+    }
+    
+    /**
+     Creates a basic image shape initialized to all 0.
+     */
+    public override init() {
+    }
+    
+    public init(labels: [AIEShapeLabel], values: [Int]) {
+        assert(labels.count == values.count, "The labels and values parameters must have the same count.")
+        self.count = labels.count
+        self.labels = labels
+        self.values = values
+    }
+    
+    public convenience init(width: Int, height: Int, depth: Int) {
+        self.init()
+        self.width = width
+        self.height = height
+        self.depth = depth
+    }
+    
+    // MARK: - Convenience Properties
+    
+    public class var zero : AIEShape {
+        return AIEShape()
+    }
+    
+    public var width : Int {
+        get {
+            return count >= 2 ? values[1] : 0
+        }
+        set {
+            if count >= 1 {
+                values[1] = newValue
+            }
+        }
+    }
+    
+    public var height : Int {
+        get {
+            return count >= 1 ? values[0] : 0
+        }
+        set {
+            if count >= 1 {
+                values[0] = newValue
+            }
+        }
+    }
+    
+    public var depth : Int {
+        get {
+            return count >= 2 ? values[2] : 0
+        }
+        set {
+            if count >= 2 {
+                values[2] = newValue
+            }
+        }
+    }
+    
+    public subscript(_ index: Int) -> Int {
+        return values[index]
+    }
+    
+    public subscript(_ label: AIEShapeLabel) -> Int? {
+        for x in 0 ..< count {
+            if labels[x] == label {
+                return values[x]
+            }
+        }
+        return nil
+    }
+    
+    // MARK: - NSObject
 
-    public static func == (lhs: AIEShape, rhs: AIEShape) -> Bool {
-        return lhs.width == rhs.width && lhs.height == rhs.height
+    public override var description: String {
+        return AIEStringFromShape(self)
+    }
+    
+    // MARK: - NSValue
+
+    public func toValue() -> NSValue {
+        return NSValue.value(with: self)
+    }
+    
+    // MARK: - AJREquatable
+    
+    public func isEqual(toShape shape: AIEShape) -> Bool {
+        if count == shape.count {
+            for x in 0 ..< count {
+                if values[x] != shape.values[x]
+                    || labels[x] != shape.labels[x] {
+                    return false
+                }
+            }
+            return true
+        }
+        return false
+    }
+    
+    public override func isEqual(_ object: Any?) -> Bool {
+        if let object = object as? AIEShape {
+            return object .isEqual(toShape: object)
+        }
+        return false
+    }
+    
+    public override class func isEqual(to object: Any?) -> Bool {
+        return isEqual(object)
     }
     
 }
 
-extension AIEShape : AJRInspectorValue, AJRInspectorValueAsValue {
-
-    public static func inspectorValue(from string: String) -> Any? {
+@nonobjc
+public extension AIEShape {
+    
+    // MARK: - AJRInspectorValue
+    
+    static func inspectorValue(from string: String) -> Any? {
         return AIEShapeFromString(string)
     }
-
-    public static func inspectorValue(from value: NSValue) -> Any? {
+    
+    static func inspectorValue(from value: NSValue) -> Any? {
         return value.shapeValue
     }
-
-    public var description: String {
-        return AIEStringFromShape(self)
-    }
-
-    public func toValue() -> NSValue {
-        return NSValue(shape: self)
-    }
-
+    
 }
 
-public extension AIEShape {
+// MARK: - AIEShapesEqual
 
-    static let zero = AIEShapeZero
-    static let identity = AIEShapeIdentity
-
+@_cdecl("AIEShapesEqual")
+public func AIEShapesEqual(_ lhs: AIEShape, _ rhs: AIEShape) -> Bool {
+    return lhs == rhs
 }
+
+// MARK: - AIEShapeFromString
+
+@_cdecl("AIEShapeFromString")
+public func AIEShapeFromString(_ string: String) -> AIEShape? {
+    var labels = [AIEShapeLabel]()
+    var values = [Int]()
+    
+    let scanner = Scanner(string: string)
+    if scanner.scanString("{") == nil {
+        return nil
+    }
+    while true {
+        if let label = scanner.scanUpToString("="),
+           scanner.scanString("=") != nil,
+           let value = scanner.scanInt() {
+            labels.append(AIEShapeLabel(label))
+            values.append(value)
+        }
+        // This means we'll likely have more values.
+        if scanner.scanString(";") != nil {
+            continue
+        }
+        // This means we're done. We'll allow garbage at the end of the string.
+        if scanner.scanString("}") != nil{
+            break
+        }
+        return nil
+    }
+    return AIEShape(labels: labels, values: values)
+}
+
+// MARK: - AIEStringFromShape
+
+@_cdecl("AIEStringFromShape")
+public func AIEStringFromShape(_ shape: AIEShape) -> String {
+    var string = "{"
+    for x in 0 ..< shape.count {
+        if x > 0 {
+            string += "; "
+        }
+        string += shape.labels[x].rawValue
+        string += "="
+        string += String(describing: shape[x])
+    }
+    string += "}"
+    return string
+}
+
+// MARK: - AJRXMLCoding
 
 @objc
 public extension AJRXMLCoder {
@@ -83,20 +245,13 @@ public extension AJRXMLCoder {
 public extension AJRXMLArchiver {
 
     @objc(encodeShape:forKey:)
-    override func encode(_ size: AIEShape, forKey key: String) -> Void {
+    override func encode(_ shape: AIEShape, forKey key: String) -> Void {
         encodeGroup(forKey: key, using: {
-            if size.width != 0 {
-                self.encode(size.width, forKey: "width")
-            }
-            if size.height != 0 {
-                self.encode(size.height, forKey: "height")
-            }
-            if size.depth != 0 {
-                self.encode(size.depth, forKey: "depth")
+            for x in 0 ..< shape.count {
+                self.encode(shape.values[x], forKey: shape.labels[x].rawValue)
             }
         })
     }
-
 
 }
 
@@ -105,95 +260,37 @@ public extension AJRXMLUnarchiver {
 
     @objc(decodeShapeForKey:setter:)
     override func decodeShape(forKey key: String, setter: @escaping (_ value: AIEShape) -> Void) -> Void {
-        var size = AIEShape.zero
-        decodeGroup(forKey: key, using: {
+        let labels : [AIEShapeLabel] = [ .height, .width, .depth ]
+        var values : [Int] = [0, 0, 0]
+        // TODO: We need to add a mechanism to the XML decode that'll just call us for each attribute found in the XML. Then, we can create the labels and values from that call back, and thus reproduce the struct in the same order.
+        decodeGroup(forKey: key) {
             self.decodeInteger(forKey: "width") { value in
-                size.width = value
+                values[1] = value
             }
             self.decodeInteger(forKey: "height") { value in
-                size.height = value
+                values[0] = value
             }
             self.decodeInteger(forKey: "depth") { value in
-                size.depth = value
+                values[2] = value
             }
-        }, setter: {
-            setter(size)
-        })
-    }
-
-}
-// MARK: - AJRInspectorSliceSize -
-
-@objcMembers
-open class AIEInspectorSliceShape : AJRInspectorSliceThreeValues<AIEShape> {
-
-    open override var nibBundle: Bundle {
-        // Because we don't define our own xib, we use the one from AJRInterface.
-        return Bundle(for: AJRInspectorSliceGeometry.self)
-    }
-
-    open override var units : Unit? {
-        // We don't want to display "units", they don't really have meaning to us.
-        return nil
-    }
-
-    // We link, because when linked, we set both fields to the same value.
-    open override var defaultValuesCanLink: Bool { return true }
-
-    open override var defaultLabel1Value : String { return translator["Width"] }
-    open override var defaultLabel2Value : String { return translator["Height"] }
-    open override var defaultLabel3Value : String { return translator["Depth"] }
-
-    open override func updateFields() -> Void {
-        super.updateFields()
-        if let size = configureFieldsAndFetchSingleValue() {
-            numberField1.integerValue = size.width
-            numberField2.integerValue = size.height
-            numberField3.integerValue = size.depth
-            stepper1.integerValue = size.width
-            stepper2.integerValue = size.height
-            stepper3.integerValue = size.depth
-        }
-    }
-
-    @IBAction open override func setValue1(_ sender: NSControl?) {
-        if valueKey?.selectionType == .single,
-            var shape = valueKey!.value {
-            let newValue = sender?.integerValue ?? 0
-            if shape.width != newValue {
-                shape.width = newValue
-                if linkedButton1.state == .on {
-                    shape.height = newValue
-                }
-                valueKey?.value = shape
-            }
-        }
-    }
-
-    @IBAction open override func setValue2(_ sender: NSControl?) {
-        if valueKey?.selectionType == .single,
-            var shape = valueKey!.value {
-            let newValue = sender?.integerValue ?? 0
-            if shape.height != newValue {
-                if linkedButton1.state == .on {
-                    shape.width = newValue
-                }
-                shape.height = newValue
-                valueKey?.value = shape
-            }
-        }
-    }
-
-    @IBAction open override func setValue3(_ sender: NSControl?) {
-        if valueKey?.selectionType == .single,
-            var shape = valueKey!.value {
-            let newValue = sender?.integerValue ?? 0
-            if shape.depth != newValue {
-                shape.depth = newValue
-                valueKey?.value = shape
-            }
+        } setter: {
+            let shape = AIEShape(labels: labels, values: values)
+            setter(shape)
         }
     }
 
 }
 
+// MARK: - NSValue
+
+public extension NSValue {
+    
+    class func value(with shape: AIEShape) -> NSValue {
+        preconditionFailure("Shouldn't have gotten here.")
+    }
+    
+    var shapeValue : AIEShape {
+        preconditionFailure("Shouldn't have gotten here.")
+    }
+    
+}

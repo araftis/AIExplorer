@@ -33,26 +33,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef struct _aieShape {
-    NSInteger width;
-    NSInteger height;
-    NSInteger depth;
-} AIEShape;
+@class AIEShape;
 
-extern AIEShape AIEShapeMake(NSInteger width, NSInteger height, NSInteger depth);
-extern BOOL AIEShapesEqual(AIEShape lhs, AIEShape rhs);
+typedef NSString * const AIEShapeLabel NS_TYPED_EXTENSIBLE_ENUM;
 
-extern AIEShape AIEShapeZero;
-extern AIEShape AIEShapeIdentity;
-
-extern AIEShape AIEShapeFromString(NSString *string);
-extern NSString *AIEStringFromShape(AIEShape size);
-
-@interface NSValue (AIEShapeExtensions)
-
-+ (NSValue *)valueWithShape:(AIEShape)size;
-@property (nonatomic,readonly) AIEShape shapeValue;
-
-@end
+extern AIEShapeLabel AIEShapeLabelWidth;
+extern AIEShapeLabel AIEShapeLabelHeight;
+extern AIEShapeLabel AIEShapeLabelDepth;
 
 NS_ASSUME_NONNULL_END

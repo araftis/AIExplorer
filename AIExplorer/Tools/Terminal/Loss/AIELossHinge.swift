@@ -38,4 +38,8 @@ public extension AIELossIndentifier {
 @objcMembers
 open class AIELossHinge: AIELoss {
 
+    open override class var ajr_nameForXMLArchiving: String {
+        return "aieLossHinge"
+    }
+
 }

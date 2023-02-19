@@ -160,7 +160,7 @@ open class AIEDocument: DrawDocument {
     /**
      Removes the specified code definition.
 
-     - parameter codeDefiniton: The Code definition to remove.
+     - parameter codeDefinition: The Code definition to remove.
      */
     @discardableResult
     open func removeCodeDefinition(_ codeDefinition: AIECodeDefinition) -> AIECodeDefinition? {

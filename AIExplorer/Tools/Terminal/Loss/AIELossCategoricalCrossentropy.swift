@@ -58,4 +58,8 @@ open class AIELossCategoricalCrossentropy: AIELoss {
         coder.encode(classCount, forKey: "classCount")
     }
 
+    open override class var ajr_nameForXMLArchiving: String {
+        return "aieLossCategoricalCrossentropy"
+    }
+
 }

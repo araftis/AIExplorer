@@ -91,8 +91,8 @@ open class AIEConvolution: AIEGraphic {
     open var size : AIEShape = .zero
     open var depth : Int = 0
     open var outputFeatureChannels : Int = 0
-    open var dilation : AIEShape = .identity
-    open var stride : AIEShape = .identity
+    open var dilation : AIEShape = .zero
+    open var stride : AIEShape = .zero
     open var paddingPolicy : PaddingPolicy = .same
     open var paddingSize : AIEShape = .zero
 
@@ -304,7 +304,7 @@ open class AIEConvolution: AIEGraphic {
         return (outputLength + stride - 1) / stride
     }
 
-    public static func output(from input: [Int], size: AIEShape, padding: PaddingPolicy, paddingSize: AIEShape, stride: AIEShape, dilation: AIEShape = .identity) -> [Int] {
+    public static func output(from input: [Int], size: AIEShape, padding: PaddingPolicy, paddingSize: AIEShape, stride: AIEShape, dilation: AIEShape = .zero) -> [Int] {
         assert(input.count >= 3 && input.count <= 5, "input size must be between 3 and 5.")
         var output = input
 

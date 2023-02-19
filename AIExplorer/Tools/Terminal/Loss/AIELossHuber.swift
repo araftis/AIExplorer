@@ -54,4 +54,8 @@ open class AIELossHuber: AIELoss {
         coder.encode(delta, forKey: "delta")
     }
 
+    open override class var ajr_nameForXMLArchiving: String {
+        return "aieLossHuber"
+    }
+
 }

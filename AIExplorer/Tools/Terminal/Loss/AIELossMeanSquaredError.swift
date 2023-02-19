@@ -37,5 +37,9 @@ public extension AIELossIndentifier {
 
 @objcMembers
 open class AIELossMeanSquaredError: AIELoss {
+    
+    open override class var ajr_nameForXMLArchiving: String {
+        return "aieLossMeanSquaredError"
+    }
 
 }

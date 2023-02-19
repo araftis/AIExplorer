@@ -11,6 +11,8 @@
 		210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */; };
 		210F8F922742ECF1004A939D /* AIEMLComputeObjCGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F912742ECF1004A939D /* AIEMLComputeObjCGenerator.swift */; };
 		210F8F942742ED08004A939D /* AIEMLComputeSwiftGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */; };
+		215A9DB829A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */; };
+		215A9DBB29A2C304004BEAB6 /* AIEShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */; };
 		2169BA2F2748799B00A5407D /* AIEIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2169BA2E2748799B00A5407D /* AIEIO.swift */; };
 		21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FCD9CA27067AD80049E558 /* AIETitle.swift */; };
 		21FFE2F929131D7700A79F8F /* AIELogicTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE2F829131D7700A79F8F /* AIELogicTool.swift */; };
@@ -217,6 +219,9 @@
 		210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEMessagesInspector.xib; sourceTree = "<group>"; };
 		210F8F912742ECF1004A939D /* AIEMLComputeObjCGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeObjCGenerator.swift; sourceTree = "<group>"; };
 		210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeSwiftGenerator.swift; sourceTree = "<group>"; };
+		215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEInspectorSliceShape.swift; sourceTree = "<group>"; };
+		215A9DB929A2C303004BEAB6 /* AIExplorerTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AIExplorerTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEShapeTests.swift; sourceTree = "<group>"; };
 		2169BA2E2748799B00A5407D /* AIEIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEIO.swift; sourceTree = "<group>"; };
 		21FCD9CA27067AD80049E558 /* AIETitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETitle.swift; sourceTree = "<group>"; };
 		21FFE2F829131D7700A79F8F /* AIELogicTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELogicTool.swift; sourceTree = "<group>"; };
@@ -261,7 +266,7 @@
 		21FFE3672995A91800A79F8F /* AIEAdamOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEAdamOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
 		21FFE3692995BC0000A79F8F /* AIERMSPropOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIERMSPropOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
 		21FFE36B2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIESGDOptimizer+TensorFlow.swift"; sourceTree = "<group>"; };
-		21FFE36D2999BDC900A79F8F /* AIEImageDataSource.inspector */ = {isa = PBXFileReference; lastKnownFileType = file; name = AIEImageDataSource.inspector; path = AIExplorer/Tools/IO/Image/AIEImageDataSource.inspector; sourceTree = SOURCE_ROOT; };
+		21FFE36D2999BDC900A79F8F /* AIEImageDataSource.inspector */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = AIEImageDataSource.inspector; path = AIExplorer/Tools/IO/Image/AIEImageDataSource.inspector; sourceTree = SOURCE_ROOT; };
 		21FFE36F2999BDE400A79F8F /* AIEImageDataSourceCIFAR10.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEImageDataSourceCIFAR10.inspector; sourceTree = "<group>"; };
 		21FFE3712999BDFA00A79F8F /* AIEImageDataSourceMNIST.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEImageDataSourceMNIST.inspector; sourceTree = "<group>"; };
 		21FFE3732999BE0600A79F8F /* AIEImageDataSourcePath.inspector */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AIEImageDataSourcePath.inspector; sourceTree = "<group>"; };
@@ -646,7 +651,9 @@
 			isa = PBXGroup;
 			children = (
 				FA18B4A625AEA257000DEF0C /* AIExplorerTests.m */,
+				215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */,
 				FA18B4A825AEA257000DEF0C /* Info.plist */,
+				215A9DB929A2C303004BEAB6 /* AIExplorerTests-Bridging-Header.h */,
 			);
 			path = AIExplorerTests;
 			sourceTree = "<group>";
@@ -817,6 +824,7 @@
 				FABB13BB293D7185002DD56B /* AIEShape.h */,
 				FABB13BC293D7185002DD56B /* AIEShape.m */,
 				FABB13B9293D6F65002DD56B /* AIEShape.swift */,
+				215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */,
 				FABB13C3293D8D02002DD56B /* AIEInspectorSliceShape.strings */,
 			);
 			path = Types;
@@ -916,6 +924,7 @@
 					};
 					FA18B4A025AEA257000DEF0C = {
 						CreatedOnToolsVersion = 12.3;
+						LastSwiftMigration = 1410;
 					};
 				};
 			};
@@ -1039,6 +1048,7 @@
 				FA37E0FB2995E4C4000DB105 /* AIELossHuber.swift in Sources */,
 				FA37E13529988FA1000DB105 /* AIEImageDataSourceCIFAR10.swift in Sources */,
 				21FFE36C2995C41600A79F8F /* AIESGDOptimizer+TensorFlow.swift in Sources */,
+				215A9DB829A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift in Sources */,
 				FA02BF7825B7A7C6001EFBBA /* AIEMatrixMultiplication.swift in Sources */,
 				FA37E12129960018000DB105 /* AIELossLog+TensorFlow.swift in Sources */,
 				FABB13BE293D7185002DD56B /* AIEShape.m in Sources */,
@@ -1137,6 +1147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA18B4A725AEA257000DEF0C /* AIExplorerTests.m in Sources */,
+				215A9DBB29A2C304004BEAB6 /* AIEShapeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1340,6 +1351,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1351,6 +1363,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ajr.application.AIExplorerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AIExplorerTests/AIExplorerTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1358,6 +1373,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1369,6 +1385,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ajr.application.AIExplorerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AIExplorerTests/AIExplorerTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

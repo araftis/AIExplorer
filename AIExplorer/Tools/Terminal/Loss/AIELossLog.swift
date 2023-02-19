@@ -54,4 +54,8 @@ open class AIELossLog: AIELoss {
         coder.encode(epsilon, forKey: "epsilon")
     }
 
+    open override class var ajr_nameForXMLArchiving: String {
+        return "aieLossLog"
+    }
+
 }

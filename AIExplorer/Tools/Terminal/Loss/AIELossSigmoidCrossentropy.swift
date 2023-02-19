@@ -54,4 +54,8 @@ open class AIELossSigmoidCrossentropy: AIELoss {
         coder.encode(labelSmoothing, forKey: "labelSmoothing")
     }
 
+    open override class var ajr_nameForXMLArchiving: String {
+        return "aieLossSigmoidCrossentropy"
+    }
+
 }
