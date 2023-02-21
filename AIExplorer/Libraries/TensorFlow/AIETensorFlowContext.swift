@@ -243,7 +243,13 @@ internal class AIETensorFlowContext {
         }
     }
     
-    func writeFunction(name: String, indented: Bool = false, newlines: Bool = false, suffix: String? = nil, arguments block : () throws -> Void, body: (() throws -> Void)? = nil) throws -> Void {
+    func writeFunction(name: String,
+                       indented: Bool = false,
+                       newlines: Bool = false,
+                       suffix: String? = nil,
+                       documentation: String? = nil,
+                       arguments block : () throws -> Void,
+                       body: (() throws -> Void)? = nil) throws -> Void {
         do {
             separateArgumentsWithNewlines = newlines
             try startWritingFunction(name: name, indented: indented)
@@ -258,10 +264,11 @@ internal class AIETensorFlowContext {
             }
             try stopWritingFunctionArguments(suffix: suffix)
             if let body {
-                if suffix == nil {
-                    try write(":\n")
-                }
                 try indent {
+                    if let documentation {
+                        try writeComment(documentation, longForm: true)
+                        try write("\n")
+                    }
                     try body()
                 }
             }
@@ -270,5 +277,23 @@ internal class AIETensorFlowContext {
             throw error
         }
     }
-    
+
+    func writeFunctionDef(name: String, newlines: Bool = false, documentation: String? = nil, arguments: () throws -> Void, body: (() throws -> Void)? = nil) throws -> Void {
+        try writeFunction(name: "def \(name)", indented: true, newlines: newlines, suffix: ":\n", documentation: documentation, arguments: arguments, body: body)
+    }
+
+    func writeComment(_ comment: String, longForm: Bool = false) throws -> Void {
+        if longForm {
+            try writeIndented("\"\"\"\n")
+            let prefix = String(indent: indent)
+            let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
+            try output.write(wrapped)
+            try writeIndented("\n\"\"\"\n")
+        } else {
+            let prefix = String(indent: indent) + "# "
+            let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
+            try output.write(wrapped)
+        }
+    }
+
 }
