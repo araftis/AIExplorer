@@ -33,7 +33,108 @@ import Cocoa
 
 @objcMembers
 open class AIETensorFlowCodeGenerator: AIECodeGenerator {
+
+    internal func generateHeader(using context: AIETensorFlowContext) throws -> Void {
+        context.stage = .header
+        
+        try context.write("#\n")
+        try context.write("# \(info[.codeName] ?? "Anonymous").m\n")
+        try context.write("#\n")
+        try context.write("# Created by \(NSFullUserName()) on \(Self.simpleDateFormatter.string(from:Date()))\n")
+        try context.write("#\n")
+
+        // Handle Licenses
+        context.stage = .licenses
+        try generateLicenses(using: context)
+        
+        // And finally, all the import statements we'll need.
+        context.stage = .imports
+        try context.write("\n")
+        try context.write("import numpy as np\n")
+        try context.write("import tensorflow as tf\n")
+        try context.write("import tensorflow_datasets as tfds\n")
+        try context.write("\n")
+        try context.write("from tensorflow import keras\n")
+        try context.write("from tensorflow.keras import layers\n")
+        try context.write("from tensorflow.keras import optimizers\n")
+        try context.write("from tensorflow.keras import models\n")
+        try context.write("from tensorflow.keras import losses\n")
+        try context.write("from tensorflow.keras import optimizers\n")
+    }
     
+    internal func generateLicenses(using context: AIETensorFlowContext) throws -> Void {
+        var licenses = [String]()
+        iterateRoots { root in
+            root.iterateGraph { child, stop in
+                if let child = child as? AIETensorFlowCodeWriter,
+                   let license = child.license {
+                    licenses.append(license)
+                }
+            }
+        }
+        for (index, license) in licenses.enumerated() {
+            if index > 0 {
+                try context.write("#\n")
+            }
+            try context.write(license.byWrapping(to: 75, prefix: "# ", lineSeparator: "\n", splitURLs: false))
+            try context.write("\n")
+        }
+    }
+    
+    internal func generateClass(for node: AIETensorFlowCodeWriter, using context: AIETensorFlowContext) throws -> Void {
+        try context.write("\n")
+        try context.write("class \(info[.codeName] ?? "Anonymous"):\n")
+        try context.write("\n")
+        
+        // Create the init method.
+        context.stage = .initArguments
+        try context.writeFunction(name: "def __init__", indented: true, suffix: ":\n") {
+            try context.writeArgument("self")
+            try node.generateInitArguments(context: context)
+        }
+        try context.indent {
+            context.stage = .initialization
+            let wroteCode = try node.generateInitializationCode(context: context)
+            if !wroteCode  {
+                try context.writeIndented("pass\n")
+            } else {
+                try context.write("\n")
+            }
+        }
+
+        // Write any additional methods desired by our nodes.
+        context.stage = .methods
+        try node.generateMethodsCode(context: context)
+
+        // Declare the build method. This actually builds and compiles.
+        try context.write("\n")
+        try context.writeFunction(name: "def build_model", indented: true, suffix: ":\n") {
+            try context.writeArgument("self")
+            try context.writeArgument("isTraining=False")
+        }
+
+        try context.indent {
+            context.stage = .build
+            
+            // Write the model declaration.
+            try context.writeIndented("# Define the model as a Sequential model. This should cover most situations,\n")
+            try context.writeIndented("# but there's a good chance we'll need to improve this in the future.\n")
+            try context.writeIndented("model = models.Sequential(")
+            if let name = info[.codeName] {
+                try context.write("name='\(name)'")
+            }
+            try context.write(")\n")
+            try context.write("\n")
+            
+            // And generate the model.
+            try node.generateCode(context: context)
+            try context.write("\n")
+            
+            // And finally return the model.
+            try context.writeIndented("return model")
+        }
+    }
+
     public override func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
         // First, we're going to look over our roots. All roots must be an IO node of some sort.
         iterateRoots { root in
@@ -42,67 +143,14 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             }
         }
         
-        try outputStream.indent(0).write("#\n")
-        try outputStream.indent(0).write("# \(info[.codeName] ?? "Anonymous").m\n")
-        try outputStream.indent(0).write("#\n")
-        try outputStream.indent(0).write("# Created by \(NSFullUserName()) on \(Self.simpleDateFormatter.string(from:Date()))\n")
-        try outputStream.indent(0).write("#\n")
-        try outputStream.indent(0).write("\n")
-        try outputStream.indent(0).write("import numpy as np\n")
-        try outputStream.indent(0).write("import tensorflow as tf\n")
-        try outputStream.indent(0).write("\n")
-        try outputStream.indent(0).write("from tensorflow import keras\n")
-        try outputStream.indent(0).write("from tensorflow.keras import layers\n")
-        try outputStream.indent(0).write("from tensorflow.keras import optimizers\n")
-        try outputStream.indent(0).write("from tensorflow.keras import models\n")
-        try outputStream.indent(0).write("from tensorflow.keras import losses\n")
-        try outputStream.indent(0).write("from tensorflow.keras import optimizers\n")
+        let context = AIETensorFlowContext(outputStream: outputStream, indent: 1)
+        
+        try generateHeader(using: context)
 
         // TODO: Make this smarter. If we're going to allow multiple roots, we need to make sure we generate a class for each root, but that also means we need to attach the name of the neural net to the root node, which is an I/O node? Need to think about that last thing.
         try iterateRoots(using: { node in
-            try outputStream.indent(0).write("\n")
-
             if let node = node as? AIETensorFlowCodeWriter {
-                try outputStream.indent(0).write("class \(info[.codeName] ?? "Anonymous"):\n")
-                try outputStream.indent(0).write("\n")
-                
-                let context = AIETensorFlowContext(outputStream: outputStream, indent: 1)
-                
-                // Create the init method.
-                try context.writeIndented("def __init__(self):\n")
-                context.stage = .initialization
-                context.incrementIndent()
-                let wroteCode = try node.generateCreationInsideInit(context: context)
-                messages.append(contentsOf: context.messages)
-                if !wroteCode  {
-                    try context.writeIndented("pass\n")
-                }
-                context.decrementIndent()
-
-                // Declare the build method. This actually builds and compiles.
-                try context.write("\n")
-                try context.writeIndented("def buildModel(self, isTraining=False):\n")
-                context.incrementIndent()
-
-                // Write the model declaration.
-                try context.writeIndented("# Define the model as a Sequential model. This should cover most situations,\n")
-                try context.writeIndented("# but there's a good chance we'll need to improve this in the future.\n")
-                try context.writeIndented("model = models.Sequential(")
-                if let name = info[.codeName] {
-                    try context.write("name='\(name)'")
-                }
-                try context.write(")\n")
-                try context.write("\n")
-                
-                // And generate the model.
-                context.stage = .build
-                try node.generateCode(context: context)
-                try context.write("\n")
-                
-                // And finally return the model.
-                try context.writeIndented("return model")
-                messages.append(contentsOf: context.messages)
-                context.decrementIndent()
+                try generateClass(for: node, using: context)
             } else {
                 messages.append(AIEMessage(type: .error, message: "\(Swift.type(of:node)) is not supported with TensorFlow.", on: node))
                 try outputStream.indent(1).write("// \(Swift.type(of:node)) is not supported with TensorFlow.\n")
@@ -110,6 +158,8 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         })
         try outputStream.indent(0).write("\n")
         try outputStream.indent(0).write("\n")
+        
+        messages.append(contentsOf: context.messages)
     }
     
 }

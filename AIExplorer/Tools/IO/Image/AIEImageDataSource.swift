@@ -40,7 +40,7 @@ public extension AIEDataSourceIndentifier {
 }
 
 @objcMembers
-open class AIEImageDataSource: AIEDataSource, AJRXMLCoding {
+open class AIEImageDataSource: AIEDataSource, AJRXMLCoding, AIEMessageObject {
     
     open class var defaultWidth : Int { return 0 }
     open class var defaultHeight : Int { return 0 }
@@ -145,4 +145,15 @@ open class AIEImageDataSource: AIEDataSource, AJRXMLCoding {
         return string
     }
 
+    // MARK: - AIEMessageObject
+    
+    public var messagesTitle: String {
+        return "Image Data Source"
+    }
+    
+    public var messagesImage: NSImage? {
+        return nil
+    }
+
+    
 }

@@ -40,13 +40,46 @@ internal protocol AIETensorFlowCodeWriter : AIEMessageObject {
      
      If the receiver doesn't generate code, it should return `false`, otherwise `true`.
      
-     There's a default implementation of this method that simply returns `false`.
-     
+     There is a default implementation of this function that always returns `false`, so you only need to implement this if you plan to actually do something.
+
      - parameter context: The generation context with the current state of generation.
+     
+     - returns If you write any code, you should return `true`.
      */
     @discardableResult
-    func generateCreationInsideInit(context: AIETensorFlowContext) throws -> Bool
+    func generateInitializationCode(context: AIETensorFlowContext) throws -> Bool
+
+    /**
+     When called, the context will be writing a function, so this allows you to add an argument to the init() method.
+     
+     Note that the context will be in the code for generating a function call, so the only valid call you can make on the context is `writeArgument()`.
+     
+     There is a default implementation of this function that always returns `false`, so you only need to implement this if you plan to actually do something.
+     
+     - parameter context: The context we're writing into.
+     
+     - returns If you actually write any code, you should return `true`.
+     */
+    @discardableResult
+    func generateInitArguments(context: AIETensorFlowContext) throws -> Bool
     
+    /**
+     Allows the node to generate additional methods on the NN class.
+     
+     This method is useful if you're node type needs to generate additional methods. For example, if we hit an input node, and it has a data source, then we could generate code to create and load the dataSource object.
+
+     - parameter context: The context we're writing into.
+     
+     - returns If you actually write any code, you should return `true`.
+     */
+    @discardableResult
+    func generateMethodsCode(context: AIETensorFlowContext) throws -> Bool
+    
+    /**
+     If something in your node has a special license, this allows you to return it.
+     */
+    var license : String? { get }
+
     func appendParent(context: AIETensorFlowContext) throws -> Void
     func progressToChild(context: AIETensorFlowContext) throws -> Void
     var destinationObjects : [AIEGraphic] { get }
@@ -62,10 +95,23 @@ internal protocol AIETensorFlowCodeWriter : AIEMessageObject {
 }
 
 extension AIETensorFlowCodeWriter {
-
-    func generateCreationInsideInit(context: AIETensorFlowContext) throws -> Bool {
-        return false
+    
+    func generateInitializationCode(context: AIETensorFlowContext) throws -> Bool {
+        try progressToChild(context: context)
+        return context.generatedCode
     }
+    
+    func generateInitArguments(context: AIETensorFlowContext) throws -> Bool {
+        try progressToChild(context: context)
+        return context.generatedCode
+    }
+    
+    func generateMethodsCode(context: AIETensorFlowContext) throws -> Bool {
+        try progressToChild(context: context)
+        return context.generatedCode
+    }
+    
+    var license : String? { return nil }
     
     func appendParent(context: AIETensorFlowContext) throws -> Void {
         if let parent = context.parent {
@@ -89,8 +135,18 @@ extension AIETensorFlowCodeWriter {
                 context.push(self)
                 let generatedCode : Bool
                 switch context.stage {
+                case .header:
+                    generatedCode = false
+                case .licenses:
+                    generatedCode = false
+                case .imports:
+                    generatedCode = false
+                case .initArguments:
+                    generatedCode = try child.generateInitArguments(context: context)
                 case .initialization:
-                    generatedCode = try child.generateCreationInsideInit(context: context)
+                    generatedCode = try child.generateInitializationCode(context: context)
+                case .methods:
+                    generatedCode = try child.generateMethodsCode(context: context)
                 case .build:
                     generatedCode = try child.generateCode(context: context)
                 }

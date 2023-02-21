@@ -67,8 +67,7 @@ extension AIETerminus : AIETensorFlowCodeWriter {
         
         // Finally, write the compile line.
         try context.write("")
-        try context.writeIndented("")
-        try context.writeFunction(name: "model.compile") {
+        try context.writeFunction(name: "model.compile", indented: true) {
             try context.writeArgument(lossName != nil, "loss=\(lossName ?? "")")
             try context.writeArgument(optimizerName != nil, "optimizer=\(optimizerName ?? "")")
         }

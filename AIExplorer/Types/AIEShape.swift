@@ -66,8 +66,12 @@ public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, A
     
     // MARK: - Convenience Properties
     
-    public class var zero : AIEShape {
+    public class var zeroImage : AIEShape {
         return AIEShape()
+    }
+    
+    public class var zeroSize : AIEShape {
+        return AIEShape(labels: [.width,.height], values: [0, 0])
     }
     
     public var width : Int {

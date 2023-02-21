@@ -13,6 +13,9 @@
 		210F8F942742ED08004A939D /* AIEMLComputeSwiftGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */; };
 		215A9DB829A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */; };
 		215A9DBB29A2C304004BEAB6 /* AIEShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */; };
+		215A9DBE29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBD29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift */; };
+		215A9DC029A2DDA3004BEAB6 /* AIEImageDataSourceMNIST+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBF29A2DDA3004BEAB6 /* AIEImageDataSourceMNIST+TensorFlow.swift */; };
+		215A9DC229A2E1FC004BEAB6 /* AIEImageDataSourcePath+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DC129A2E1FC004BEAB6 /* AIEImageDataSourcePath+TensorFlow.swift */; };
 		2169BA2F2748799B00A5407D /* AIEIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2169BA2E2748799B00A5407D /* AIEIO.swift */; };
 		21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FCD9CA27067AD80049E558 /* AIETitle.swift */; };
 		21FFE2F929131D7700A79F8F /* AIELogicTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFE2F829131D7700A79F8F /* AIELogicTool.swift */; };
@@ -222,6 +225,9 @@
 		215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEInspectorSliceShape.swift; sourceTree = "<group>"; };
 		215A9DB929A2C303004BEAB6 /* AIExplorerTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AIExplorerTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEShapeTests.swift; sourceTree = "<group>"; };
+		215A9DBD29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEImageDataSourceCIFAR10+TensorFlow.swift"; sourceTree = "<group>"; };
+		215A9DBF29A2DDA3004BEAB6 /* AIEImageDataSourceMNIST+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEImageDataSourceMNIST+TensorFlow.swift"; sourceTree = "<group>"; };
+		215A9DC129A2E1FC004BEAB6 /* AIEImageDataSourcePath+TensorFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIEImageDataSourcePath+TensorFlow.swift"; sourceTree = "<group>"; };
 		2169BA2E2748799B00A5407D /* AIEIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEIO.swift; sourceTree = "<group>"; };
 		21FCD9CA27067AD80049E558 /* AIETitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIETitle.swift; sourceTree = "<group>"; };
 		21FFE2F829131D7700A79F8F /* AIELogicTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIELogicTool.swift; sourceTree = "<group>"; };
@@ -427,6 +433,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		215A9DBC29A2DB3C004BEAB6 /* Data Sources */ = {
+			isa = PBXGroup;
+			children = (
+				215A9DBD29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift */,
+				215A9DBF29A2DDA3004BEAB6 /* AIEImageDataSourceMNIST+TensorFlow.swift */,
+				215A9DC129A2E1FC004BEAB6 /* AIEImageDataSourcePath+TensorFlow.swift */,
+			);
+			path = "Data Sources";
+			sourceTree = "<group>";
+		};
 		21FFE2F729130DB700A79F8F /* Logic */ = {
 			isa = PBXGroup;
 			children = (
@@ -443,6 +459,7 @@
 		21FFE3242983490100A79F8F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				215A9DBC29A2DB3C004BEAB6 /* Data Sources */,
 				21FFE3612995A4B600A79F8F /* Losses */,
 				21FFE3622995A4BB00A79F8F /* Optimizers */,
 				21FFE33529834A0A00A79F8F /* AIEActivation+TensorFlow.swift */,
@@ -1030,6 +1047,7 @@
 				FA02BF7C25B7A7D9001EFBBA /* AIEFullyConnected.swift in Sources */,
 				21FFE2F929131D7700A79F8F /* AIELogicTool.swift in Sources */,
 				FA18B4E125AEA305000DEF0C /* AIEPooling.swift in Sources */,
+				215A9DC029A2DDA3004BEAB6 /* AIEImageDataSourceMNIST+TensorFlow.swift in Sources */,
 				FA37E0F92995E4B8000DB105 /* AIELossHinge.swift in Sources */,
 				FABD168925CA5556000294E3 /* AIEDocument.swift in Sources */,
 				FA02BF9925B7AAEA001EFBBA /* AIESlice.swift in Sources */,
@@ -1059,6 +1077,7 @@
 				FA37E12F29988AA1000DB105 /* AIEDataSource.swift in Sources */,
 				FA8E369125BF8E0400EB554F /* AIEMLCompute.swift in Sources */,
 				21FFE33A29834A7500A79F8F /* AIEBatchNormalization+TensorFlow.swift in Sources */,
+				215A9DBE29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift in Sources */,
 				FA02BFCB25B7ADE9001EFBBA /* AIEYOLOLoss.swift in Sources */,
 				FA02BF6A25B7A6D6001EFBBA /* AIEMathTool.swift in Sources */,
 				FA37E11B2995FF16000DB105 /* AIELossCosineDistance+TensorFlow.swift in Sources */,
@@ -1135,6 +1154,7 @@
 				FA18B4E225AEA305000DEF0C /* AIEConvolution.swift in Sources */,
 				FA37E125299600A2000DB105 /* AIELossMeanSquaredError+TensorFlow.swift in Sources */,
 				21FFE330298349C500A79F8F /* AIEReshape+TensorFlow.swift in Sources */,
+				215A9DC229A2E1FC004BEAB6 /* AIEImageDataSourcePath+TensorFlow.swift in Sources */,
 				FA02BF5925B78527001EFBBA /* AIESoftmax.swift in Sources */,
 				FA37E13729988FAD000DB105 /* AIEImageDataSourcePath.swift in Sources */,
 				FA18B4DE25AEA305000DEF0C /* AIEIOTool.swift in Sources */,

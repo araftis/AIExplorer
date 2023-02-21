@@ -413,6 +413,34 @@ open class AIEGraphic: DrawGraphic, AIEMessageObject {
         return exitLinks
     }
 
+    @discardableResult
+    internal func iterate(graph node: AIEGraphic,
+                          visited: inout Set<AIEGraphic>,
+                          using block: (_ node: AIEGraphic, _ stop: inout Bool) throws -> Void) rethrows -> Bool {
+        var stop = false
+        if !visited.contains(node) {
+            // Note that we've visited this node.
+            visited.insert(node)
+            try block(node, &stop)
+            if !stop {
+                for exitLink in node.exitLinks {
+                    if let childNode = exitLink.destination as? AIEGraphic {
+                        stop = try iterate(graph: childNode, visited: &visited, using: block)
+                    }
+                    if stop {
+                        break
+                    }
+                }
+            }
+        }
+        return stop
+    }
+    
+    open func iterateGraph(using block: (_ node: AIEGraphic, _ stop: inout Bool) throws -> Void) rethrows -> Void {
+        var visited = Set<AIEGraphic>()
+        try iterate(graph: self, visited: &visited, using: block)
+    }
+    
     internal func traverse(graph: AIEGraphic, visited: inout Set<AIEGraphic>, counts: inout AJRCountedSet<String>) -> Void {
         if !visited.contains(graph) {
             // Note that we've visited this node.

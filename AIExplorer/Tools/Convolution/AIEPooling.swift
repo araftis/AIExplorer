@@ -66,11 +66,11 @@ open class AIEPooling: AIEGraphic {
 
     // MARK: - Properties
 
-    open var size : AIEShape = .zero
-    open var stride : AIEShape = .zero
-    open var dilation : AIEShape = .zero
+    open var size : AIEShape = .zeroSize
+    open var stride : AIEShape = .zeroSize
+    open var dilation : AIEShape = .zeroSize
     open var paddingPolicy : AIEConvolution.PaddingPolicy = .same
-    open var padding : AIEShape = .zero
+    open var padding : AIEShape = .zeroSize
     open var countIncludesPadding : Bool = false
 
     // MARK: - Creation

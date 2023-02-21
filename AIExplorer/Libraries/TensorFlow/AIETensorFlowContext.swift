@@ -33,7 +33,12 @@ import Cocoa
 
 internal enum AIEStage {
     
+    case header
+    case licenses
+    case imports
+    case initArguments
     case initialization
+    case methods
     case build
     
 }
@@ -160,6 +165,14 @@ internal class AIETensorFlowContext {
         }
     }
     
+    func indent(_ indentedBlock: () throws -> Void) rethrows -> Void {
+        incrementIndent()
+        defer {
+            decrementIndent()
+        }
+        try indentedBlock()
+    }
+    
     // MARK: - Writing Conveniences
     
     func write(_ string: String) throws -> Void {
@@ -167,16 +180,41 @@ internal class AIETensorFlowContext {
     }
     
     func writeIndented(_ string: String) throws -> Void {
-        try output.indent(indent).write(string)
+        var foundError : Error? = nil
+        var lineIndex : Int = 0
+        
+        string.enumerateLines { line, stop in
+            do {
+                if lineIndex > 0 {
+                    try self.output.write("\n")
+                }
+                try self.output.indent(self.indent).write(line)
+            } catch {
+                foundError = error
+                stop = true
+            }
+            lineIndex += 1
+        }
+        if let foundError {
+            throw foundError
+        }
+        if string.hasSuffix("\n") {
+            try output.write("\n")
+        }
     }
     
     // MARK: - Arguments
 
     var argumentsWritten : Int = 0
+    var separateArgumentsWithNewlines : Bool = false
     
-    func startWritingFunction(name: String) throws -> Void {
+    func startWritingFunction(name: String, indented: Bool = false) throws -> Void {
         argumentsWritten = 0
-        try write("\(name)(")
+        if indented {
+            try writeIndented("\(name)(")
+        } else {
+            try write("\(name)(")
+        }
     }
     
     func writeArgument(_ condition : @autoclosure () -> Bool, _ string: String) throws -> Void {
@@ -184,21 +222,49 @@ internal class AIETensorFlowContext {
             if argumentsWritten > 0 {
                 try write(", ")
             }
+            if separateArgumentsWithNewlines {
+                try write("\n")
+                try writeIndented("")
+            }
             try write(string)
             argumentsWritten += 1
         }
     }
     
-    func stopWritingFunctionArguments() throws -> Void {
-        argumentsWritten = 0
-        try write(")")
+    func writeArgument(_ string: String) throws -> Void {
+        try writeArgument(true, string)
     }
     
-    func writeFunction(name: String, arguments block : () throws -> Void) throws -> Void {
+    func stopWritingFunctionArguments(suffix: String? = nil) throws -> Void {
+        argumentsWritten = 0
+        try write(")")
+        if let suffix {
+            try write(suffix)
+        }
+    }
+    
+    func writeFunction(name: String, indented: Bool = false, newlines: Bool = false, suffix: String? = nil, arguments block : () throws -> Void, body: (() throws -> Void)? = nil) throws -> Void {
         do {
-            try startWritingFunction(name: name)
+            separateArgumentsWithNewlines = newlines
+            try startWritingFunction(name: name, indented: indented)
+            if separateArgumentsWithNewlines {
+                incrementIndent()
+            }
             try block()
-            try stopWritingFunctionArguments()
+            if separateArgumentsWithNewlines {
+                try write("\n")
+                decrementIndent()
+                try writeIndented("")
+            }
+            try stopWritingFunctionArguments(suffix: suffix)
+            if let body {
+                if suffix == nil {
+                    try write(":\n")
+                }
+                try indent {
+                    try body()
+                }
+            }
         } catch {
             argumentsWritten = 0
             throw error

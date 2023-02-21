@@ -88,13 +88,13 @@ open class AIEConvolution: AIEGraphic {
 
     // MARK: - Properties
     open var type : `Type` = .standard
-    open var size : AIEShape = .zero
+    open var size : AIEShape = .zeroSize
     open var depth : Int = 0
     open var outputFeatureChannels : Int = 0
-    open var dilation : AIEShape = .zero
-    open var stride : AIEShape = .zero
+    open var dilation : AIEShape = .zeroSize
+    open var stride : AIEShape = .zeroSize
     open var paddingPolicy : PaddingPolicy = .same
-    open var paddingSize : AIEShape = .zero
+    open var paddingSize : AIEShape = .zeroSize
 
     open var inputFeatureChannels : Int {
         if let inputShape,
@@ -257,16 +257,16 @@ open class AIEConvolution: AIEGraphic {
         if outputFeatureChannels != 0 {
             coder.encode(outputFeatureChannels, forKey: "outputFeatureChannels")
         }
-        if dilation != .zero {
+        if dilation != .zeroSize {
             coder.encode(dilation, forKey: "dilation")
         }
-        if stride != .zero {
+        if stride != .zeroSize {
             coder.encode(stride, forKey: "stride")
         }
         if paddingPolicy != .same {
             coder.encode(paddingPolicy, forKey: "paddingPolicy")
         }
-        if paddingSize != .zero {
+        if paddingSize != .zeroSize {
             coder.encode(paddingSize, forKey: "paddingSize")
         }
     }
@@ -304,7 +304,7 @@ open class AIEConvolution: AIEGraphic {
         return (outputLength + stride - 1) / stride
     }
 
-    public static func output(from input: [Int], size: AIEShape, padding: PaddingPolicy, paddingSize: AIEShape, stride: AIEShape, dilation: AIEShape = .zero) -> [Int] {
+    public static func output(from input: [Int], size: AIEShape, padding: PaddingPolicy, paddingSize: AIEShape, stride: AIEShape, dilation: AIEShape = .zeroSize) -> [Int] {
         assert(input.count >= 3 && input.count <= 5, "input size must be between 3 and 5.")
         var output = input
 

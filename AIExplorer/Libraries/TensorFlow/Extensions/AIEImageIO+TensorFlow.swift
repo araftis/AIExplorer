@@ -31,7 +31,37 @@
 import Foundation
 
 extension AIEImageIO : AIETensorFlowCodeWriter {
+    
+    internal func generateInitArguments(context: AIETensorFlowContext) throws -> Bool {
+        try context.writeArgument("dataSource=None")
+        try progressToChild(context: context)
+        return true
+    }
 
+    internal func generateInitializationCode(context: AIETensorFlowContext) throws -> Bool {
+        if let dataSource = dataSource as? AIETensorFlowCodeWriter {
+            if try dataSource.generateInitializationCode(context: context) {
+                context.generatedCode = true
+            }
+        } else {
+            context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of:dataSource)) doesn't support generating code for TensorFlow.", on: dataSource))
+        }
+        try progressToChild(context: context)
+        return context.generatedCode
+    }
+    
+    internal func generateMethodsCode(context: AIETensorFlowContext) throws -> Bool {
+        if let dataSource = dataSource as? AIETensorFlowCodeWriter {
+            if try dataSource.generateMethodsCode(context: context) {
+                context.generatedCode = true
+            }
+        } else {
+            context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of:dataSource)) doesn't support generating code for TensorFlow.", on: dataSource))
+        }
+        try progressToChild(context: context)
+        return context.generatedCode
+    }
+    
     internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
         if batchSize <= 0 {
             context.add(message: AIEMessage(type: .warning, message: "The input node should define a batch size.", on: self))
@@ -50,5 +80,13 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
         
         return true
     }
+    
+    internal var license: String? {
+        if let dataSource = dataSource as? AIETensorFlowCodeWriter {
+            return dataSource.license
+        }
+        return nil
+    }
+    
 }
 

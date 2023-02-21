@@ -11,7 +11,7 @@ import AIExplorer
 internal class AIEXMLCodingTestObject : NSObject, AJRXMLCoding {
     
     
-    public var shape : AIEShape = .zero
+    public var shape : AIEShape = .zeroSize
     
     required override init() {
     }
@@ -42,8 +42,8 @@ final class AIEShapeTests: XCTestCase {
     }
 
     func testBasics() throws {
-        let shape = AIEShape.zero
-        XCTAssert(shape == AIEShape.zero)
+        let shape = AIEShape.zeroImage
+        XCTAssert(shape == AIEShape.zeroImage)
         XCTAssert("\(shape)" == "{height=0; width=0; depth=0}")
     }
     
