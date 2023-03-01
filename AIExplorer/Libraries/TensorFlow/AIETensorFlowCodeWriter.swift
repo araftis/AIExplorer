@@ -80,6 +80,13 @@ internal protocol AIETensorFlowCodeWriter : AIEMessageObject {
      */
     var license : String? { get }
 
+    /**
+     Returns a list of required imports.
+
+     Note that we'll have a general set already imported, but in case you need to import more, you can return them here. The set will be uniqued, so import statements will only happen once.
+     */
+    var imports : [String] { get }
+
     func appendParent(context: AIETensorFlowContext) throws -> Void
     func progressToChild(context: AIETensorFlowContext) throws -> Void
     var destinationObjects : [AIEGraphic] { get }
@@ -112,6 +119,8 @@ extension AIETensorFlowCodeWriter {
     }
     
     var license : String? { return nil }
+
+    var imports : [String] { return [] }
     
     func appendParent(context: AIETensorFlowContext) throws -> Void {
         if let parent = context.parent {

@@ -19,7 +19,12 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
 
     internal func generatePrepareDataset(context: AIETensorFlowContext) throws -> Void {
         try context.write("\n")
-        try context.writeFunction(name: "def prepare_data_source", indented: true) {
+        let documentation = """
+            Prepares the data for training. You don't need to call this if you're just going to load the model and then use inference.
+
+            In this case, this will download the MNIST data, if it's not already been downloaded, load it, and then normalize the data. Normalization is done by converting the data from gray scale values of 0 to 255 to values of 0.0 to 1.0.
+            """
+        try context.writeFunctionDef(name: "prepare_data_source", documentation: documentation) {
             try context.writeArgument("self")
         } body: {
             try context.writeIndented("""
@@ -36,7 +41,7 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
             
             try context.write("\n")
             try context.writeIndented("# A useful little function to normalize the data's values from 0-255 to 0.0 to 1.0.\n")
-            try context.writeFunction(name: "def normalize_img", indented: true, suffix: ":\n") {
+            try context.writeFunctionDef(name: "normalize_img") {
                 try context.writeArgument("image")
                 try context.writeArgument("label")
             }
@@ -73,21 +78,21 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
     
     internal func generatePropertyGetters(context: AIETensorFlowContext) throws -> Void {
         try context.write("\n")
-        try context.writeFunction(name: "def get_dataset_info", indented: true) {
+        try context.writeFunctionDef(name: "get_dataset_info") {
             try context.writeArgument("self")
         } body: {
             try context.writeIndented("self.prepare_data_source()\n")
             try context.writeIndented("return self.dataset_info\n")
         }
         try context.write("\n")
-        try context.writeFunction(name: "def get_dataset_train", indented: true) {
+        try context.writeFunctionDef(name: "get_dataset_train") {
             try context.writeArgument("self")
         } body: {
             try context.writeIndented("self.prepare_data_source()\n")
             try context.writeIndented("return self.dataset_train\n")
         }
         try context.write("\n")
-        try context.writeFunction(name: "def get_dataset_test", indented: true) {
+        try context.writeFunctionDef(name: "get_dataset_test") {
             try context.writeArgument("self")
         } body: {
             try context.writeIndented("self.prepare_data_source()\n")
@@ -111,6 +116,10 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
             
             Yann LeCun and Corinna Cortes hold the copyright of MNIST dataset, which is a derivative work from original NIST datasets. MNIST dataset is made available under the terms of the [Creative Commons Attribution-Share Alike 3.0 license.](https://creativecommons.org/licenses/by-sa/3.0/)
             """
+    }
+
+    var imports : [String] {
+        return ["import tensorflow_datasets as tfds"]
     }
     
     var destinationObjects: [AIEGraphic] {

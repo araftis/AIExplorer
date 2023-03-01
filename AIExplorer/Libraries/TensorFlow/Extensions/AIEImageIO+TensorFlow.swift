@@ -82,11 +82,14 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
     }
     
     internal var license: String? {
-        if let dataSource = dataSource as? AIETensorFlowCodeWriter {
-            return dataSource.license
-        }
-        return nil
+        guard let dataSource = dataSource as? AIETensorFlowCodeWriter else { return nil }
+        return dataSource.license
     }
-    
+
+    internal var imports: [String] {
+        guard let dataSource = dataSource as? AIETensorFlowCodeWriter else { return [] }
+        return dataSource.imports
+    }
+
 }
 

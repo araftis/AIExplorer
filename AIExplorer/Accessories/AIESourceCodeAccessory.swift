@@ -84,7 +84,12 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
+
+        // This is not "just working", and I'm not going to spend time debugging right now. Besides, I think I can do this better, given a little time.
+//        if let syntaxDefinition = try? AJRSyntaxDefinition(name: "Python"),
+//           let syntaxTextStorage = AJRSyntaxTextStorage(syntaxDefinition: syntaxDefinition) {
+//            sourceTextView.layoutManager?.replaceTextStorage(syntaxTextStorage)
+//        }
     }
 
     // MARK: - DrawViewController
