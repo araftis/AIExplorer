@@ -112,7 +112,7 @@ open class AIEDocument: DrawDocument {
 
     // MARK: - Code
 
-    open func createCodeDefintion() -> AIECodeDefinition {
+    open func createCodeDefinition() -> AIECodeDefinition {
         let newCode = AIECodeDefinition(in: self)
 
         addCodeDefinition(newCode)
