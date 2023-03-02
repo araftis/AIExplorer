@@ -38,9 +38,10 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         context.stage = .header
         
         try context.write("#\n")
-        try context.write("# \(info[.codeName] ?? "Anonymous").m\n")
+        try context.write("# \(info[.codeName] ?? "Anonymous").py\n")
         try context.write("#\n")
         try context.write("# Created by \(NSFullUserName()) on \(Self.simpleDateFormatter.string(from:Date()))\n")
+        try context.write("# Copyright © \(Self.yearDateFormatter.string(from:Date())), All rights reserved.\n")
         try context.write("#\n")
 
         // Handle Licenses

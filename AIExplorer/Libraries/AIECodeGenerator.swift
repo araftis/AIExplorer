@@ -76,10 +76,18 @@ open class AIECodeGenerator: NSObject {
     
     open class var simpleDateFormatter : DateFormatter {
         let formatter = DateFormatter()
-        
+
         formatter.dateStyle = .short
         formatter.timeStyle = .none
-        
+
+        return formatter
+    }
+
+    open class var yearDateFormatter : DateFormatter {
+        let formatter = DateFormatter()
+
+        formatter.dateFormat = "YYYY"
+
         return formatter
     }
 
