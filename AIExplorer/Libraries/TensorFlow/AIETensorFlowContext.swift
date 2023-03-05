@@ -45,21 +45,21 @@ internal class AIETensorFlowContext : AIECodeGeneratorContext {
         case .classDocumentation:
             break
         case .methodDocumentation:
-            try writeIndented("\"\"\"\n")
+            try write("\"\"\"\n")
             let prefix = String(indent: indent)
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
-            try writeIndented("\n\"\"\"\n\n")
+            try write("\n\"\"\"\n\n")
         case .singleLine:
             let prefix = String(indent: indent) + "# "
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
         case .multiline:
-            try writeIndented("\"\"\"\n")
+            try write("\"\"\"\n")
             let prefix = String(indent: indent)
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
-            try writeIndented("\n\"\"\"\n")
+            try write("\n\"\"\"\n")
         }
     }
     

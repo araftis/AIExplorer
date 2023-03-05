@@ -39,8 +39,8 @@ extension AIETerminus : AIETensorFlowCodeWriter {
     internal class AIETensorFlowTerminusWriter : AIETypedCodeWriter<AIETerminus> {
         
         func generateOptimizerCode(context: AIECodeGeneratorContext) throws -> Void {
-            try context.writeIndented("# We don't generate real optimizer code yet.\n")
-            try context.writeIndented("optimizer = optimizers.CategoricalCrossentropy()\n")
+            try context.write("# We don't generate real optimizer code yet.\n")
+            try context.write("optimizer = optimizers.CategoricalCrossentropy()\n")
         }
         
         override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
@@ -52,7 +52,7 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             // Note: This will always generate code, so ignore.
             var lossName : String? = nil
             if let loss = node.loss as? AIETensorFlowLossCodeWriter {
-                try context.writeIndented("\(loss.variableName) = ")
+                try context.write("\(loss.variableName) = ")
                 _ = try loss.generateLossCode(context: context)
                 try context.write("\n")
                 lossName = loss.variableName
@@ -63,7 +63,7 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             // Now workout the optimizer function
             var optimizerName : String? = nil
             if let optimizer = node.optimizer as? AIETensorFlowOptimizerCodeWriter {
-                try context.writeIndented("\(optimizer.variableName) = ")
+                try context.write("\(optimizer.variableName) = ")
                 _ = try optimizer.generateOptimizerCode(context: context)
                 try context.write("\n")
                 optimizerName = optimizer.variableName

@@ -101,12 +101,12 @@ extension AIEBranch : AIETensorFlowCodeWriter {
                     let condition = link.extendedProperties["condition"] as? AJREvaluation
                     if let condition {
                         if index == 0 {
-                            try context.writeIndented("if \(condition):\n")
+                            try context.write("if \(condition):\n")
                         } else {
                             try context.write(" elif \(condition):\n")
                         }
                     } else {
-                        try context.writeIndented("else:\n")
+                        try context.write("else:\n")
                     }
                     context.incrementIndent()
                     let generatedCode : Bool
@@ -119,7 +119,7 @@ extension AIEBranch : AIETensorFlowCodeWriter {
                     if  generatedCode {
                         context.generatedCode = true
                     } else {
-                        try context.writeIndented("pass\n")
+                        try context.write("pass\n")
                     }
                     context.decrementIndent()
                     context.popNode()

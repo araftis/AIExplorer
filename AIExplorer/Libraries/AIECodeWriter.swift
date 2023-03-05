@@ -217,10 +217,10 @@ open class AIECodeWriter : NSObject {
 
     func appendStandardCode(context: AIECodeGeneratorContext, _ block: () throws -> Void) throws -> Void {
         try self.appendShapes(context: context)
-        try context.writeIndented("\(object.variableName) = ")
+        try context.write("\(object.variableName) = ")
         try block()
         try context.write("\n")
-        try context.writeIndented("model.add(\(object.variableName))\n")
+        try context.write("model.add(\(object.variableName))\n")
     }
 
 }

@@ -251,15 +251,20 @@ open class AIECodeGeneratorContext : NSObject {
     
     // MARK: - Writing Conveniences
     
-    internal var nextWriteIndents = true
+    internal var nextWriteIndent = true
     
     /**
      Writes a string to the output. The string must be encodable to UTF-8.
      
      - parameter string The string to write.
      */
-    func write(_ string: String) throws -> Void {
+    internal func _write(_ string: String) throws -> Void {
+        if nextWriteIndent {
+            try output.writeIndent(indent, width: indentWidth)
+        }
         try output.write(string)
+        // So, the idea here is that if the line ends in a newline, then the next line is indented.
+        nextWriteIndent = string.hasSuffix("\n")
     }
     
     /**
@@ -267,16 +272,16 @@ open class AIECodeGeneratorContext : NSObject {
      
      - parameter string The string to write.
      */
-    func writeIndented(_ string: String) throws -> Void {
+    open func write(_ string: String) throws -> Void {
         var foundError : Error? = nil
         var lineIndex : Int = 0
         
         string.enumerateLines { line, stop in
             do {
                 if lineIndex > 0 {
-                    try self.output.write("\n")
+                    try self._write("\n")
                 }
-                try self.output.indent(self.indent, width: self.indentWidth).write(line)
+                try self._write(line)
             } catch {
                 foundError = error
                 stop = true
@@ -287,7 +292,7 @@ open class AIECodeGeneratorContext : NSObject {
             throw foundError
         }
         if string.hasSuffix("\n") {
-            try output.write("\n")
+            try _write("\n")
         }
     }
     
@@ -359,10 +364,10 @@ open class AIECodeGeneratorContext : NSObject {
         case .interface:
             break
         case .implementation:
-            try writeIndented("def \(functionContext.name)(")
+            try write("def \(functionContext.name)(")
         case .call:
             if functionContext.initialIndent {
-                try writeIndented("\(functionContext.name)(")
+                try write("\(functionContext.name)(")
             } else {
                 try write("\(functionContext.name)(")
             }
@@ -384,7 +389,7 @@ open class AIECodeGeneratorContext : NSObject {
             }
             if functionContext.separateArgumentsWithNewlines {
                 try write("\n")
-                try writeIndented("")
+                try write("")
             }
             try write(string)
             functionContext.argumentsWritten += 1
@@ -436,7 +441,7 @@ open class AIECodeGeneratorContext : NSObject {
             if functionContext.separateArgumentsWithNewlines {
                 try write("\n")
                 decrementIndent()
-                try writeIndented("")
+                try write("")
             }
             try writeFunctionArgumentsStop()
             if let body {
@@ -475,21 +480,21 @@ open class AIECodeGeneratorContext : NSObject {
         case .classDocumentation:
             break
         case .methodDocumentation:
-            try writeIndented("\"\"\"\n")
+            try write("\"\"\"\n")
             let prefix = String(indent: indent)
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
-            try writeIndented("\n\"\"\"\n\n")
+            try write("\n\"\"\"\n\n")
         case .singleLine:
             let prefix = String(indent: indent) + "# "
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
         case .multiline:
-            try writeIndented("\"\"\"\n")
+            try write("\"\"\"\n")
             let prefix = String(indent: indent)
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
-            try writeIndented("\n\"\"\"\n")
+            try write("\n\"\"\"\n")
         }
     }
 

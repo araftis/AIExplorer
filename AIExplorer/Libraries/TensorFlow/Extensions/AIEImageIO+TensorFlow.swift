@@ -73,15 +73,15 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
                 context.add(message: AIEMessage(type: .warning, message: "The input node should define a batch size.", on: object))
             }
             if let shape = object.inputShape {
-                try context.writeIndented("# Input Shape: \(shape)\n")
+                try context.write("# Input Shape: \(shape)\n")
             }
             if let shape = object.inputShape {
-                try context.writeIndented("\(object.variableName) = layers.Input(shape=(\(shape[1]), \(shape[2]), \(shape[3])), name='\(object.variableName)')\n")
+                try context.write("\(object.variableName) = layers.Input(shape=(\(shape[1]), \(shape[2]), \(shape[3])), name='\(object.variableName)')\n")
                 if shape[1] == 0 || shape[2] == 0 || shape[3] == 0 {
                     context.add(message: AIEMessage(type: .warning, message: "The input shape must define a width, height, and depth.", on: object))
                 }
             }
-            try context.writeIndented("model.add(\(object.variableName))\n")
+            try context.write("model.add(\(object.variableName))\n")
             try progressToChild(context: context)
             
             return true

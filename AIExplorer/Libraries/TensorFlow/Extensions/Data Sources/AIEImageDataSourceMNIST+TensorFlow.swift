@@ -16,10 +16,10 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
     internal class AIETensorFlowMNISTWriter : AIETypedCodeWriter<AIEImageDataSourceMNIST> {
         
         override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
-            try context.writeIndented("self.dataset_train = None\n")
-            try context.writeIndented("self.dataset_test = None\n")
-            try context.writeIndented("self.dataset_info = None\n")
-            try context.writeIndented("self.dataset = None\n")
+            try context.write("self.dataset_train = None\n")
+            try context.write("self.dataset_test = None\n")
+            try context.write("self.dataset_info = None\n")
+            try context.write("self.dataset = None\n")
             return true
         }
         
@@ -33,7 +33,7 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
             try context.writeFunction(name: "prepare_data_source", type: .implementation, documentation: documentation) {
                 try context.writeArgument("self")
             } body: {
-                try context.writeIndented("""
+                try context.write("""
                     # Fetch and "format" the data
                     (ds_train, ds_test), ds_info = tfds.load(
                         'mnist',
@@ -42,21 +42,21 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
                         as_supervised=True,
                         with_info=True,
                     )
-                    self.dataset_info = ds_info
+                    self.dataset_info = ds_info\n
                     """)
                 
                 try context.write("\n")
-                try context.writeIndented("# A useful little function to normalize the data's values from 0-255 to 0.0 to 1.0.\n")
+                try context.write("# A useful little function to normalize the data's values from 0-255 to 0.0 to 1.0.\n")
                 try context.writeFunction(name: "normalize_img", type: .implementation) {
                     try context.writeArgument("image")
                     try context.writeArgument("label")
                 }
                 try context.indent {
-                    //try context.writeIndented("\"\"\"Normalizes images: `uint8` -> `float32`.\"\"\"\n")
-                    try context.writeIndented("return tf.cast(image, tf.float32) / 255.0, label\n")
+                    //try context.write("\"\"\"Normalizes images: `uint8` -> `float32`.\"\"\"\n")
+                    try context.write("return tf.cast(image, tf.float32) / 255.0, label\n")
                 }
                 try context.write("\n")
-                try context.writeIndented("""
+                try context.write("""
                     # Normalize and prepare the training data.
                     ds_train = ds_train.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
                     ds_train = ds_train.cache()
@@ -67,18 +67,18 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
                     """
                     )
                     try context.write("\n")
-                    try context.writeIndented("""
+                    try context.write("""
                     # Normalize and prepare the testing data.
                     ds_test = ds_test.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
                     ds_test = ds_test.batch(128)
                     ds_test = ds_test.cache()
                     ds_test = ds_test.prefetch(tf.data.AUTOTUNE)
-                    self.dataset_test = ds_test
+                    self.dataset_test = ds_test\n
                     """
                 )
                 try context.write("\n")
-                try context.writeIndented("# Make sure the dataset is None, because we're not using it.\n")
-                try context.writeIndented("\nself.dataset = None\n")
+                try context.writeComment("Make sure the dataset is None, because we're not using it.\n", type: .singleLine)
+                try context.write("\nself.dataset = None\n")
             }
         }
         
@@ -87,22 +87,22 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
             try context.writeFunction(name: "get_dataset_info", type: .implementation) {
                 try context.writeArgument("self")
             } body: {
-                try context.writeIndented("self.prepare_data_source()\n")
-                try context.writeIndented("return self.dataset_info\n")
+                try context.write("self.prepare_data_source()\n")
+                try context.write("return self.dataset_info\n")
             }
             try context.write("\n")
             try context.writeFunction(name: "get_dataset_train", type: .implementation) {
                 try context.writeArgument("self")
             } body: {
-                try context.writeIndented("self.prepare_data_source()\n")
-                try context.writeIndented("return self.dataset_train\n")
+                try context.write("self.prepare_data_source()\n")
+                try context.write("return self.dataset_train\n")
             }
             try context.write("\n")
             try context.writeFunction(name: "get_dataset_test", type: .implementation) {
                 try context.writeArgument("self")
             } body: {
-                try context.writeIndented("self.prepare_data_source()\n")
-                try context.writeIndented("return self.dataset_test\n")
+                try context.write("self.prepare_data_source()\n")
+                try context.write("return self.dataset_test\n")
             }
         }
         

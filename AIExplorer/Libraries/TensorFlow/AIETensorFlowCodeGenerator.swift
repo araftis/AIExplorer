@@ -101,95 +101,97 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         try context.write("class \(info[.codeName] ?? "Anonymous"):\n")
         try context.write("\n")
         
-        // Create the init method.
-        try context.writeFunction(name: "__init__", type: .implementation) {
-            try context.writeArgument("self")
-            try context.generateCode(for: node, in: .initArguments)
-        } body: {
-            let wroteCode = try context.generateCode(for: node, in: .initialization)
-            if !wroteCode  {
-                try context.writeIndented("pass\n")
+        try context.indent {
+            // Create the init method.
+            try context.writeFunction(name: "__init__", type: .implementation) {
+                try context.writeArgument("self")
+                try context.generateCode(for: node, in: .initArguments)
+            } body: {
+                let wroteCode = try context.generateCode(for: node, in: .initialization)
+                if !wroteCode  {
+                    try context.write("pass\n")
+                }
             }
-        }
-
-        // Write any additional methods desired by our nodes.
-        try context.generateCode(for: node, in: .implementationMethods)
-
-        // Declare the build method. This actually builds and compiles.
-        try context.write("\n")
-        let documentation = """
+            
+            // Write any additional methods desired by our nodes.
+            try context.generateCode(for: node, in: .implementationMethods)
+            
+            // Declare the build method. This actually builds and compiles.
+            try context.write("\n")
+            let documentation = """
             This method builds your model if it doesn't already exist. The more built is based on the model designed with AI Explorer. If `isTraining` is `False`, then the model is built ready for inference, otherwise it's built for training. As part of being built for training, the model will be compiled using the supplied loss and optimization options chosen in the modeler.
-
+            
             Parameters
             ----------
             isTraining : boolean
                 Determines whether the model is built for training or not.
-
+            
             Returns
             -------
             A TensorFlow model ready for training or inference.
             """
-        try context.writeFunction(name: "build_model", type: .implementation, documentation: documentation) {
-            try context.writeArgument("self")
-            try context.writeArgument("isTraining=False")
-        } body: {
-            try context.writeComment("Let's see if the model's already created, and just return it if it is.\n")
-            try context.writeIndented("if isTraining:\n")
-            try context.indent {
-                try context.writeIndented("if hasattr(self, 'model_training'):\n")
+            try context.writeFunction(name: "build_model", type: .implementation, documentation: documentation) {
+                try context.writeArgument("self")
+                try context.writeArgument("isTraining=False")
+            } body: {
+                try context.writeComment("Let's see if the model's already created, and just return it if it is.\n")
+                try context.write("if isTraining:\n")
                 try context.indent {
-                    try context.writeIndented("return self.model_training\n")
+                    try context.write("if hasattr(self, 'model_training'):\n")
+                    try context.indent {
+                        try context.write("return self.model_training\n")
+                    }
                 }
-            }
-            try context.writeIndented("else:\n")
-            try context.indent {
-                try context.writeIndented("if hasattr(self, 'model_inference'):\n")
+                try context.write("else:\n")
                 try context.indent {
-                    try context.writeIndented("return self.model_inference\n")
+                    try context.write("if hasattr(self, 'model_inference'):\n")
+                    try context.indent {
+                        try context.write("return self.model_inference\n")
+                    }
                 }
+                
+                // Write the model declaration.
+                try context.write("\n")
+                try context.writeComment("Define the model as a Sequential model. This should cover most situations, but there's a good chance we'll need to improve this in the future.\n")
+                try context.write("model = models.Sequential(")
+                if let name = self.info[.codeName] {
+                    try context.write("name='\(name)'")
+                }
+                try context.write(")\n")
+                try context.write("\n")
+                
+                // And generate the model.
+                try context.generateCode(for: node, in: .build)
+                
+                try context.write("\n")
+                try context.write("if isTraining:\n")
+                try context.indent {
+                    try context.write("self.model_training = model\n")
+                }
+                try context.write("else:\n")
+                try context.indent {
+                    try context.write("self.model_inference = model\n")
+                }
+                
+                // And finally return the model.
+                try context.write("\n")
+                try context.write("return model\n")
             }
-
-            // Write the model declaration.
-            try context.write("\n")
-            try context.writeComment("Define the model as a Sequential model. This should cover most situations, but there's a good chance we'll need to improve this in the future.\n")
-            try context.writeIndented("model = models.Sequential(")
-            if let name = self.info[.codeName] {
-                try context.write("name='\(name)'")
-            }
-            try context.write(")\n")
-            try context.write("\n")
             
-            // And generate the model.
-            try context.generateCode(for: node, in: .build)
-
             try context.write("\n")
-            try context.writeIndented("if isTraining:\n")
-            try context.indent {
-                try context.writeIndented("self.model_training = model\n")
+            try context.writeFunction(name: "train", type: .implementation) {
+                try context.writeArgument("self")
+                try context.writeArgument("batch_size=128")
+            } body: {
+                try context.write("model = self.build_model(isTraining=True)\n")
             }
-            try context.writeIndented("else:\n")
-            try context.indent {
-                try context.writeIndented("self.model_inference = model\n")
-            }
-
-            // And finally return the model.
+            
             try context.write("\n")
-            try context.writeIndented("return model\n")
-        }
-
-        try context.write("\n")
-        try context.writeFunction(name: "train", type: .implementation) {
-            try context.writeArgument("self")
-            try context.writeArgument("batch_size=128")
-        } body: {
-            try context.writeIndented("model = self.build_model(isTraining=True)\n")
-        }
-
-        try context.write("\n")
-        try context.writeFunction(name: "infer", type: .implementation) {
-            try context.writeArgument("self")
-        } body: {
-            try context.writeIndented("model = self.build_model(isTraining=False)\n")
+            try context.writeFunction(name: "infer", type: .implementation) {
+                try context.writeArgument("self")
+            } body: {
+                try context.write("model = self.build_model(isTraining=False)\n")
+            }
         }
     }
 
@@ -201,7 +203,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             }
         }
         
-        let context = AIETensorFlowContext(outputStream: outputStream, indent: 1)
+        let context = AIETensorFlowContext(outputStream: outputStream)
         
         try generateHeader(using: context)
 
@@ -211,7 +213,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 try generateClass(for: node, using: context)
             } else {
                 messages.append(AIEMessage(type: .error, message: "\(Swift.type(of:node)) is not supported with TensorFlow.", on: node))
-                try context.writeIndented("// \(Swift.type(of:node)) is not supported with TensorFlow.\n")
+                try context.write("// \(Swift.type(of:node)) is not supported with TensorFlow.\n")
             }
         }
         try context.write("\n")
