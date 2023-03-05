@@ -31,7 +31,7 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
                 In this case, this will download the MNIST data, if it's not already been downloaded, load it, and then normalize the data. Normalization is done by converting the data from gray scale values of 0 to 255 to values of 0.0 to 1.0.
                 """
             try context.writeFunction(name: "prepare_data_source", type: .implementation, documentation: documentation) {
-                try context.writeArgument("self")
+                try context.writeArgument(name: "self")
             } body: {
                 try context.write("""
                     # Fetch and "format" the data
@@ -48,8 +48,8 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
                 try context.write("\n")
                 try context.write("# A useful little function to normalize the data's values from 0-255 to 0.0 to 1.0.\n")
                 try context.writeFunction(name: "normalize_img", type: .implementation) {
-                    try context.writeArgument("image")
-                    try context.writeArgument("label")
+                    try context.writeArgument(name: "image")
+                    try context.writeArgument(name: "label")
                 }
                 try context.indent {
                     //try context.write("\"\"\"Normalizes images: `uint8` -> `float32`.\"\"\"\n")
@@ -85,21 +85,21 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
         func generatePropertyGetters(context: AIECodeGeneratorContext) throws -> Void {
             try context.write("\n")
             try context.writeFunction(name: "get_dataset_info", type: .implementation) {
-                try context.writeArgument("self")
+                try context.writeArgument(name: "self")
             } body: {
                 try context.write("self.prepare_data_source()\n")
                 try context.write("return self.dataset_info\n")
             }
             try context.write("\n")
             try context.writeFunction(name: "get_dataset_train", type: .implementation) {
-                try context.writeArgument("self")
+                try context.writeArgument(name: "self")
             } body: {
                 try context.write("self.prepare_data_source()\n")
                 try context.write("return self.dataset_train\n")
             }
             try context.write("\n")
             try context.writeFunction(name: "get_dataset_test", type: .implementation) {
-                try context.writeArgument("self")
+                try context.writeArgument(name: "self")
             } body: {
                 try context.write("self.prepare_data_source()\n")
                 try context.write("return self.dataset_test\n")

@@ -256,6 +256,8 @@ open class AIECodeGeneratorContext : NSObject {
     /**
      Writes a string to the output. The string must be encodable to UTF-8.
      
+     This is basically private, because callers should use the public `write()` method.
+     
      - parameter string The string to write.
      */
     internal func _write(_ string: String) throws -> Void {
@@ -270,7 +272,9 @@ open class AIECodeGeneratorContext : NSObject {
     /**
      Writes a string to the output, but first writes an indent. Currently all indents are written as spaces. You can change the width of the indent by setting `indentWidth`.
      
-     - parameter string The string to write.
+     This method is actually somewhat more robust than it seems at first glance, as it does things like handles multiple lines in a one string. It works by enumerating lines in the string. For each line, it indents the output and then writes the line. The method does not currently deal with line wrapping, although that's a possibility in the future.
+     
+     - parameter string The string to write. The string my be multi-line.
      */
     open func write(_ string: String) throws -> Void {
         var foundError : Error? = nil
@@ -317,19 +321,23 @@ open class AIECodeGeneratorContext : NSObject {
      */
     public enum FunctionType {
         /// The function as it appears in the interface. For Obj-C and C++, this would be as it appears in the header file. For Swift and Python, this would be nothing.
-        case interface
+        case prototype
         /// The function as it appears in the implementation of the class.
         case implementation
         /// The function when being called.
         case call
     }
 
+    /**
+     Defines a context for the function we're writing.
+     
+     This basically captures the paremeters to the `writeFunction()` method, since writing functions can be nested. In otherwords, things about writing a function with its body. The function may obviously call other functions, so you'd be re-entering into the code. As such, we want to track the state of the function accross calls to multiple other method calls.
+     */
     public class FunctionContext {
         var argumentsWritten: Int
 
         var name: String
         var type: FunctionType
-        var initialIndent: Bool
         var separateArgumentsWithNewlines: Bool
         var documentationPosition: DocumentationPosition
         var documentation: String?
@@ -337,7 +345,6 @@ open class AIECodeGeneratorContext : NSObject {
         
         init(name: String,
              type: FunctionType = .call,
-             initialIndent: Bool = false,
              separateArgumentsWithNewlines: Bool = false,
              documentationPosition: DocumentationPosition = .beforeDeclaration,
              documentation: String? = nil,
@@ -345,7 +352,6 @@ open class AIECodeGeneratorContext : NSObject {
             self.argumentsWritten = 0
             self.name = name
             self.type = type
-            self.initialIndent = initialIndent
             self.separateArgumentsWithNewlines = separateArgumentsWithNewlines
             self.documentationPosition = documentationPosition
             self.documentation = documentation
@@ -353,27 +359,45 @@ open class AIECodeGeneratorContext : NSObject {
         }
     }
     
-    open var functionStack = [FunctionContext]()
+    /// Tracks the current stack of function calls.
+    internal var functionStack = [FunctionContext]()
+    
+    /// Returns the current function context.
     open var functionContext : FunctionContext {
         assert(functionStack.count != 0, "You attempted to access a function writing method without having started a function!")
         return functionStack.last!
     }
-    
-    func writingFunctionStart() throws -> Void {
+
+    /**
+     Writes the start of the function.
+     
+     This does multiple things based on the `type` of the function. You implementation should be able to write out whatever is appropriate for the type. For example, here's what code generation for Python might look like:
+     
+     ```Swift
+     switch functionContext.type {
+     case .interface:
+         break
+     case .implementation:
+         try write("def \(functionContext.name)(")
+     case .call:
+         try write("\(functionContext.name)(")
+     }
+     ```
+     */
+    open func writingFunctionStart() throws -> Void {
         switch functionContext.type {
-        case .interface:
+        case .prototype:
             break
         case .implementation:
             try write("def \(functionContext.name)(")
         case .call:
-            if functionContext.initialIndent {
-                try write("\(functionContext.name)(")
-            } else {
-                try write("\(functionContext.name)(")
-            }
+            try write("\(functionContext.name)(")
         }
     }
     
+    /**
+     Writes the function's documentation, as appropriate for the given language.
+     */
     func writeFunctionDocumentation() throws -> Void {
         if let documentation = functionContext.documentation {
             try indent {
@@ -382,24 +406,60 @@ open class AIECodeGeneratorContext : NSObject {
         }
     }
     
-    func writeArgument(_ condition : @autoclosure () -> Bool, _ string: String, type: String? = nil) throws -> Void {
+    /**
+     Writes an argument of the function.
+     
+     This method is slightly complex. It basically does the following:
+     
+     1. Evaluate `condition`, and if `true`, then we'll write the argument.
+         1. If `functionContext.argumentsWritten` is non-zero, then write an appropriate argument separator.
+         2. If `name` and `value` are both not `nil`, then write them. Something like `name=value`.
+         3. If `name` is not `nil` and `value` is `nil`, then write name.
+         4. If `name` is `nil`, and `value` is not `nil`, then write value.
+         5. Increment `functionContext.argumentsWritten`.
+     
+     The parameters may have different meanings depending on the function call type.
+     
+     For `interface` and `implementation` the most important parameter is `name`, as that must always be provided. For some languages, `type` may also be recorded. Likewise, for some languages, a default value can be provided for a function's argument. If that's the case, this should be passed in `value`.
+     
+     For `call`, the value parameter is the most important. However, some languages support "named" parameters, in which case you may also provide `name`.
+     
+     - parameter condition An autoclosure that is evalutate to determine if the argument should be written. For example, the library may have a default parameter for an argument. If the current value is equal to the default value, the we don't want to write argument.
+     - parameter name The name of the parameter. In the case of a declaration, this is just the name. If `name` and `value` are provided for a declaration, then a "default" value is provided using `value`.
+     - parameter value The value of the parameter. In the case of a call, this is just the value.
+     - parameter type The type of the parameter. This may be `nil` if the language doesn't support parameters.
+     */
+    func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
         if condition() {
             if functionContext.argumentsWritten > 0 {
                 try write(", ")
             }
             if functionContext.separateArgumentsWithNewlines {
                 try write("\n")
-                try write("")
             }
-            try write(string)
+            if let name, let value {
+                try write(name)
+                try write("=")
+                try write(value)
+            } else if let name {
+                try write(name)
+            } else if let value {
+                try write(value)
+            }
             functionContext.argumentsWritten += 1
         }
     }
     
-    func writeArgument(_ string: String, type: String? = nil) throws -> Void {
-        try writeArgument(true, string, type: type)
+    /**
+     Just calls `writeArgument(_:name:value:type:)` where `condition` is always `true`.
+     */
+    func writeArgument(name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
+        try writeArgument(true, name: name, value: value, type: type)
     }
     
+    /**
+     Terminates the function call. For `call`, this should just close the function call, but not include a newline. For the others, this will likely include a newline.
+     */
     func writeFunctionArgumentsStop() throws -> Void {
         functionContext.argumentsWritten = 0
         try write(")")
@@ -408,13 +468,35 @@ open class AIECodeGeneratorContext : NSObject {
         }
     }
     
+    /**
+     The default position of documentation for the language. While overridable at the call site, that's usually not necessary, because languages tend to be self-consistent with this.
+     */
     open var defaultDocumentationPosition : DocumentationPosition {
         return .beforeDeclaration
     }
     
+    /**
+     Writes a function, as defined by `type`, which generally means a function prototype, implementation, or call. This method is useful when generating your code, as it will do a lot of repetitive work for you, and the while keeping things formatted correctly.
+     
+     You can generate code for three kinds of function, as defined by `type`:
+     
+     1. **prototype** The function prototype. Not all languages need this, like Swift or Python, but some do, like C++ and Obj-C. This should not include `body`. Other valid parameters are `documentation`, `documentationPosition`, `argumentsIndented`, `arguments`, and `returnType`.
+     2. **implementation** The implementation of the function. When doing this, you should generally include a `body` as well. All parameters are value, although you don't necessarily need to provide documentation for the implementation, depending on language.
+     3. **call** Use this when you're calling a function. This should not include `body`. On the `name`, `type`, and `arguments` parameters are valid.
+     
+     When you call this, a new `FunctionContext` is created and pushed on a stack. This allows you to call this method a second time from within the `body` code provided.
+     
+     - parameter name The name of the function. You can also think of this as the function's "prefix", so while "my_function" would be fine, so woudl "my_object.my_function".
+     - parameter type The type of function call being made.
+     - parameter documentation The documentation for the function. May not be necessary.
+     - parameter documentationPosition The position of the documentation. This is generally defined by default via the `defaultDocumentationPosition` property, so you'll rarely, if ever, need to provide this.
+     - parameter argumentsIndented If `true`, each argument will be on a new line and indented. This can be useful for functions with a lot of parameters.
+     - parameter arguments A block of code providing the arguments. The block should really only include calls to `writeArgument()` from within this block, although you could, in theory, also call back into `writeFunction()` to start an embedded function call.
+     - parameter returnType The return type of the function. This may not be necessary, depending on the language.
+     - parameter body A code block that writes the body of the function. This may certainly call back into `writeFunction()` to make additional function calls. You don't need to provide this parameter for `prototype` or `call` types. This is really just a short hand for calling `indent()` after writing the initial function declaration.
+     */
     func writeFunction(name: String,
                        type: FunctionType = .call,
-                       indented: Bool = false,
                        documentation: String? = nil,
                        documentationPosition: DocumentationPosition? = nil,
                        argumentsIndented: Bool = false,
@@ -424,7 +506,6 @@ open class AIECodeGeneratorContext : NSObject {
         do {
             let functionContext = FunctionContext(name: name,
                                                   type: type,
-                                                  initialIndent: indented,
                                                   separateArgumentsWithNewlines: argumentsIndented,
                                                   documentationPosition: documentationPosition ?? defaultDocumentationPosition,
                                                   documentation: documentation,
@@ -460,6 +541,9 @@ open class AIECodeGeneratorContext : NSObject {
 
     // MARK: - Writing Comments
 
+    /**
+     Defines the type of the comment, so that it can be written appropriately.
+     */
     public enum CommentType {
         /// The comment found at the top of a document.
         case header
@@ -473,6 +557,9 @@ open class AIECodeGeneratorContext : NSObject {
         case multiline
     }
     
+    /**
+     Writes a comment.
+     */
     func writeComment(_ comment: String, type: CommentType = .singleLine) throws -> Void {
         switch type {
         case .header:
@@ -500,23 +587,63 @@ open class AIECodeGeneratorContext : NSObject {
 
     // MARK: - Type Casting
     
+    /**
+     Creates a code writer for the passed in object.
+     
+     You'll almost certainly override this method for you language, so that you can produce appropriate code writers. You'll usually do something like check and see if the object reponds to a particular protocol or is of a particular type, and if it is, then you'll produce the code writer.
+     
+     For example:
+     
+     ```Swift
+     if let object = object as? AIEWritableObject {
+         return AIECodeWriter(object: object)
+     }
+     return nil
+     ```
+     
+     - parameter object The object to create code writer for.
+     
+     - returns A code writer or `nil` if none can be produced.
+     */
     open func codeWriter(for object: Any?) -> AIECodeWriter? {
         if let object = object as? AIEWritableObject {
             return AIECodeWriter(object: object)
         }
         return nil
     }
-    
+
+    /**
+     Use this method to initiate writing code.
+     
+     For some stages, this will cause the entire neural network graph to be traversed. For others, it will simply exit after processing one node. In all cases, the context's stage will be set to the `stage`.
+     
+     - parameter object The object to generate code for.
+     - parameter stage The stage of the code generation.
+     */
     @discardableResult
     open func generateCode(for object: Any?, in stage: Stage) throws -> Bool {
         self.stage = stage
         return try codeWriter(for: object)?.generateCode(in: self) ?? false
     }
     
+    /**
+     Creates a code writer for the passed in object and asks it for its licenses, if any.
+     
+     - parameter object The object who's licenses you want.
+     
+     - returns The license, if any, otherwise `nil`.
+     */
     open func license(for object: Any?) -> String? {
         return codeWriter(for: object)?.license(context: self)
     }
     
+    /**
+     Creates a new code writer for the passed in object and asks it for its imports.
+     
+     - parameter object The object who's imports you want.
+     
+     - returns An array of import statements. The array may be empty.
+     */
     open func imports(for object: Any?) -> [String] {
         return codeWriter(for: object)?.imports(context: self) ?? []
     }

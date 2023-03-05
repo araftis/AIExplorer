@@ -35,7 +35,7 @@ extension AIELossMeanAbsoluteError : AIETensorFlowLossCodeWriter {
 
     internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "losses.MeanAbsoluteError") {
-            try context.writeArgument(reductionType != .none, "reduction=\(reductionType.tensorFlowDescription)")
+            try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
         }
         return true
     }

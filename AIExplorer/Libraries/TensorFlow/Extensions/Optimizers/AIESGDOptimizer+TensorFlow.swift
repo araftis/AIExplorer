@@ -34,9 +34,9 @@ extension AIESGDOptimizer : AIETensorFlowOptimizerCodeWriter {
     
     func generateOptimizerCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "optimizers.SGD") {
-            try context.writeArgument(learningRate != 0.001, "learning_rate=\(learningRate)")
-            try context.writeArgument(momentumScale != 0.0, "momentum=\(momentumScale)")
-            try context.writeArgument(usesNesterovMomentum, "nesterov=True")
+            try context.writeArgument(learningRate != 0.001, name: "learning_rate", value: "\(learningRate)")
+            try context.writeArgument(momentumScale != 0.0, name: "momentum", value: "\(momentumScale)")
+            try context.writeArgument(usesNesterovMomentum, name: "nesterov", value: "True")
         }
         return true
     }

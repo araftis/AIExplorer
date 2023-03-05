@@ -104,7 +104,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         try context.indent {
             // Create the init method.
             try context.writeFunction(name: "__init__", type: .implementation) {
-                try context.writeArgument("self")
+                try context.writeArgument(name: "self")
                 try context.generateCode(for: node, in: .initArguments)
             } body: {
                 let wroteCode = try context.generateCode(for: node, in: .initialization)
@@ -131,8 +131,8 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             A TensorFlow model ready for training or inference.
             """
             try context.writeFunction(name: "build_model", type: .implementation, documentation: documentation) {
-                try context.writeArgument("self")
-                try context.writeArgument("isTraining=False")
+                try context.writeArgument(name: "self")
+                try context.writeArgument(name: "isTraining", value: "False")
             } body: {
                 try context.writeComment("Let's see if the model's already created, and just return it if it is.\n")
                 try context.write("if isTraining:\n")
@@ -180,15 +180,15 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             
             try context.write("\n")
             try context.writeFunction(name: "train", type: .implementation) {
-                try context.writeArgument("self")
-                try context.writeArgument("batch_size=128")
+                try context.writeArgument(name: "self")
+                try context.writeArgument(name: "batch_size", value: "128")
             } body: {
                 try context.write("model = self.build_model(isTraining=True)\n")
             }
             
             try context.write("\n")
             try context.writeFunction(name: "infer", type: .implementation) {
-                try context.writeArgument("self")
+                try context.writeArgument(name: "self")
             } body: {
                 try context.write("model = self.build_model(isTraining=False)\n")
             }

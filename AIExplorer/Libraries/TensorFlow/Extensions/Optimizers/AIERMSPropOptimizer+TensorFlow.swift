@@ -34,11 +34,11 @@ extension AIERMSPropOptimizer : AIETensorFlowOptimizerCodeWriter {
     
     func generateOptimizerCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "optimizers.RMSProp") {
-            try context.writeArgument(learningRate != 0.001, "learning_rate=\(learningRate)")
-            try context.writeArgument(alpha != 0.9, "rho=\(alpha)")
-            try context.writeArgument(momentumScale != 0.0, "momentum=\(momentumScale)")
-            try context.writeArgument(epsilon != 1e-07, "epsilon=\(epsilon)")
-            try context.writeArgument(isCentered, "centered=True")
+            try context.writeArgument(learningRate != 0.001, name: "learning_rate", value: "\(learningRate)")
+            try context.writeArgument(alpha != 0.9, name: "rho", value: "\(alpha)")
+            try context.writeArgument(momentumScale != 0.0, name: "momentum", value: "\(momentumScale)")
+            try context.writeArgument(epsilon != 1e-07, name: "epsilon", value: "\(epsilon)")
+            try context.writeArgument(isCentered, name: "centered", value: "True")
         }
         return true
     }

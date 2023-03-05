@@ -38,11 +38,11 @@ extension AIEAdamOptimizer : AIETensorFlowOptimizerCodeWriter {
             name = "AdamW"
         }
         try context.writeFunction(name: "optimizers.\(name)") {
-            try context.writeArgument(learningRate != 0.001, "learning_rate=\(learningRate)")
-            try context.writeArgument(beta1 != 0.9, "beta_1=\(beta1)")
-            try context.writeArgument(beta2 != 0.999, "beta_2=\(beta2)")
-            try context.writeArgument(epsilon != 1e-07, "epsilon=\(epsilon)")
-            try context.writeArgument(usesAMSGrad, "amsgrad=True")
+            try context.writeArgument(learningRate != 0.001, name: "learning_rate=\(learningRate)")
+            try context.writeArgument(beta1 != 0.9, name: "beta_1", value: "\(beta1)")
+            try context.writeArgument(beta2 != 0.999, name: "beta_2", value: "\(beta2)")
+            try context.writeArgument(epsilon != 1e-07, name: "epsilon", value: "\(epsilon)")
+            try context.writeArgument(usesAMSGrad, name: "amsgrad", value: "True")
         }
         return true
     }

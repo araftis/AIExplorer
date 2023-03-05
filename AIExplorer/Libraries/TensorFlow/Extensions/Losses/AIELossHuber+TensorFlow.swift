@@ -35,8 +35,8 @@ extension AIELossHuber : AIETensorFlowLossCodeWriter {
 
     internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "losses.Huber") {
-            try context.writeArgument(reductionType != .none, "reduction=\(reductionType.tensorFlowDescription)")
-            try context.writeArgument(delta != 1.0, "delta=\(delta)")
+            try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
+            try context.writeArgument(delta != 1.0, name: "delta", value: "\(delta)")
         }
         return true
     }

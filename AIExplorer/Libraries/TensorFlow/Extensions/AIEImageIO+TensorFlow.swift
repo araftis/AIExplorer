@@ -39,7 +39,7 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
     internal class AIETensorFlowImageIOWriter : AIETypedCodeWriter<AIEImageIO> {
         
         override func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
-            try context.writeArgument("dataSource=None")
+            try context.writeArgument(name: "dataSource", value: "None")
             try progressToChild(context: context)
             return true
         }
