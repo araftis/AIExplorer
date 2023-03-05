@@ -91,8 +91,8 @@ open class AIEConvolution: AIEGraphic {
     open var size : AIEShape = .zeroSize
     open var depth : Int = 0
     open var outputFeatureChannels : Int = 0
-    open var dilation : AIEShape = .zeroSize
-    open var stride : AIEShape = .zeroSize
+    open var dilation : AIEShape = AIEShape(width: 1, height: 1)
+    open var stride : AIEShape = AIEShape(width: 1, height: 1)
     open var paddingPolicy : PaddingPolicy = .same
     open var paddingSize : AIEShape = .zeroSize
 
@@ -105,15 +105,6 @@ open class AIEConvolution: AIEGraphic {
     }
 
     // MARK: - Creation
-
-    public convenience init(width: Int, height: Int, depth: Int, step : Int) {
-        self.init()
-
-        self.size.width = width
-        self.size.height = height
-        self.depth = height
-        self.stride = stride
-    }
 
     public required init() {
         super.init()

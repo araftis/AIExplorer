@@ -11,6 +11,8 @@
 		210F8F8C2730A7F5004A939D /* AIEMessagesInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */; };
 		210F8F922742ECF1004A939D /* AIEMLComputeObjCGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F912742ECF1004A939D /* AIEMLComputeObjCGenerator.swift */; };
 		210F8F942742ED08004A939D /* AIEMLComputeSwiftGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */; };
+		2115E38329B13E5A00D512A0 /* AIECodeGeneratorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115E38229B13E5A00D512A0 /* AIECodeGeneratorContext.swift */; };
+		2115E38529B13F5C00D512A0 /* AIECodeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115E38429B13F5C00D512A0 /* AIECodeWriter.swift */; };
 		215A9DB829A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */; };
 		215A9DBB29A2C304004BEAB6 /* AIEShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */; };
 		215A9DBE29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBD29A2DB6B004BEAB6 /* AIEImageDataSourceCIFAR10+TensorFlow.swift */; };
@@ -222,6 +224,8 @@
 		210F8F8A2730A7F5004A939D /* AIEMessagesInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEMessagesInspector.xib; sourceTree = "<group>"; };
 		210F8F912742ECF1004A939D /* AIEMLComputeObjCGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeObjCGenerator.swift; sourceTree = "<group>"; };
 		210F8F932742ED08004A939D /* AIEMLComputeSwiftGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEMLComputeSwiftGenerator.swift; sourceTree = "<group>"; };
+		2115E38229B13E5A00D512A0 /* AIECodeGeneratorContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIECodeGeneratorContext.swift; sourceTree = "<group>"; };
+		2115E38429B13F5C00D512A0 /* AIECodeWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIECodeWriter.swift; sourceTree = "<group>"; };
 		215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEInspectorSliceShape.swift; sourceTree = "<group>"; };
 		215A9DB929A2C303004BEAB6 /* AIExplorerTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AIExplorerTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEShapeTests.swift; sourceTree = "<group>"; };
@@ -805,6 +809,8 @@
 			children = (
 				FADD1CFE270FD5B9000C49DA /* AIECodeDefinition.swift */,
 				FABD163C25C78722000294E3 /* AIECodeGenerator.swift */,
+				2115E38229B13E5A00D512A0 /* AIECodeGeneratorContext.swift */,
+				2115E38429B13F5C00D512A0 /* AIECodeWriter.swift */,
 				FA8E368225BF8D0000EB554F /* AIELibrary.swift */,
 				FA8E368F25BF8DF100EB554F /* ML Compute */,
 				FA8E368C25BF8DEC00EB554F /* TensorFlow */,
@@ -1098,6 +1104,7 @@
 				21FFE34B298C79D000A79F8F /* AIEOptimizer.swift in Sources */,
 				21FFE332298349D900A79F8F /* AIEFullyConnected+TensorFlow.swift in Sources */,
 				21FFE3662995A72900A79F8F /* AIEOptimizer+TensorFlow.swift in Sources */,
+				2115E38329B13E5A00D512A0 /* AIECodeGeneratorContext.swift in Sources */,
 				21FCD9CB27067AD80049E558 /* AIETitle.swift in Sources */,
 				FA02BF4825B783CB001EFBBA /* AIEKnowledgeGraphIO.swift in Sources */,
 				FA37E0F52995E49C000DB105 /* AIELossCategoricalCrossentropy.swift in Sources */,
@@ -1145,6 +1152,7 @@
 				21FFE344298C647500A79F8F /* AIETerminalTool.swift in Sources */,
 				FA02BF9D25B7AAF6001EFBBA /* AIESplit.swift in Sources */,
 				FA37E13329988F90000DB105 /* AIEImageDataSourceMNIST.swift in Sources */,
+				2115E38529B13F5C00D512A0 /* AIECodeWriter.swift in Sources */,
 				FA02BFAC25B7AC2F001EFBBA /* AIELayerNormalization.swift in Sources */,
 				FABD163D25C78722000294E3 /* AIECodeGenerator.swift in Sources */,
 				21FFE356298C8C1B00A79F8F /* AIEAdamWOptimizer.swift in Sources */,

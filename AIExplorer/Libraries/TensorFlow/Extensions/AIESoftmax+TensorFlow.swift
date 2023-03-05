@@ -32,17 +32,26 @@ import Foundation
 
 extension AIESoftmax : AIETensorFlowCodeWriter {
 
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        if let inputShape = inputShape {
-            if inputShape.count > 2 {
-                context.add(message: AIEMessage(type: .error, message: "The input shape \(inputShape) to the soft max layer has too many dimension. It should have just two, [<batch_size>, <dimension>].", on: self))
-            }
-            try appendStandardCode(context: context) {
-                try context.write("layers.Softmax(name='\(variableName)')")
-            }
-            try progressToChild(context: context)
-        }
-
-        return true
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowSoftmaxWriter(object: self)
     }
+    
+    internal class AIETensorFlowSoftmaxWriter : AIETypedCodeWriter<AIESoftmax> {
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            if let inputShape = object.inputShape {
+                if inputShape.count > 2 {
+                    context.add(message: AIEMessage(type: .error, message: "The input shape \(inputShape) to the soft max layer has too many dimension. It should have just two, [<batch_size>, <dimension>].", on: object))
+                }
+                try appendStandardCode(context: context) {
+                    try context.write("layers.Softmax(name='\(object.variableName)')")
+                }
+                try progressToChild(context: context)
+            }
+            
+            return true
+        }
+        
+    }
+    
 }

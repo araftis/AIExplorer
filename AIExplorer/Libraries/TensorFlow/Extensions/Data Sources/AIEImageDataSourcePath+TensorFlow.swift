@@ -8,32 +8,17 @@
 import Foundation
 
 extension AIEImageDataSourcePath : AIETensorFlowCodeWriter {
-    
-    internal func generateInitializationCode(context: AIETensorFlowContext) throws -> Bool {
-        return false
-    }
 
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        return false
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowImageDataSourcePathWriter(object: self)
     }
     
-    internal var destinationObjects: [AIEGraphic] {
-        return []
+    internal class AIETensorFlowImageDataSourcePathWriter : AIETypedCodeWriter<AIEImageDataSourcePath> {
+        
+        override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
+            return false
+        }
+        
     }
     
-    internal var variableName: String {
-        return "dataSource"
-    }
-    
-    internal var inputShape: [Int]? {
-        return nil
-    }
-    
-    internal var outputShape: [Int] {
-        return []
-    }
-    
-    internal var kind: AIEGraphic.Kind {
-        return .support
-    }
 }

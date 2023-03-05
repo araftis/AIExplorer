@@ -33,7 +33,7 @@ import Foundation
 
 extension AIELossMeanSquaredError : AIETensorFlowLossCodeWriter {
 
-    internal func generateLossCode(context: AIETensorFlowContext) throws -> Bool {
+    internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "losses.MeanSquaredError") {
             try context.writeArgument(reductionType != .none, "reduction=\(reductionType.tensorFlowDescription)")
         }

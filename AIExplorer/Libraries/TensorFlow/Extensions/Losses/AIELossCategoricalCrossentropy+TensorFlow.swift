@@ -33,7 +33,7 @@ import Foundation
 
 extension AIELossCategoricalCrossentropy : AIETensorFlowLossCodeWriter {
 
-    internal func generateLossCode(context: AIETensorFlowContext) throws -> Bool {
+    internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "losses.CategoricalCrossentropy") {
             try context.writeArgument(reductionType != .none, "reduction=\(reductionType.tensorFlowDescription)")
             try context.writeArgument(labelSmoothing != 0.0, "label_smoothing=\(labelSmoothing)")

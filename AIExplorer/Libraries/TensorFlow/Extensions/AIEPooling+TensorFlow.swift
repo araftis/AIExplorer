@@ -32,12 +32,21 @@ import Foundation
 
 extension AIEPooling : AIETensorFlowCodeWriter {
 
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        try appendStandardCode(context: context) {
-            try context.write("layers.MaxPool2D((\(size.height), \(size.width)), \(stride.width), name='\(variableName)')")
-        }
-        try progressToChild(context: context)
-        
-        return true
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowPoolingWriter(object: self)
     }
+    
+    internal class AIETensorFlowPoolingWriter : AIETypedCodeWriter<AIEPooling> {
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            try appendStandardCode(context: context) {
+                try context.write("layers.MaxPool2D((\(node.size.height), \(node.size.width)), \(node.stride.width), name='\(node.variableName)')")
+            }
+            try progressToChild(context: context)
+            
+            return true
+        }
+        
+    }
+    
 }

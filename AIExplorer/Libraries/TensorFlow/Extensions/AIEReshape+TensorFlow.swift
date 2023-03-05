@@ -31,12 +31,22 @@
 import Foundation
 
 extension AIEReshape : AIETensorFlowCodeWriter {
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        try self.appendStandardCode(context: context) {
-            try context.output.write("layers.Flatten(name='\(variableName)')")
-        }
-        try progressToChild(context: context)
 
-        return true
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowReshapeWriter(object: self)
     }
+    
+    internal class AIETensorFlowReshapeWriter : AIETypedCodeWriter<AIEReshape> {
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            try self.appendStandardCode(context: context) {
+                try context.output.write("layers.Flatten(name='\(object.variableName)')")
+            }
+            try progressToChild(context: context)
+            
+            return true
+        }
+        
+    }
+    
 }

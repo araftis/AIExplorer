@@ -32,7 +32,7 @@ import Foundation
 
 extension AIERMSPropOptimizer : AIETensorFlowOptimizerCodeWriter {
     
-    func generateOptimizerCode(context: AIETensorFlowContext) throws -> Bool {
+    func generateOptimizerCode(context: AIECodeGeneratorContext) throws -> Bool {
         try context.writeFunction(name: "optimizers.RMSProp") {
             try context.writeArgument(learningRate != 0.001, "learning_rate=\(learningRate)")
             try context.writeArgument(alpha != 0.9, "rho=\(alpha)")

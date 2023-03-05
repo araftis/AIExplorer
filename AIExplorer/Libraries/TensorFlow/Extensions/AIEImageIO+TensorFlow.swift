@@ -32,64 +32,74 @@ import Foundation
 
 extension AIEImageIO : AIETensorFlowCodeWriter {
     
-    internal func generateInitArguments(context: AIETensorFlowContext) throws -> Bool {
-        try context.writeArgument("dataSource=None")
-        try progressToChild(context: context)
-        return true
-    }
-
-    internal func generateInitializationCode(context: AIETensorFlowContext) throws -> Bool {
-        if let dataSource = dataSource as? AIETensorFlowCodeWriter {
-            if try dataSource.generateInitializationCode(context: context) {
-                context.generatedCode = true
-            }
-        } else {
-            context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of:dataSource)) doesn't support generating code for TensorFlow.", on: dataSource))
-        }
-        try progressToChild(context: context)
-        return context.generatedCode
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowImageIOWriter(object: self)
     }
     
-    internal func generateMethodsCode(context: AIETensorFlowContext) throws -> Bool {
-        if let dataSource = dataSource as? AIETensorFlowCodeWriter {
-            if try dataSource.generateMethodsCode(context: context) {
-                context.generatedCode = true
-            }
-        } else {
-            context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of:dataSource)) doesn't support generating code for TensorFlow.", on: dataSource))
-        }
-        try progressToChild(context: context)
-        return context.generatedCode
-    }
-    
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        if batchSize <= 0 {
-            context.add(message: AIEMessage(type: .warning, message: "The input node should define a batch size.", on: self))
-        }
-        if let inputShape {
-            try context.output.indent(context.indent).write("# Input Shape: \(inputShape)\n")
-        }
-        if let shape = inputShape {
-            try context.output.indent(2).write("\(variableName) = layers.Input(shape=(\(shape[1]), \(shape[2]), \(shape[3])), name='\(variableName)')\n")
-            if shape[1] == 0 || shape[2] == 0 || shape[3] == 0 {
-                context.add(message: AIEMessage(type: .warning, message: "The input shape must define a width, height, and depth.", on: self))
-            }
-        }
-        try context.writeIndented("model.add(\(variableName))\n")
-        try progressToChild(context: context)
+    internal class AIETensorFlowImageIOWriter : AIETypedCodeWriter<AIEImageIO> {
         
-        return true
-    }
-    
-    internal var license: String? {
-        guard let dataSource = dataSource as? AIETensorFlowCodeWriter else { return nil }
-        return dataSource.license
-    }
+        override func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
+            try context.writeArgument("dataSource=None")
+            try progressToChild(context: context)
+            return true
+        }
+        
+        override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
+            if let writer = context.codeWriter(for: node.dataSource) {
+                if try writer.generateInitializationCode(context: context) {
+                    context.generatedCode = true
+                }
+            } else {
+                context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of: node.dataSource)) doesn't support generating code for TensorFlow.", on: object))
+            }
+            try progressToChild(context: context)
+            return context.generatedCode
+        }
+        
+        override func generateImplementationMethodsCode(in context: AIECodeGeneratorContext) throws -> Bool {
+            if let writer = context.codeWriter(for: node.dataSource) {
+                if try writer.generateImplementationMethodsCode(in: context) {
+                    context.generatedCode = true
+                }
+            } else {
+                context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of: node.dataSource)) doesn't support generating code for TensorFlow.", on: object))
+            }
+            try progressToChild(context: context)
+            return context.generatedCode
+        }
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            if node.batchSize <= 0 {
+                context.add(message: AIEMessage(type: .warning, message: "The input node should define a batch size.", on: object))
+            }
+            if let shape = object.inputShape {
+                try context.writeIndented("# Input Shape: \(shape)\n")
+            }
+            if let shape = object.inputShape {
+                try context.writeIndented("\(object.variableName) = layers.Input(shape=(\(shape[1]), \(shape[2]), \(shape[3])), name='\(object.variableName)')\n")
+                if shape[1] == 0 || shape[2] == 0 || shape[3] == 0 {
+                    context.add(message: AIEMessage(type: .warning, message: "The input shape must define a width, height, and depth.", on: object))
+                }
+            }
+            try context.writeIndented("model.add(\(object.variableName))\n")
+            try progressToChild(context: context)
+            
+            return true
+        }
 
-    internal var imports: [String] {
-        guard let dataSource = dataSource as? AIETensorFlowCodeWriter else { return [] }
-        return dataSource.imports
+        override func license(context: AIECodeGeneratorContext) -> String? {
+            if let writer = context.codeWriter(for: node.dataSource) {
+                return writer.license(context: context)
+            }
+            return nil
+        }
+        
+        override func imports(context: AIECodeGeneratorContext) -> [String] {
+            guard let writer = context.codeWriter(for: node.dataSource) else { return [] }
+            return writer.imports(context: context)
+        }
+        
     }
-
+        
 }
 

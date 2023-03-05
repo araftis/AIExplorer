@@ -33,84 +33,103 @@ import Foundation
 import Draw
 
 extension AIEBranch : AIETensorFlowCodeWriter {
-    
-    func generateInitArguments(context: AIETensorFlowContext) throws -> Bool {
-        return try generateCode(for: exitLinks, context: context, using: { child in
-            return try child.generateInitArguments(context: context)
-        })
+
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowBranchWriter(object: self)
     }
     
-    func generateInitializationCode(context: AIETensorFlowContext) throws -> Bool {
-        return try generateCode(for: exitLinks, context: context, using: { (child) in
-            return try child.generateInitializationCode(context: context)
-        })
-    }
-
-    func generateMethodsCode(context: AIETensorFlowContext) throws -> Bool {
-        return try generateCode(for: exitLinks, context: context, using: { (child) in
-            return try child.generateMethodsCode(context: context)
-        })
-    }
-
-    func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        return try generateCode(for: exitLinks, context: context)
-    }
-
-    func generateCode(for links : [DrawLink], context: AIETensorFlowContext, using block: (_ child: AIETensorFlowCodeWriter) throws -> Bool) throws -> Bool {
-        var wroteCode = false
-        for link in links {
-            if let child = link.destination as? AIEGraphic {
-                context.push(self)
-                if let child = child as? AIETensorFlowCodeWriter {
-                    if try block(child) {
+    internal class AIETensorFlowBranchWriter : AIETypedCodeWriter<AIEBranch> {
+        
+        var exitLinks : [DrawLink] {
+            return node.exitLinks
+        }
+        
+        override func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
+            return try generateCode(for: exitLinks, context: context, using: { child in
+                if let writer = context.codeWriter(for: child) {
+                    return try writer.generateInitArguments(context: context)
+                }
+                return false
+            })
+        }
+        
+        override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
+            return try generateCode(for: exitLinks, context: context, using: { (child) in
+                if let writer = context.codeWriter(for: child) {
+                    return try writer.generateInitializationCode(context: context)
+                }
+                return false
+            })
+        }
+        
+        override func generateImplementationMethodsCode(in context: AIECodeGeneratorContext) throws -> Bool {
+            return try generateCode(for: exitLinks, context: context, using: { (child) in
+                if let writer = context.codeWriter(for: child) {
+                    return try writer.generateImplementationMethodsCode(in: context)
+                }
+                return false
+            })
+        }
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            return try generateCode(for: exitLinks, context: context)
+        }
+        
+        func generateCode(for links : [DrawLink], context: AIECodeGeneratorContext, using block: (_ writer: AIECodeWriter) throws -> Bool) throws -> Bool {
+            var wroteCode = false
+            for link in links {
+                if let writer = context.codeWriter(for: link.destination) {
+                    context.pushNode(self)
+                    if try block(writer) {
                         wroteCode = true
                     }
+                    context.popNode()
                 } else {
-                    context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
+                    context.add(message: AIEMessage(type: .error, message: "\(type(of: object)) does not support TensorFlow code generation.", on: object))
                 }
-                context.pop()
             }
+            return wroteCode
         }
-        return wroteCode
-    }
-    
-    func generateCode(for links : [DrawLink], context: AIETensorFlowContext) throws -> Bool {
-        var wroteCode = false
         
-        for (index, link) in links.enumerated() {
-            if let child = link.destination as? AIEGraphic {
-                // We'll quietly ignore any exit links that aren't NN objects.
-                context.push(self)
-                let condition = link.extendedProperties["condition"] as? AJREvaluation
-                if let condition {
-                    if index == 0 {
-                        try context.writeIndented("if \(condition):\n")
+        func generateCode(for links : [DrawLink], context: AIECodeGeneratorContext) throws -> Bool {
+            var wroteCode = false
+            
+            for (index, link) in links.enumerated() {
+                if let child = link.destination as? AIEGraphic {
+                    // We'll quietly ignore any exit links that aren't NN objects.
+                    context.pushNode(self)
+                    let condition = link.extendedProperties["condition"] as? AJREvaluation
+                    if let condition {
+                        if index == 0 {
+                            try context.writeIndented("if \(condition):\n")
+                        } else {
+                            try context.write(" elif \(condition):\n")
+                        }
                     } else {
-                        try context.write(" elif \(condition):\n")
+                        try context.writeIndented("else:\n")
                     }
-                } else {
-                    try context.writeIndented("else:\n")
+                    context.incrementIndent()
+                    let generatedCode : Bool
+                    if let writer = context.codeWriter(for: child) {
+                        generatedCode = try writer.generateBuildCode(context: context)
+                    } else {
+                        context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
+                        generatedCode = false
+                    }
+                    if  generatedCode {
+                        context.generatedCode = true
+                    } else {
+                        try context.writeIndented("pass\n")
+                    }
+                    context.decrementIndent()
+                    context.popNode()
+                    wroteCode = true
                 }
-                context.incrementIndent()
-                let generatedCode : Bool
-                if let child = child as? AIETensorFlowCodeWriter {
-                    generatedCode = try child.generateCode(context: context)
-                } else {
-                    context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
-                    generatedCode = false
-                }
-                if  generatedCode {
-                    context.generatedCode = true
-                } else {
-                    try context.writeIndented("pass\n")
-                }
-                context.decrementIndent()
-                context.pop()
-                wroteCode = true
             }
+            
+            return wroteCode
         }
         
-        return wroteCode
     }
 
 }

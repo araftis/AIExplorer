@@ -34,14 +34,21 @@ import AJRInterface
 @objcMembers
 public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, AJREquatable {
     
+    static let sizeLabels : [AIEShapeLabel] = [.height, .width]
+    static let imageLabels : [AIEShapeLabel] = [.height, .width, .depth]
+
     public private(set) var count : Int = 3
-    internal var labels : [AIEShapeLabel] = [.height, .width, .depth]
+    internal var labels : [AIEShapeLabel] = AIEShape.imageLabels
     internal var values : [Int] = [ 0, 0, 0 ]
     
     // MARK: - Creation
     
     open class func shape(width: Int, height: Int, depth: Int) -> AIEShape {
         return AIEShape(width: width, height: height, depth: depth)
+    }
+    
+    open class func shape(width: Int, height: Int) -> AIEShape {
+        return AIEShape(labels: AIEShape.sizeLabels, values: [height, width])
     }
     
     /**
@@ -64,6 +71,12 @@ public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, A
         self.depth = depth
     }
     
+    public init(width: Int, height: Int) {
+        self.count = 2
+        self.labels = AIEShape.sizeLabels
+        self.values = [height, width]
+    }
+    
     // MARK: - Convenience Properties
     
     public class var zeroImage : AIEShape {
@@ -79,7 +92,7 @@ public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, A
             return count >= 2 ? values[1] : 0
         }
         set {
-            if count >= 1 {
+            if count >= 2 {
                 values[1] = newValue
             }
         }
@@ -98,10 +111,10 @@ public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, A
     
     public var depth : Int {
         get {
-            return count >= 2 ? values[2] : 0
+            return count >= 3 ? values[2] : 0
         }
         set {
-            if count >= 2 {
+            if count >= 3 {
                 values[2] = newValue
             }
         }

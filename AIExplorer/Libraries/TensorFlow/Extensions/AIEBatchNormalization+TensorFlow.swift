@@ -32,12 +32,21 @@ import Foundation
 
 extension AIEBatchNormalization : AIETensorFlowCodeWriter {
     
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        try appendShapes(context: context)
-        try context.output.write("layers.BatchNormalization(momentum = \(self.momentum), epsilon = \(self.epsilon), name='\(variableName)')")
-        
-        context.add(message: AIEMessage(type: .warning, message: "AIEBatchNormalization does not yet generate correct code for TensorFlow", on: self))
-        
-        return true
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowBatchNormalizationWriter(object: self)
     }
+    
+    internal class AIETensorFlowBatchNormalizationWriter : AIETypedCodeWriter<AIEBatchNormalization> {
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            try appendShapes(context: context)
+            try context.output.write("layers.BatchNormalization(momentum = \(node.momentum), epsilon = \(node.epsilon), name='\(node.variableName)')")
+            
+            context.add(message: AIEMessage(type: .warning, message: "AIEBatchNormalization does not yet generate correct code for TensorFlow", on: object))
+            
+            return true
+        }
+        
+    }
+    
 }

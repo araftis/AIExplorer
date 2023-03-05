@@ -34,8 +34,8 @@ import Cocoa
 @objcMembers
 open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
-    internal func generateHeader(using context: AIETensorFlowContext) throws -> Void {
-        context.stage = .header
+    internal func generateHeader(using context: AIECodeGeneratorContext) throws -> Void {
+        context.stage = .implementationHeader
         
         try context.write("#\n")
         try context.write("# \(info[.codeName] ?? "Anonymous").py\n")
@@ -61,8 +61,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
         iterateRoots { root in
             root.iterateGraph { node, stop in
-                guard let node = node as? AIETensorFlowCodeWriter else { return }
-                let additional = node.imports
+                let additional = context.imports(for: node)
                 for importString in additional {
                     if !imports.contains(importString) {
                         imports.append(importString)
@@ -72,19 +71,18 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         }
 
         // And finally, all the import statements we'll need.
-        context.stage = .imports
+        context.stage = .implementationIncludes
         try context.write("\n")
         for importStatement in imports {
             try context.write("\(importStatement)\n")
         }
     }
     
-    internal func generateLicenses(using context: AIETensorFlowContext) throws -> Void {
+    internal func generateLicenses(using context: AIECodeGeneratorContext) throws -> Void {
         var licenses = [String]()
         iterateRoots { root in
-            root.iterateGraph { child, stop in
-                if let child = child as? AIETensorFlowCodeWriter,
-                   let license = child.license {
+            root.iterateGraph { node, stop in
+                if let license = context.license(for: node) {
                     licenses.append(license)
                 }
             }
@@ -98,27 +96,24 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         }
     }
     
-    internal func generateClass(for node: AIETensorFlowCodeWriter, using context: AIETensorFlowContext) throws -> Void {
+    internal func generateClass(for node: AIETensorFlowCodeWriter, using context: AIECodeGeneratorContext) throws -> Void {
         try context.write("\n")
         try context.write("class \(info[.codeName] ?? "Anonymous"):\n")
         try context.write("\n")
         
         // Create the init method.
-        context.stage = .initArguments
-        try context.writeFunctionDef(name: "__init__") {
+        try context.writeFunction(name: "__init__", type: .implementation) {
             try context.writeArgument("self")
-            try node.generateInitArguments(context: context)
+            try context.generateCode(for: node, in: .initArguments)
         } body: {
-            context.stage = .initialization
-            let wroteCode = try node.generateInitializationCode(context: context)
+            let wroteCode = try context.generateCode(for: node, in: .initialization)
             if !wroteCode  {
                 try context.writeIndented("pass\n")
             }
         }
 
         // Write any additional methods desired by our nodes.
-        context.stage = .methods
-        try node.generateMethodsCode(context: context)
+        try context.generateCode(for: node, in: .implementationMethods)
 
         // Declare the build method. This actually builds and compiles.
         try context.write("\n")
@@ -134,12 +129,10 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             -------
             A TensorFlow model ready for training or inference.
             """
-        try context.writeFunctionDef(name: "build_model", documentation: documentation) {
+        try context.writeFunction(name: "build_model", type: .implementation, documentation: documentation) {
             try context.writeArgument("self")
             try context.writeArgument("isTraining=False")
         } body: {
-            context.stage = .build
-
             try context.writeComment("Let's see if the model's already created, and just return it if it is.\n")
             try context.writeIndented("if isTraining:\n")
             try context.indent {
@@ -167,7 +160,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             try context.write("\n")
             
             // And generate the model.
-            try node.generateCode(context: context)
+            try context.generateCode(for: node, in: .build)
 
             try context.write("\n")
             try context.writeIndented("if isTraining:\n")
@@ -185,7 +178,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         }
 
         try context.write("\n")
-        try context.writeFunctionDef(name: "train") {
+        try context.writeFunction(name: "train", type: .implementation) {
             try context.writeArgument("self")
             try context.writeArgument("batch_size=128")
         } body: {
@@ -193,7 +186,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         }
 
         try context.write("\n")
-        try context.writeFunctionDef(name: "infer") {
+        try context.writeFunction(name: "infer", type: .implementation) {
             try context.writeArgument("self")
         } body: {
             try context.writeIndented("model = self.build_model(isTraining=False)\n")
@@ -218,11 +211,11 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 try generateClass(for: node, using: context)
             } else {
                 messages.append(AIEMessage(type: .error, message: "\(Swift.type(of:node)) is not supported with TensorFlow.", on: node))
-                try outputStream.indent(1).write("// \(Swift.type(of:node)) is not supported with TensorFlow.\n")
+                try context.writeIndented("// \(Swift.type(of:node)) is not supported with TensorFlow.\n")
             }
         }
-        try outputStream.indent(0).write("\n")
-        try outputStream.indent(0).write("\n")
+        try context.write("\n")
+        try context.write("\n")
         
         messages.append(contentsOf: context.messages)
     }

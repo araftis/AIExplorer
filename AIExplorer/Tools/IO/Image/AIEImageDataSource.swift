@@ -40,7 +40,7 @@ public extension AIEDataSourceIndentifier {
 }
 
 @objcMembers
-open class AIEImageDataSource: AIEDataSource, AJRXMLCoding, AIEMessageObject {
+open class AIEImageDataSource: AIEDataSource, AJRXMLCoding, AIEMessageObject, AIEWritableObject {
     
     open class var defaultWidth : Int { return 0 }
     open class var defaultHeight : Int { return 0 }
@@ -155,5 +155,25 @@ open class AIEImageDataSource: AIEDataSource, AJRXMLCoding, AIEMessageObject {
         return nil
     }
 
+    public var kind: AIEGraphic.Kind {
+        return .support
+    }
     
+    public var destinationObjects: [AIEGraphic] {
+        return []
+    }
+    
+    public var variableName: String {
+        return ""
+    }
+    
+    public var inputShape: [Int]? {
+        return nil
+    }
+    
+    public var outputShape: [Int] {
+        return []
+    }
+    
+
 }

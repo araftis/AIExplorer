@@ -32,7 +32,7 @@ import Foundation
 
 internal protocol AIETensorFlowOptimizerCodeWriter : AIEMessageObject {
     
-    func generateOptimizerCode(context: AIETensorFlowContext) throws -> Bool
+    func generateOptimizerCode(context: AIECodeGeneratorContext) throws -> Bool
     var variableName : String { get }
 
 }

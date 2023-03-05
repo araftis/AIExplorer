@@ -32,47 +32,56 @@ import Foundation
 
 extension AIETerminus : AIETensorFlowCodeWriter {
     
-    internal func generateOptimizerCode(context: AIETensorFlowContext) throws -> Void {
-        try context.writeIndented("# We don't generate real optimizer code yet.\n")
-        try context.writeIndented("optimizer = optimizers.CategoricalCrossentropy()\n")
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowTerminusWriter(object: self)
     }
     
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        if destinationObjects.count > 0 {
-            context.add(message: AIEMessage(type: .error, message: "The loss layer should have no children, and they will not be visited.", on: self))
-        }
-
-        // Work out the Loss function
-        // Note: This will always generate code, so ignore.
-        var lossName : String? = nil
-        if let loss = loss as? AIETensorFlowLossCodeWriter {
-            try context.writeIndented("\(loss.variableName) = ")
-            _ = try loss.generateLossCode(context: context)
-            try context.write("\n")
-            lossName = loss.variableName
-        } else {
-            context.add(message: AIEMessage(type: .error, message: "\(type(of:loss)) does not support code generation for TensorFlow.", on: self))
-        }
-
-        // Now workout the optimizer function
-        var optimizerName : String? = nil
-        if let optimizer = optimizer as? AIETensorFlowOptimizerCodeWriter {
-            try context.writeIndented("\(optimizer.variableName) = ")
-            _ = try optimizer.generateOptimizerCode(context: context)
-            try context.write("\n")
-            optimizerName = optimizer.variableName
-        } else {
-            context.add(message: AIEMessage(type: .error, message: "\(type(of:optimizer)) does not support code generation for TensorFlow.", on: self))
+    internal class AIETensorFlowTerminusWriter : AIETypedCodeWriter<AIETerminus> {
+        
+        func generateOptimizerCode(context: AIECodeGeneratorContext) throws -> Void {
+            try context.writeIndented("# We don't generate real optimizer code yet.\n")
+            try context.writeIndented("optimizer = optimizers.CategoricalCrossentropy()\n")
         }
         
-        // Finally, write the compile line.
-        try context.write("")
-        try context.writeFunction(name: "model.compile", indented: true) {
-            try context.writeArgument(lossName != nil, "loss=\(lossName ?? "")")
-            try context.writeArgument(optimizerName != nil, "optimizer=\(optimizerName ?? "")")
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            if object.destinationObjects.count > 0 {
+                context.add(message: AIEMessage(type: .error, message: "The loss layer should have no children, and they will not be visited.", on: object))
+            }
+            
+            // Work out the Loss function
+            // Note: This will always generate code, so ignore.
+            var lossName : String? = nil
+            if let loss = node.loss as? AIETensorFlowLossCodeWriter {
+                try context.writeIndented("\(loss.variableName) = ")
+                _ = try loss.generateLossCode(context: context)
+                try context.write("\n")
+                lossName = loss.variableName
+            } else {
+                context.add(message: AIEMessage(type: .error, message: "\(type(of:node.loss)) does not support code generation for TensorFlow.", on: object))
+            }
+            
+            // Now workout the optimizer function
+            var optimizerName : String? = nil
+            if let optimizer = node.optimizer as? AIETensorFlowOptimizerCodeWriter {
+                try context.writeIndented("\(optimizer.variableName) = ")
+                _ = try optimizer.generateOptimizerCode(context: context)
+                try context.write("\n")
+                optimizerName = optimizer.variableName
+            } else {
+                context.add(message: AIEMessage(type: .error, message: "\(type(of:node.optimizer)) does not support code generation for TensorFlow.", on: object))
+            }
+            
+            // Finally, write the compile line.
+            try context.write("")
+            try context.writeFunction(name: "model.compile", indented: true) {
+                try context.writeArgument(lossName != nil, "loss=\(lossName ?? "")")
+                try context.writeArgument(optimizerName != nil, "optimizer=\(optimizerName ?? "")")
+            }
+            try context.write("\n")
+            
+            return true
         }
-        try context.write("\n")
         
-        return true
     }
+    
 }

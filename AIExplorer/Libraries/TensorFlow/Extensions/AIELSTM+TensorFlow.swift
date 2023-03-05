@@ -32,12 +32,21 @@ import Foundation
 
 extension AIELSTM : AIETensorFlowCodeWriter {
 
-    internal func generateCode(context: AIETensorFlowContext) throws -> Bool {
-        try appendShapes(context: context)
-        try context.output.write("layers.LTSM(units = \(self.units), name='\(variableName)')")
-        
-        context.add(message: AIEMessage(type: .warning, message: "AIELSTM does not yet generate correct code for TensorFlow", on: self))
-        
-        return true
+    func createTensorFlowCodeWriter() -> AIECodeWriter {
+        return AIETensorFlowLSTMWriter(object: self)
     }
+    
+    internal class AIETensorFlowLSTMWriter : AIETypedCodeWriter<AIELSTM> {
+        
+        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+            try appendShapes(context: context)
+            try context.write("layers.LTSM(units = \(node.units), name='\(node.variableName)')")
+            
+            context.add(message: AIEMessage(type: .warning, message: "AIELSTM does not yet generate correct code for TensorFlow", on: object))
+            
+            return true
+        }
+        
+    }
+    
 }
