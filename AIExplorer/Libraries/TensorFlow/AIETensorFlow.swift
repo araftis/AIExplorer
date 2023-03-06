@@ -31,8 +31,8 @@
 
 import Cocoa
 
-public extension AIELibraryIndentifier {
-    static var tensorflow = AIELibraryIndentifier(rawValue: "tensorflow")
+public extension AIELibraryIdentifier {
+    static var tensorflow = AIELibraryIdentifier(rawValue: "tensorflow")
 }
 
 /**

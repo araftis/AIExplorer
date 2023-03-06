@@ -71,7 +71,7 @@ extension AIEBranch : AIETensorFlowCodeWriter {
             })
         }
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             return try generateCode(for: exitLinks, context: context)
         }
         
@@ -111,7 +111,7 @@ extension AIEBranch : AIETensorFlowCodeWriter {
                     context.incrementIndent()
                     let generatedCode : Bool
                     if let writer = context.codeWriter(for: child) {
-                        generatedCode = try writer.generateBuildCode(context: context)
+                        generatedCode = try writer.generateBuildCode(in: context)
                     } else {
                         context.add(message: AIEMessage(type: .error, message: "\(type(of: child)) does not support TensorFlow code generation.", on: child))
                         generatedCode = false

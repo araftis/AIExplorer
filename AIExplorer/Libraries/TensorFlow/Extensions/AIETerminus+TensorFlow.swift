@@ -43,7 +43,7 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             try context.write("optimizer = optimizers.CategoricalCrossentropy()\n")
         }
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             if object.destinationObjects.count > 0 {
                 context.add(message: AIEMessage(type: .error, message: "The loss layer should have no children, and they will not be visited.", on: object))
             }

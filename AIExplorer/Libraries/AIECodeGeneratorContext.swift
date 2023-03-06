@@ -72,8 +72,10 @@ open class AIECodeGeneratorContext : NSObject {
         
     }
 
+    public private(set) weak var library : AIELibrary? = nil
+    public private(set) weak var codeGenerator : AIECodeGenerator? = nil
     /// The current stage of generation. Setting this resets `generatedCode` to `false`.
-    public var stage : Stage = .initialization
+    public private(set) var stage : Stage = .initialization
     /// Where the output is being generated. Note that this is a stack, because sometimes we'll generated to a substream, and if that substream generates code, when popping the stack, we'll append the output to the previous output stream.
     internal var outputStreams : [OutputStream]
     /// The current path to the neural network node being processed.
@@ -84,6 +86,8 @@ open class AIECodeGeneratorContext : NSObject {
     public private(set) var indent : Int
     /// The size of the indent. By default this will be four.
     public var indentWidth : Int = 4
+    /// Some stages allow a "scope". This may be irrelevant in some languages, and can be ignored in those cases.
+    public private(set) var scope : Scope = .public
     /// If, when traversing the tree, we generate code, this will be set to `true`.
     public var generatedCode : Bool = false
 
@@ -93,7 +97,8 @@ open class AIECodeGeneratorContext : NSObject {
      - parameter outputStream Where output should be written. Note that output will mostly be done through the context, which nows how to properly format for the given language.
      - parameter indent The initial indent of the context.
      */
-    init(outputStream: OutputStream, indent: Int = 0) {
+    init(outputStream: OutputStream, library: AIELibrary?, codeGenerator: AIECodeGenerator, indent: Int = 0) {
+        self.library = library
         self.indent = indent
         self.outputStreams = [outputStream]
         self.path = [AIECodeWriter]()
@@ -241,7 +246,7 @@ open class AIECodeGeneratorContext : NSObject {
      
      - parameter indentedBlock A block of code that writes more output. The output will be indented one level deeper.
      */
-    func indent(_ indentedBlock: () throws -> Void) rethrows -> Void {
+    open func indent(_ indentedBlock: () throws -> Void) throws -> Void {
         incrementIndent()
         defer {
             decrementIndent()
@@ -249,6 +254,17 @@ open class AIECodeGeneratorContext : NSObject {
         try indentedBlock()
     }
     
+    /**
+     In the base class, this just calls `indent`, but subclasses can override to add additional ornimatation for blocks of code.
+     
+     For example, an Obj-C subclass might add the `{` and `}` about the block.
+     */
+    open func block(_ body: () throws -> Void) throws {
+        try write(" BEGIN\n")
+        try indent(body)
+        try write("END\n")
+    }
+
     // MARK: - Writing Conveniences
     
     internal var nextWriteIndent = true
@@ -338,6 +354,7 @@ open class AIECodeGeneratorContext : NSObject {
 
         var name: String
         var type: FunctionType
+        var receiver: String?
         var separateArgumentsWithNewlines: Bool
         var documentationPosition: DocumentationPosition
         var documentation: String?
@@ -345,6 +362,7 @@ open class AIECodeGeneratorContext : NSObject {
         
         init(name: String,
              type: FunctionType = .call,
+             receiver: String? = nil,
              separateArgumentsWithNewlines: Bool = false,
              documentationPosition: DocumentationPosition = .beforeDeclaration,
              documentation: String? = nil,
@@ -352,6 +370,7 @@ open class AIECodeGeneratorContext : NSObject {
             self.argumentsWritten = 0
             self.name = name
             self.type = type
+            self.receiver = receiver
             self.separateArgumentsWithNewlines = separateArgumentsWithNewlines
             self.documentationPosition = documentationPosition
             self.documentation = documentation
@@ -389,7 +408,7 @@ open class AIECodeGeneratorContext : NSObject {
         case .prototype:
             break
         case .implementation:
-            try write("def \(functionContext.name)(")
+            try write("FUNCTION \(functionContext.name)(")
         case .call:
             try write("\(functionContext.name)(")
         }
@@ -398,11 +417,9 @@ open class AIECodeGeneratorContext : NSObject {
     /**
      Writes the function's documentation, as appropriate for the given language.
      */
-    func writeFunctionDocumentation() throws -> Void {
+    open func writeFunctionDocumentation() throws -> Void {
         if let documentation = functionContext.documentation {
-            try indent {
-                try writeComment(documentation, type: .methodDocumentation)
-            }
+            try writeComment(documentation, type: .methodDocumentation)
         }
     }
     
@@ -429,7 +446,7 @@ open class AIECodeGeneratorContext : NSObject {
      - parameter value The value of the parameter. In the case of a call, this is just the value.
      - parameter type The type of the parameter. This may be `nil` if the language doesn't support parameters.
      */
-    func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
+    open func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
         if condition() {
             if functionContext.argumentsWritten > 0 {
                 try write(", ")
@@ -453,18 +470,18 @@ open class AIECodeGeneratorContext : NSObject {
     /**
      Just calls `writeArgument(_:name:value:type:)` where `condition` is always `true`.
      */
-    func writeArgument(name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
+    open func writeArgument(name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
         try writeArgument(true, name: name, value: value, type: type)
     }
     
     /**
      Terminates the function call. For `call`, this should just close the function call, but not include a newline. For the others, this will likely include a newline.
      */
-    func writeFunctionArgumentsStop() throws -> Void {
+    open func writeFunctionArgumentsStop() throws -> Void {
         functionContext.argumentsWritten = 0
         try write(")")
-        if functionContext.type == .implementation {
-            try write(":\n")
+        if functionContext.type == .prototype {
+            try write(";\n")
         }
     }
     
@@ -497,15 +514,17 @@ open class AIECodeGeneratorContext : NSObject {
      */
     func writeFunction(name: String,
                        type: FunctionType = .call,
+                       returnType: String? = nil,
+                       receiver: String? = nil,
                        documentation: String? = nil,
                        documentationPosition: DocumentationPosition? = nil,
                        argumentsIndented: Bool = false,
-                       arguments block : () throws -> Void,
-                       returnType: String? = nil,
+                       arguments argumentsBlock : () throws -> Void,
                        body: (() throws -> Void)? = nil) throws -> Void {
         do {
             let functionContext = FunctionContext(name: name,
                                                   type: type,
+                                                  receiver: receiver,
                                                   separateArgumentsWithNewlines: argumentsIndented,
                                                   documentationPosition: documentationPosition ?? defaultDocumentationPosition,
                                                   documentation: documentation,
@@ -518,18 +537,17 @@ open class AIECodeGeneratorContext : NSObject {
             if functionContext.separateArgumentsWithNewlines {
                 incrementIndent()
             }
-            try block()
+            try argumentsBlock()
             if functionContext.separateArgumentsWithNewlines {
                 try write("\n")
                 decrementIndent()
-                try write("")
             }
             try writeFunctionArgumentsStop()
             if let body {
-                if functionContext.documentationPosition == .afterDeclaration {
-                    try writeFunctionDocumentation()
-                }
-                try indent {
+                try block {
+                    if functionContext.documentationPosition == .afterDeclaration {
+                        try writeFunctionDocumentation()
+                    }
                     try body()
                 }
             }
@@ -613,6 +631,30 @@ open class AIECodeGeneratorContext : NSObject {
     }
 
     /**
+     Defines the scope of things like properties and methods. Usually defaults to public.
+     */
+    public enum Scope {
+        /// Methods or properties are public and can be overridden.
+        case `open`
+        /// Methods or properties are public. May be the same as `open` in many languages.
+        case `public`
+        /// Methods or properties are protected.
+        case `protected`
+        /// Methods or properties are private.
+        case `private`
+    }
+    
+    /**
+     Flags to the context what stage we're about to begin.
+     
+     
+     */
+    open func begin(stage: Stage, scope: Scope = .public) -> Void {
+        self.stage = stage
+        self.scope = scope
+    }
+    
+    /**
      Use this method to initiate writing code.
      
      For some stages, this will cause the entire neural network graph to be traversed. For others, it will simply exit after processing one node. In all cases, the context's stage will be set to the `stage`.
@@ -621,8 +663,8 @@ open class AIECodeGeneratorContext : NSObject {
      - parameter stage The stage of the code generation.
      */
     @discardableResult
-    open func generateCode(for object: Any?, in stage: Stage) throws -> Bool {
-        self.stage = stage
+    open func generateCode(for object: Any?, in stage: Stage, scope: Scope = .public) throws -> Bool {
+        begin(stage: stage, scope: scope)
         return try codeWriter(for: object)?.generateCode(in: self) ?? false
     }
     

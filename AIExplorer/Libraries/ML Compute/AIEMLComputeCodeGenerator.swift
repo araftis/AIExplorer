@@ -37,10 +37,10 @@ open class AIEMLComputeCodeGenerator: AIECodeGenerator {
     override open func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
         var childGenerator : AIECodeGenerator? = nil
         
-        if language.identifier == "obj-c" {
-            childGenerator = AIEMLComputeObjCGenerator(info: info, for: language, roots: roots)
-        } else if language.identifier == "swift" {
-            childGenerator = AIEMLComputeSwiftGenerator(info: info, for: language, roots: roots)
+        if language.identifier == .objC {
+            childGenerator = AIEMLComputeObjCGenerator(library: library, info: info, for: language, roots: roots)
+        } else if language.identifier == .swift {
+            childGenerator = AIEMLComputeSwiftGenerator(library: library, info: info, for: language, roots: roots)
         } else {
             for root in roots {
                 messages.append(AIEMessage(type: .error, message: "Invalid language: \(language.name)", on: root))
@@ -50,6 +50,23 @@ open class AIEMLComputeCodeGenerator: AIECodeGenerator {
         if let childGenerator = childGenerator {
             try childGenerator.generate(to: outputStream, accumulatingMessages: &messages)
         }
+    }
+    
+    // MARK: - Conveniences
+    
+    public enum FileType {
+        case objCInterface
+        case objCImplementation
+        case swift
+    }
+
+    var fileType : FileType {
+        if info[.extension] == "h" {
+            return .objCInterface
+        } else if info[.extension] == "m" {
+            return .objCImplementation
+        }
+        return .swift
     }
 
 }

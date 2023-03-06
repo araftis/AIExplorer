@@ -37,7 +37,28 @@ internal class AIETensorFlowContext : AIECodeGeneratorContext {
     open override var defaultDocumentationPosition : DocumentationPosition {
         return .afterDeclaration
     }
-    
+
+    open override func block(_ body: () throws -> Void) throws {
+        try write(":\n")
+        try indent(body)
+    }
+
+    open override func writingFunctionStart() throws -> Void {
+        switch functionContext.type {
+        case .prototype:
+            break
+        case .implementation:
+            try write("def \(functionContext.name)(")
+        case .call:
+            try write("\(functionContext.name)(")
+        }
+    }
+
+    override func writeFunctionArgumentsStop() throws -> Void {
+        functionContext.argumentsWritten = 0
+        try write(")")
+    }
+
     override func writeComment(_ comment: String, type: CommentType = .singleLine) throws -> Void {
         switch type {
         case .header:

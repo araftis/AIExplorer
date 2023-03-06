@@ -225,7 +225,7 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             coder.encode(library.identifier.rawValue, forKey: "library")
         }
         if let language = language {
-            coder.encode(language.identifier, forKey: "language")
+            coder.encode(language.identifier.rawValue, forKey: "language")
         }
         if let url = outputURL {
             coder.encodeURLBookmark(url, forKey: "outputURL")
@@ -250,14 +250,14 @@ open class AIECodeDefinition: AJREditableObject, AJRXMLCoding {
             self.name = value as? String
         }
         coder.decodeString(forKey: "library") { (identifier) in
-            if let library = AIELibrary.library(for: AIELibraryIndentifier(identifier)) {
+            if let library = AIELibrary.library(for: AIELibraryIdentifier(identifier)) {
                 self.library = library
             } else {
                 self.library = AIELibrary.library(for: .tensorflow)!
             }
         }
         coder.decodeString(forKey: "language") { (identifier) in
-            if let language = self.library?.language(for: identifier) {
+            if let language = self.library?.language(for: AIELanguageIdentifier(identifier)) {
                 self.language = language
             } else {
                 self.language = self.library?.preferredLanguage

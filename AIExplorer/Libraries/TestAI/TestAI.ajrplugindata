@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<plugindata owner="com.ajr.framework.AJRFoundation" version="1">
+    <aie-library name="TestAI" id="testAI" class="AIExplorer.TestAILibrary">
+        <code-generator class="AIExplorer.TestAICodeGenerator">
+            <language identifier="python" name="Python">
+                <extension extension="py" uti="public.python-script" />
+            </language>
+        </code-generator>
+    </aie-library>
+</plugindata>

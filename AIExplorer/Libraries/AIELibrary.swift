@@ -33,7 +33,7 @@ import Cocoa
 import AJRFoundation
 import Draw
 
-public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
+public struct AIELibraryIdentifier : RawRepresentable, Equatable, Hashable {
 
     public typealias RawValue = String
 
@@ -47,7 +47,7 @@ public struct AIELibraryIndentifier : RawRepresentable, Equatable, Hashable {
         self.rawValue = rawValue
     }
 
-    static var unknown = AIELibraryIndentifier("unknown")
+    static var unknown = AIELibraryIdentifier("unknown")
 }
 
 @objcMembers
@@ -72,13 +72,39 @@ public class AIEFileType : NSObject {
     
 }
 
+public struct AIELanguageIdentifier : RawRepresentable, Equatable, Hashable {
+
+    public typealias RawValue = String
+
+    public var rawValue: String
+
+    public init(_ rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+
+    public init(rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+
+    static var unknown = AIELanguageIdentifier("unknown")
+    static var objC = AIELanguageIdentifier("obj-c")
+    static var swift = AIELanguageIdentifier("swift")
+    static var python = AIELanguageIdentifier("python")
+    static var jupyterNoteBook = AIELanguageIdentifier("ipynb")
+    static var java = AIELanguageIdentifier("java")
+    static var go = AIELanguageIdentifier("go")
+    static var rust = AIELanguageIdentifier("rust")
+    static var javaScript = AIELanguageIdentifier("javaScript")
+
+}
+
 /**
  This is a small contained class to describe a programming language. This is a class rather than a struct for Obj-C interoperability.
  */
 @objcMembers public class AIELanguage : NSObject, Comparable, AJRInspectorChoiceTitleProvider {
 
     public var name : String
-    public var identifier : String
+    public var identifier : AIELanguageIdentifier
     public var fileTypes : [AIEFileType]
     public var fileExtensions : [String] {
         return fileTypes.map { $0.extension }
@@ -87,7 +113,7 @@ public class AIEFileType : NSObject {
         return fileTypes.map { $0.uti }
     }
 
-    public init(name: String, identifier: String, fileTypes: [AIEFileType]) {
+    public init(name: String, identifier: AIELanguageIdentifier, fileTypes: [AIEFileType]) {
         self.name = name
         self.identifier = identifier
         self.fileTypes = fileTypes
@@ -106,7 +132,7 @@ public class AIEFileType : NSObject {
                     AJRLog.error("Failed to create a file type from the properties: \(rawFileType)")
                 }
             }
-            self.init(name: name, identifier: identifier, fileTypes: fileTypes)
+            self.init(name: name, identifier: AIELanguageIdentifier(identifier), fileTypes: fileTypes)
         } else {
             return nil
         }
@@ -126,7 +152,7 @@ public class AIEFileType : NSObject {
 
     // MARK: - Hashable
 
-    public override var hash: Int { return identifier.hash }
+    public override var hash: Int { return identifier.rawValue.hash }
 
     // MARK: - Equatable
 
@@ -165,14 +191,14 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
 
     // MARK: - Factory
 
-    internal static var librariesById = [AIELibraryIndentifier:AIELibrary]()
+    internal static var librariesById = [AIELibraryIdentifier:AIELibrary]()
 
     @objc(registerLibrary:properties:)
     open class func register(library: AIELibrary.Type, properties: [String:Any]) -> Void {
         if let libraryClass = properties["class"] as? AIELibrary.Type,
            let rawId = properties["id"] as? String,
            let name = properties["name"] as? String {
-            let identifier = AIELibraryIndentifier(rawValue: rawId)
+            let identifier = AIELibraryIdentifier(rawValue: rawId)
             let url = properties["url"] as? URL
             let library = libraryClass.init(id: identifier, name: name, url: url)
             librariesById[identifier] = library
@@ -180,7 +206,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
         }
     }
 
-    open class func library(for id: AIELibraryIndentifier) -> AIELibrary? {
+    open class func library(for id: AIELibraryIdentifier) -> AIELibrary? {
         return librariesById[id]
     }
 
@@ -193,7 +219,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
 
     // MARK: - Properties
 
-    open var identifier : AIELibraryIndentifier
+    open var identifier : AIELibraryIdentifier
     open var name : String /// Name of the library
     open var url : URL? /// A url that points to the library's homepage.
 
@@ -206,7 +232,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
 
     // MARK: - Creation
 
-    public required init(id: AIELibraryIndentifier, name : String, url : URL?) {
+    public required init(id: AIELibraryIdentifier, name : String, url : URL?) {
         self.identifier = id
         self.name = name
         self.url = url
@@ -214,7 +240,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
 
     // MARK: - Source Code Generation
 
-    open func language(for identifier: String) -> AIELanguage? {
+    open func language(for identifier: AIELanguageIdentifier) -> AIELanguage? {
         for language in supportedLanguagesForCodeGeneration {
             if language.identifier == identifier {
                 return language
@@ -275,7 +301,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
     open func codeGenerator(info: [String:Any], for language: AIELanguage, roots: [AIEGraphic]) -> AIECodeGenerator? {
         for codeGenerator in codeGenerators {
             if codeGenerator.languages.contains(language) {
-                return codeGenerator.generatorClass.init(info: info, for: language, roots: roots)
+                return codeGenerator.generatorClass.init(library: self, info: info, for: language, roots: roots)
             }
         }
         return nil

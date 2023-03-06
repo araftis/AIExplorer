@@ -31,8 +31,8 @@
 
 import Cocoa
 
-public extension AIELibraryIndentifier {
-    static var mlCompute = AIELibraryIndentifier(rawValue: "mlCompute")
+public extension AIELibraryIdentifier {
+    static var mlCompute = AIELibraryIdentifier(rawValue: "mlCompute")
 }
 
 @objcMembers

@@ -91,6 +91,7 @@ open class AIECodeGenerator: NSObject {
         return formatter
     }
 
+    open weak var library : AIELibrary?
     open var info : [String:Any]
     open var language : AIELanguage
     open var roots : [AIEGraphic]
@@ -100,7 +101,8 @@ open class AIECodeGenerator: NSObject {
     /**
      Creates a new code generated based on `language` rooted on `root`.
      */
-    public required init(info: [String:Any], for language: AIELanguage, roots: [AIEGraphic]) {
+    public required init(library: AIELibrary?, info: [String:Any], for language: AIELanguage, roots: [AIEGraphic]) {
+        self.library = library
         self.info = info
         self.language = language
         self.roots = roots
@@ -142,6 +144,21 @@ open class AIECodeGenerator: NSObject {
     open func iterateAllNodes(using block: (_ node: AIEGraphic) throws -> Void) rethrows -> Void {
         try iterateRoots { node in
             try iterateNode(in: node, using: block)
+        }
+    }
+    
+    /**
+     Loops over all root nodes in the document and generates an error message if there's any root nodes that aren't I/O nodes.
+     
+     I/O nodes are subclasses of `AIEIO`, so the basic check is generate a error for anything that's an `AIEGraphic`, but that is not an `AIEIO` node.
+     
+     - parameter context: Our code generation context.
+     */
+    open func validateRootNodes(in context: AIECodeGeneratorContext) -> Void {
+        iterateRoots { root in
+            if !(root is AIEIO) {
+                context.add(message: AIEMessage(type: .error, message: "Network roots must begin on an IO node.", on: root))
+            }
         }
     }
 

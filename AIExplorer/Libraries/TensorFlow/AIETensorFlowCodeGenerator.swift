@@ -35,7 +35,7 @@ import Cocoa
 open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
     internal func generateHeader(using context: AIECodeGeneratorContext) throws -> Void {
-        context.stage = .implementationHeader
+        context.begin(stage: .implementationHeader)
         
         try context.write("#\n")
         try context.write("# \(info[.codeName] ?? "Anonymous").py\n")
@@ -45,7 +45,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         try context.write("#\n")
 
         // Handle Licenses
-        context.stage = .licenses
+        context.begin(stage: .licenses)
         try generateLicenses(using: context)
 
         var imports = [
@@ -71,7 +71,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         }
 
         // And finally, all the import statements we'll need.
-        context.stage = .implementationIncludes
+        context.begin(stage: .implementationIncludes)
         try context.write("\n")
         for importStatement in imports {
             try context.write("\(importStatement)\n")
@@ -196,15 +196,13 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
     }
 
     public override func generate(to outputStream: OutputStream, accumulatingMessages messages: inout [AIEMessage]) throws -> Void {
-        // First, we're going to look over our roots. All roots must be an IO node of some sort.
-        iterateRoots { root in
-            if !(root is AIEIO) {
-                messages.append(AIEMessage(type: .error, message: "Network roots must begin on an IO node.", on: root))
-            }
-        }
+        // First, create our context. The context is where we track pretty much everything about the code generation.
+        let context = AIETensorFlowContext(outputStream: outputStream, library: library, codeGenerator: self)
         
-        let context = AIETensorFlowContext(outputStream: outputStream)
+        // Next, we're going to look over our roots. All roots must be an IO node of some sort.
+        validateRootNodes(in: context)
         
+        // We can now move onto generating out file header comment.
         try generateHeader(using: context)
 
         // TODO: Make this smarter. If we're going to allow multiple roots, we need to make sure we generate a class for each root, but that also means we need to attach the name of the neural net to the root node, which is an I/O node? Need to think about that last thing.

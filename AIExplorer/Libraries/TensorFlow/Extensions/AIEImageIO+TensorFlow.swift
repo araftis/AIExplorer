@@ -68,7 +68,7 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
             return context.generatedCode
         }
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             if node.batchSize <= 0 {
                 context.add(message: AIEMessage(type: .warning, message: "The input node should define a batch size.", on: object))
             }

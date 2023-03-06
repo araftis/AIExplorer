@@ -56,14 +56,15 @@ open class AIECodeWriter : NSObject {
         case .implementationMethods:
             generatedCode = try generateImplementationMethodsCode(in: context)
         case .build:
-            generatedCode = try generateBuildCode(context: context)
+            generatedCode = try generateBuildCode(in: context)
         }
         
         return generatedCode
     }
     
     @discardableResult
-    open func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+    open func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
+        context.add(message: AIEMessage(type: .error, message: "\(type(of:object)) does not yet support code writing for \(context.library?.name ?? "Unknown").", on: object))
         try progressToChild(context: context)
         return context.generatedCode
     }

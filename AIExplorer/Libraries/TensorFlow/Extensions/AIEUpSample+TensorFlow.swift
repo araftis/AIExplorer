@@ -38,7 +38,7 @@ extension AIEUpsample : AIETensorFlowCodeWriter {
     
     internal class AIETensorFlowUpsampleWriter : AIETypedCodeWriter<AIEUpsample> {
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             try appendShapes(context: context)
             try context.output.write("layers.Conv2DTranspose(\(node.depth), (\(node.height), \(node.width)), \(node.step))")
             

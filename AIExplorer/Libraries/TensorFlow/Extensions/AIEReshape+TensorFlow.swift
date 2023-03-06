@@ -38,7 +38,7 @@ extension AIEReshape : AIETensorFlowCodeWriter {
     
     internal class AIETensorFlowReshapeWriter : AIETypedCodeWriter<AIEReshape> {
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             try self.appendStandardCode(context: context) {
                 try context.output.write("layers.Flatten(name='\(object.variableName)')")
             }

@@ -38,7 +38,7 @@ extension AIESoftmax : AIETensorFlowCodeWriter {
     
     internal class AIETensorFlowSoftmaxWriter : AIETypedCodeWriter<AIESoftmax> {
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             if let inputShape = object.inputShape {
                 if inputShape.count > 2 {
                     context.add(message: AIEMessage(type: .error, message: "The input shape \(inputShape) to the soft max layer has too many dimension. It should have just two, [<batch_size>, <dimension>].", on: object))

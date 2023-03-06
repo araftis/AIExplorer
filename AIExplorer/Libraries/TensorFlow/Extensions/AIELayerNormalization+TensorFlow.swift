@@ -38,7 +38,7 @@ extension AIELayerNormalization : AIETensorFlowCodeWriter {
     
     internal class AIETensorFlowLayerNormalizationWriter : AIETypedCodeWriter<AIELayerNormalization> {
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             try appendShapes(context: context)
             try context.write("layers.LayerNormalization(epsilon = \(node.epsilon))")
             

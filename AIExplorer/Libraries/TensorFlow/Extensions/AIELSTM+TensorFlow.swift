@@ -38,7 +38,7 @@ extension AIELSTM : AIETensorFlowCodeWriter {
     
     internal class AIETensorFlowLSTMWriter : AIETypedCodeWriter<AIELSTM> {
         
-        override func generateBuildCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             try appendShapes(context: context)
             try context.write("layers.LTSM(units = \(node.units), name='\(node.variableName)')")
             
