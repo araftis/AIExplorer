@@ -20,7 +20,7 @@ extension AIEImageIO : AIEMLComputeCodeWriter {
     class ObjCImageIOCodeWriter : AIETypedCodeWriter<AIEImageIO> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             // IO nodes don't actually become part of the graph, they just define our input.
             return context.generatedCode
         }
@@ -30,7 +30,7 @@ extension AIEImageIO : AIEMLComputeCodeWriter {
     class SwiftImageIOCodeWriter : AIETypedCodeWriter<AIEImageIO> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             // IO nodes don't actually become part of the graph, they just define our input.
             return context.generatedCode
         }

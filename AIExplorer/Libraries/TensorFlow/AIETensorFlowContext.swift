@@ -29,60 +29,10 @@
  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Cocoa
+import Draw
 
 // Class, because we need this to be mutable without hassle.
-internal class AIETensorFlowContext : AIECodeGeneratorContext {
-    
-    open override var defaultDocumentationPosition : DocumentationPosition {
-        return .afterDeclaration
-    }
-
-    open override func block(_ body: () throws -> Void) throws {
-        try write(":\n")
-        try indent(body)
-    }
-
-    open override func writingFunctionStart() throws -> Void {
-        switch functionContext.type {
-        case .prototype:
-            break
-        case .implementation:
-            try write("def \(functionContext.name)(")
-        case .call:
-            try write("\(functionContext.name)(")
-        }
-    }
-
-    override func writeFunctionArgumentsStop() throws -> Void {
-        functionContext.argumentsWritten = 0
-        try write(")")
-    }
-
-    override func writeComment(_ comment: String, type: CommentType = .singleLine) throws -> Void {
-        switch type {
-        case .header:
-            break
-        case .classDocumentation:
-            break
-        case .methodDocumentation:
-            try write("\"\"\"\n")
-            let prefix = String(indent: indent)
-            let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
-            try output.write(wrapped)
-            try write("\n\"\"\"\n\n")
-        case .singleLine:
-            let prefix = String(indent: indent) + "# "
-            let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
-            try output.write(wrapped)
-        case .multiline:
-            try write("\"\"\"\n")
-            let prefix = String(indent: indent)
-            let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
-            try output.write(wrapped)
-            try write("\n\"\"\"\n")
-        }
-    }
+internal class AIETensorFlowContext : AIEPythonCodeGeneratorContext {
     
     override func codeWriter(for object: Any?) -> AIECodeWriter? {
         if let object = object as? AIETensorFlowCodeWriter {

@@ -45,63 +45,34 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
         try context.write("#\n")
 
         // Handle Licenses
-        context.begin(stage: .licenses)
-        try generateLicenses(using: context)
-
-        var imports = [
-            "import numpy as np", 
-            "import tensorflow as tf",
-            "from tensorflow import keras",
-            "from tensorflow.keras import layers",
-            "from tensorflow.keras import optimizers",
-            "from tensorflow.keras import models",
-            "from tensorflow.keras import losses",
-            "from tensorflow.keras import optimizers",
-        ]
-
-        iterateRoots { root in
-            root.iterateGraph { node, stop in
-                let additional = context.imports(for: node)
-                for importString in additional {
-                    if !imports.contains(importString) {
-                        imports.append(importString)
-                    }
-                }
-            }
+        try iterateRoots { root in
+            try context.generateCode(for: root, in: .licenses)
         }
-
-        // And finally, all the import statements we'll need.
-        context.begin(stage: .implementationIncludes)
-        try context.write("\n")
-        for importStatement in imports {
-            try context.write("\(importStatement)\n")
-        }
-    }
-    
-    internal func generateLicenses(using context: AIECodeGeneratorContext) throws -> Void {
-        var licenses = [String]()
-        iterateRoots { root in
-            root.iterateGraph { node, stop in
-                if let license = context.license(for: node) {
-                    licenses.append(license)
-                }
-            }
-        }
-        for (index, license) in licenses.enumerated() {
-            if index > 0 {
-                try context.write("#\n")
-            }
-            try context.write(license.byWrapping(to: 75, prefix: "# ", lineSeparator: "\n", splitURLs: false))
+        if context.generatedCode {
             try context.write("\n")
+        }
+
+        // And then imports.
+        try context.writeImports(for: .implementationIncludes) {
+            try context.writeImport("import numpy as np")
+            try context.writeImport("import tensorflow as tf")
+            try context.writeImport("from tensorflow import keras")
+            try context.writeImport("from tensorflow.keras import layers")
+            try context.writeImport("from tensorflow.keras import optimizers")
+            try context.writeImport("from tensorflow.keras import models")
+            try context.writeImport("from tensorflow.keras import losses")
+            try context.writeImport("from tensorflow.keras import optimizers")
+            try iterateRoots { root in
+                try context.generateCode(for: root, in: .implementationIncludes)
+            }
         }
     }
     
     internal func generateClass(for node: AIETensorFlowCodeWriter, using context: AIECodeGeneratorContext) throws -> Void {
         try context.write("\n")
-        try context.write("class \(info[.codeName] ?? "Anonymous"):\n")
-        try context.write("\n")
-        
-        try context.indent {
+        try context.writeClassImplementation(name: info[.codeName] ?? "Anonymous") {
+            // No explicit properties under Python.
+        } methods: {
             // Create the init method.
             try context.writeFunction(name: "__init__", type: .implementation) {
                 try context.writeArgument(name: "self")
@@ -112,20 +83,20 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                     try context.write("pass\n")
                 }
             }
-            
+
             // Write any additional methods desired by our nodes.
             try context.generateCode(for: node, in: .implementationMethods)
-            
+
             // Declare the build method. This actually builds and compiles.
             try context.write("\n")
             let documentation = """
             This method builds your model if it doesn't already exist. The more built is based on the model designed with AI Explorer. If `isTraining` is `False`, then the model is built ready for inference, otherwise it's built for training. As part of being built for training, the model will be compiled using the supplied loss and optimization options chosen in the modeler.
-            
+
             Parameters
             ----------
             isTraining : boolean
                 Determines whether the model is built for training or not.
-            
+
             Returns
             -------
             A TensorFlow model ready for training or inference.
@@ -149,7 +120,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                         try context.write("return self.model_inference\n")
                     }
                 }
-                
+
                 // Write the model declaration.
                 try context.write("\n")
                 try context.writeComment("Define the model as a Sequential model. This should cover most situations, but there's a good chance we'll need to improve this in the future.\n")
@@ -159,10 +130,10 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 }
                 try context.write(")\n")
                 try context.write("\n")
-                
+
                 // And generate the model.
                 try context.generateCode(for: node, in: .build)
-                
+
                 try context.write("\n")
                 try context.write("if isTraining:\n")
                 try context.indent {
@@ -172,12 +143,12 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 try context.indent {
                     try context.write("self.model_inference = model\n")
                 }
-                
+
                 // And finally return the model.
                 try context.write("\n")
                 try context.write("return model\n")
             }
-            
+
             try context.write("\n")
             try context.writeFunction(name: "train", type: .implementation) {
                 try context.writeArgument(name: "self")
@@ -185,7 +156,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             } body: {
                 try context.write("model = self.build_model(isTraining=True)\n")
             }
-            
+
             try context.write("\n")
             try context.writeFunction(name: "infer", type: .implementation) {
                 try context.writeArgument(name: "self")

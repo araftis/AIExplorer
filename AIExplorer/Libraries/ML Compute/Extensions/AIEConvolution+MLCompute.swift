@@ -27,7 +27,7 @@ extension AIEConvolution : AIEMLComputeCodeWriter {
                 try context.write("MLCConvolutionDescriptor *_\(node.variableName)Descriptor;\n")
                 wroteCode = true
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             return wroteCode
         }
         
@@ -80,7 +80,7 @@ extension AIEConvolution : AIEMLComputeCodeWriter {
             try context.write("                     paddingPolicy: \(paddingPolicy)\n")
             try context.write("                      paddingSizes: @[@\(node.paddingSize.width), @\(node.paddingSize.height)]];\n")
             
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }
@@ -90,7 +90,7 @@ extension AIEConvolution : AIEMLComputeCodeWriter {
             try context.write("biases: /* ???? */\n")
             try context.write("descriptor: _\(node.variableName)Descriptor];\n")
             
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }

@@ -25,7 +25,7 @@ extension AIEFullyConnected : AIEMLComputeCodeWriter {
                 try context.write("MLCConvolutionDescriptor *_\(object.variableName)Descriptor;\n")
                 wrote = true
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             return wrote
         }
 
@@ -56,7 +56,7 @@ extension AIEFullyConnected : AIEMLComputeCodeWriter {
             }
             try context.write(";\n")
             
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }

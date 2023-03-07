@@ -23,13 +23,22 @@ extension AIEGraphic : AIEWritableObject {
 
 @objcMembers
 open class AIECodeWriter : NSObject {
-    
+
+    /// The object being written.
     open var object : AIEWritableObject
-    
+
+    /// Create a new code writer for `object`.
     public init(object: AIEWritableObject) {
         self.object = object
     }
-    
+
+    /**
+    This method is simply a dispatch method which will call the appropriate generate method based on the context's stage.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     func generateCode(in context: AIECodeGeneratorContext) throws -> Bool {
         var generatedCode : Bool = false
@@ -61,53 +70,119 @@ open class AIECodeWriter : NSObject {
         
         return generatedCode
     }
-    
+
+    /**
+     This method generates code for build the actual neural network model.
+
+     The is by far the most important method. All the other methods are just for supporting this method. In fact, many libraries may not even need to override anything else What you write will be heavily dependent on what library you're supporting.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
         context.add(message: AIEMessage(type: .error, message: "\(type(of:object)) does not yet support code writing for \(context.library?.name ?? "Unknown").", on: object))
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
 
+    /**
+     Generates code that will appear in the file's interface header, which is the comment block at the top of the interface file. Note that many languages do not have an interface file, in which case this method is likely to do nothing.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateInterfaceHeaderCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
-    
+
+    /**
+     Generates code that appears at the top of the implementation file, in the introductory comment block.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateImplementatinoHeaderCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
-    
+
+    /**
+     Generates a license for the node.
+
+     Most nodes don't have a license, but some may. For example, the I/O nodes might have a license depending on the data source being used.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateLicenseCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
-    
+
+    /**
+     Generates "import" statements used by the library.
+
+     Default import statements will already be written, but you object might need to do something specific or special. For example, you migth need make sure you import image handling libraries.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateInterfaceIncludeCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
-    
+
+    /**
+     Generates code that declare method interfaces.
+
+     Not all languages require this method, like Python or Swift, but other languages do, like C++ or Obj-C. This is called while a class interface is being generated.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateInterfaceMethodDeclarationCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
-    
+
+    /**
+     Generates property declarations.
+
+     These are often the instance variables of your class. This code can be called at different points. For example, Python and Swift will call this while generating the implementation, since they have to interface. On the other hand, Obj-C and C++ will call this during the generation of the class interface.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generatePropertyDeclarationCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
-    
+
+    /**
+     This works like the interface method, but generates imports for the implementation.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
+     */
     @discardableResult
     open func generateImplementationIncludeCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
     
@@ -125,7 +200,7 @@ open class AIECodeWriter : NSObject {
      */
     @discardableResult
     func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
-        try progressToChild(context: context)
+        try progressToChild(in: context)
         return context.generatedCode
     }
 
@@ -142,7 +217,7 @@ open class AIECodeWriter : NSObject {
      */
     @discardableResult
     func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
-        return try progressToChild(context: context)
+        return try progressToChild(in: context)
     }
     
     /**
@@ -156,27 +231,20 @@ open class AIECodeWriter : NSObject {
      */
     @discardableResult
     func generateImplementationMethodsCode(in context: AIECodeGeneratorContext) throws -> Bool {
-        return try progressToChild(context: context)
+        return try progressToChild(in: context)
     }
     
     /**
-     If something in your node has a special license, this allows you to return it.
+     Progressing to the next node in the graph.
+
+     This is generally called at the end of the various "generate" methods. For the vast majority of nodes, which can only have a single child, this method moves to that child. However, some number of nodes may actually have multiple children. When this happens, special care must be taken. In those cases, you'll need to override this method in order to decide how to proceed, which code be visit no children, some children, or all children.
+
+     - parameter context The code generation context.
+
+     - returns `true` if code is written.
      */
-    func license(context: AIECodeGeneratorContext) -> String? {
-        return nil
-    }
-
-    /**
-     Returns a list of required imports.
-
-     Note that we'll have a general set already imported, but in case you need to import more, you can return them here. The set will be uniqued, so import statements will only happen once.
-     */
-    func imports(context: AIECodeGeneratorContext) -> [String] {
-        return []
-    }
-
     @discardableResult
-    func progressToChild(context: AIECodeGeneratorContext) throws -> Bool {
+    func progressToChild(in context: AIECodeGeneratorContext) throws -> Bool {
         var generatedCode = false
         let children = object.destinationObjects
 
@@ -203,7 +271,10 @@ open class AIECodeWriter : NSObject {
         
         return generatedCode
     }
-    
+
+    /**
+     Simply checks to see if `object` has more than one child, and if it does, this generates a warning.
+     */
     func validateSingleChild(context: AIECodeGeneratorContext) -> Void {
         if object.destinationObjects.count != 1 {
             context.add(message: AIEMessage(type:.warning, message: "The node \(type(of:self)) should only have one child.", on: object))
@@ -226,10 +297,17 @@ open class AIECodeWriter : NSObject {
 
 }
 
+/**
+ This is a simple subclass that adds one property to type `object`. This is useful, because it allows you to avoid having to write a bunch of type casting code in your own code writers.
+ */
 open class AIETypedCodeWriter<T: AIEWritableObject> : AIECodeWriter {
 
+    /**
+     This is a simply a re-casting of `object` as `T`. Note that if `object` isn't a kind of `T`, this method will crash.
+     */
     open var node: T {
         get {
+            assert(object is T, "object is not of the expected type.")
             return object as! T
         }
         set {

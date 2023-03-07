@@ -315,7 +315,41 @@ open class AIECodeGeneratorContext : NSObject {
             try _write("\n")
         }
     }
-    
+
+    // MARK: - Writing Imports
+
+    open func writeImport(_ importStatement: String) throws -> Void {
+        try write("\(importStatement)\n")
+        generatedCode = true
+    }
+
+    @discardableResult
+    open func writeImports(for stage: Stage, _ statements: () throws -> Void) throws -> Bool {
+        begin(stage:stage)
+        pushOutput()
+        try statements()
+        let string = popOutput()
+        // Unique the lines written, since we only need to import once.
+        var imports = OrderedSet<String>()
+        string.enumerateLines { line, stop in
+            imports.append(line)
+        }
+        // Now that we've uniques the lines, let's append them.
+        for line in imports {
+            try write("\(line)\n")
+        }
+
+        return string.count > 0
+    }
+
+    // MARK: - Writing Licenses
+
+    open func writeLicense(_ license: String, prefix: String = "# ") throws -> Void {
+        try write(license.byWrapping(to: 75, prefix: prefix, lineSeparator: "\n", splitURLs: false))
+        try write("\n")
+        generatedCode = true
+    }
+
     // MARK: - Writing Arguments and Functions
     
     /**
@@ -512,15 +546,15 @@ open class AIECodeGeneratorContext : NSObject {
      - parameter returnType The return type of the function. This may not be necessary, depending on the language.
      - parameter body A code block that writes the body of the function. This may certainly call back into `writeFunction()` to make additional function calls. You don't need to provide this parameter for `prototype` or `call` types. This is really just a short hand for calling `indent()` after writing the initial function declaration.
      */
-    func writeFunction(name: String,
-                       type: FunctionType = .call,
-                       returnType: String? = nil,
-                       receiver: String? = nil,
-                       documentation: String? = nil,
-                       documentationPosition: DocumentationPosition? = nil,
-                       argumentsIndented: Bool = false,
-                       arguments argumentsBlock : () throws -> Void,
-                       body: (() throws -> Void)? = nil) throws -> Void {
+    open func writeFunction(name: String,
+                            type: FunctionType = .call,
+                            returnType: String? = nil,
+                            receiver: String? = nil,
+                            documentation: String? = nil,
+                            documentationPosition: DocumentationPosition? = nil,
+                            argumentsIndented: Bool = false,
+                            arguments argumentsBlock : () throws -> Void,
+                            body: (() throws -> Void)? = nil) throws -> Void {
         do {
             let functionContext = FunctionContext(name: name,
                                                   type: type,
@@ -578,7 +612,7 @@ open class AIECodeGeneratorContext : NSObject {
     /**
      Writes a comment.
      */
-    func writeComment(_ comment: String, type: CommentType = .singleLine) throws -> Void {
+    open func writeComment(_ comment: String, type: CommentType = .singleLine) throws -> Void {
         switch type {
         case .header:
             break
@@ -602,6 +636,141 @@ open class AIECodeGeneratorContext : NSObject {
             try write("\n\"\"\"\n")
         }
     }
+
+    // MARK: - Classes
+
+    open var classPropertiesIndent : Bool { return false }
+    open var classMethodsIndent : Bool { return false }
+
+    open func writeClassInterfaceBegin(name: String,
+                                       scope: Scope = .public,
+                                       superclass: String? = nil,
+                                       protocols: [String] = []) throws -> Void {
+        try write("CLASS \(name)")
+        if let superclass {
+            try write(" : \(superclass)")
+        }
+        if protocols.count > 0 {
+            for (index, proto) in protocols.enumerated() {
+                if index > 0 || superclass != nil {
+                    try write(", ")
+                }
+                try write(proto)
+            }
+        }
+        try write("\n")
+    }
+
+    open func writeClassInterfaceEnd(name: String) throws -> Void {
+        try write("\n")
+        try write("ENDCLASS\n")
+    }
+
+    open func writeClassInterface(name: String,
+                                  scope: Scope = .public,
+                                  superclass: String? = nil,
+                                  protocols: [String] = [],
+                                  documentation: String? = nil,
+                                  properties: (() throws -> Void)? = nil,
+                                  methods: (() throws -> Void)? = nil) throws -> Void {
+        if defaultDocumentationPosition == .beforeDeclaration, let documentation {
+            try writeComment(documentation, type: .classDocumentation)
+        }
+        try writeClassInterfaceBegin(name: name, scope: scope, superclass: superclass, protocols: protocols)
+        if defaultDocumentationPosition == .afterDeclaration, let documentation {
+            try writeComment(documentation, type: .classDocumentation)
+        }
+        if let properties {
+            try write("\n")
+            if classPropertiesIndent {
+                try indent {
+                    try properties()
+                }
+            } else {
+                try properties()
+            }
+        }
+        if let methods {
+            try write("\n")
+            if classMethodsIndent {
+                try indent {
+                    try methods()
+                }
+            } else {
+                try methods()
+            }
+        }
+        try write("\n")
+        try writeClassInterfaceEnd(name: name)
+    }
+
+    open func writeClassImplementationBegin(name: String,
+                                            scope: Scope = .public,
+                                            superclass: String? = nil,
+                                            protocols: [String] = []) throws -> Void {
+        try write("CLASS \(name)")
+        if let superclass {
+            try write(" : \(superclass)")
+        }
+        if protocols.count > 0 {
+            for (index, proto) in protocols.enumerated() {
+                if index > 0 || superclass != nil {
+                    try write(", ")
+                }
+                try write(proto)
+            }
+        }
+        try write("\n")
+    }
+
+    open func writeClassImplementationEnd(name: String) throws -> Void {
+        try write("\n")
+        try write("ENDCLASS\n")
+    }
+
+    open func writeClassImplementation(name: String,
+                                       scope: Scope = .public,
+                                       superclass: String? = nil,
+                                       protocols: [String] = [],
+                                       documentation: String? = nil,
+                                       properties: (() throws -> Void)? = nil,
+                                       methods: (() throws -> Void)? = nil) throws -> Void {
+        if defaultDocumentationPosition == .beforeDeclaration, let documentation {
+            try writeComment(documentation, type: .classDocumentation)
+        }
+        try writeClassImplementationBegin(name: name, scope: scope, superclass: superclass, protocols: protocols)
+        if defaultDocumentationPosition == .afterDeclaration, let documentation {
+            try writeComment(documentation, type: .classDocumentation)
+        }
+        if let properties {
+            pushOutput()
+            if classPropertiesIndent {
+                try indent {
+                    try properties()
+                }
+            } else {
+                try properties()
+            }
+            let writtenProperties = popOutput()
+            if writtenProperties.count > 0 {
+                try write("\n")
+                try write(writtenProperties)
+            }
+        }
+        if let methods {
+            try write("\n")
+            if classMethodsIndent {
+                try indent {
+                    try methods()
+                }
+            } else {
+                try methods()
+            }
+        }
+        try write("\n")
+        try writeClassImplementationEnd(name: name)
+    }
+
 
     // MARK: - Type Casting
     
@@ -629,6 +798,8 @@ open class AIECodeGeneratorContext : NSObject {
         }
         return nil
     }
+
+    // MARK: - Code Generation
 
     /**
      Defines the scope of things like properties and methods. Usually defaults to public.
@@ -664,30 +835,10 @@ open class AIECodeGeneratorContext : NSObject {
      */
     @discardableResult
     open func generateCode(for object: Any?, in stage: Stage, scope: Scope = .public) throws -> Bool {
-        begin(stage: stage, scope: scope)
+        if self.stage != stage {
+            begin(stage: stage, scope: scope)
+        }
         return try codeWriter(for: object)?.generateCode(in: self) ?? false
-    }
-    
-    /**
-     Creates a code writer for the passed in object and asks it for its licenses, if any.
-     
-     - parameter object The object who's licenses you want.
-     
-     - returns The license, if any, otherwise `nil`.
-     */
-    open func license(for object: Any?) -> String? {
-        return codeWriter(for: object)?.license(context: self)
-    }
-    
-    /**
-     Creates a new code writer for the passed in object and asks it for its imports.
-     
-     - parameter object The object who's imports you want.
-     
-     - returns An array of import statements. The array may be empty.
-     */
-    open func imports(for object: Any?) -> [String] {
-        return codeWriter(for: object)?.imports(context: self) ?? []
     }
     
 }

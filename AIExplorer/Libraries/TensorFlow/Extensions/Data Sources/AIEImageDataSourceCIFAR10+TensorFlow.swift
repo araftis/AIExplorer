@@ -17,7 +17,7 @@ extension AIEImageDataSourceCIFAR10 : AIETensorFlowCodeWriter {
         
         override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
             try context.write("self.dataSource = dataSource")
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             return true
         }
         

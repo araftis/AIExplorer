@@ -7,7 +7,7 @@
 
 import Cocoa
 
-open class AIEMLComputeSwiftContext: AIEMLComputeContext {
+open class AIEMLComputeSwiftContext: AIESwiftCodeGeneratorContext {
 
     open override func codeWriter(for object: Any?) -> AIECodeWriter? {
         if let object = object as? AIEMLComputeSwiftCodeWriter {

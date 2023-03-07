@@ -5,4 +5,10 @@
 //  Created by AJ Raftis on 3/4/23.
 //
 
-import Foundation
+import Draw
+
+internal protocol TestAICodeWriter {
+
+    func createTestAICodeWriter() -> AIECodeWriter
+
+}

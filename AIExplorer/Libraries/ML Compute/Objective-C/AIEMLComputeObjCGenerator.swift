@@ -34,9 +34,7 @@ import Cocoa
 @objcMembers
 open class AIEMLComputeObjCGenerator: AIEMLComputeCodeGenerator {
     
-    open var type : AIEIO.Kind?
-
-    open func generateInterface(in context: AIEMLComputeContext) throws -> Void {
+    open func generateInterface(in context: AIECodeGeneratorContext) throws -> Void {
         try context.write("//\n")
         try context.write("// \(info[.codeName] ?? "Anonymous").h\n")
         try context.write("//\n")
@@ -47,32 +45,35 @@ open class AIEMLComputeObjCGenerator: AIEMLComputeCodeGenerator {
         try context.write("\n")
         try context.write("NS_ASSUME_NONNULL_BEGIN\n")
         try context.write("\n")
-        try context.write("@interface \(info[.codeName] ?? "Anonymous") : NSObject\n")
-        try context.write("\n")
-        try context.write("@property (nonatomic,strong) MLCDevice *device;\n")
-        if info[.role].canInfer {
-            try context.write("@property (nonatomic,strong) MLCInferenceGraph *inferenceGraph;\n")
+
+        try context.writeClassInterface(name: info[.codeName] ?? "Anonymous",
+                                        superclass: "NSObject") {
+            try context.write("@property (nonatomic,strong) MLCDevice *device;\n")
+            if self.info[.role].canInfer {
+                try context.write("@property (nonatomic,strong) MLCInferenceGraph *inferenceGraph;\n")
+            }
+            if self.info[.role].canTrain {
+                try context.write("@property (nonatomic,strong) MLCTrainingGraph *trainingGraph;\n")
+            }
+            try self.iterateRoots { root in
+                try context.generateCode(for: root, in: .propertyDeclarations, scope: .public)
+            }
+        } methods: {
+            try context.writeFunction(name: "initWith", type: .prototype, returnType: "instancetype") {
+                try context.writeArgument(name: "device", type: "MLCDevice *")
+            }
+            try context.writeFunction(name: "buildGraph", type: .prototype, returnType: "MLCGraph *") {
+            }
+            try self.iterateRoots { root in
+                try context.generateCode(for: root, in: .interfaceMethods, scope: .public)
+            }
         }
-        if info[.role].canTrain {
-            try context.write("@property (nonatomic,strong) MLCTrainingGraph *trainingGraph;\n")
-        }
-        try iterateRoots { root in
-            try context.generateCode(for: root, in: .propertyDeclarations, scope: .public)
-        }
-        try context.write("\n")
-        try context.writeFunction(name: "initWith", type: .prototype, returnType: "instancetype") {
-            try context.writeArgument(name: "device", type: "MLCDevice *")
-        }
-        try context.writeFunction(name: "buildGraph", type: .prototype, returnType: "MLCGraph *") {
-        }
-        try context.write("\n")
-        try context.write("@end\n")
         try context.write("\n")
         try context.write("NS_ASSUME_NONNULL_END\n")
         try context.write("\n")
     }
     
-    open func generateImplementation(in context: AIEMLComputeContext) throws -> Void {
+    open func generateImplementation(in context: AIECodeGeneratorContext) throws -> Void {
         try context.write("//\n")
         try context.write("// \(info[.codeName] ?? "Anonymous").m\n")
         try context.write("//\n")
@@ -81,40 +82,44 @@ open class AIEMLComputeObjCGenerator: AIEMLComputeCodeGenerator {
         try context.write("\n")
         try context.write("#import <MLCompute/MLCompute.h>\n")
         try context.write("\n")
-        try context.write("@implementation \(info[.codeName] ?? "Anonymous") : NSObject")
-        try context.block {
-            try iterateRoots { root in
-                try context.generateCode(for: root, in: .propertyDeclarations, scope: .private)
-            }
-        }
-        try context.write("\n")
-        
-        try context.writeFunction(name: "initWith", type: .implementation, returnType: "instancetype") {
-            try context.writeArgument(name: "device", type: "MLCDevice *")
-        } body: {
-            try context.write("if ((self == [super init]))")
+
+        try context.writeClassImplementation(name: info[.codeName] ?? "Anonymous",
+                                             superclass: "NSObject") {
             try context.block {
-                try context.write("_device = device;\n")
-                // Allow any nodes to initialize their ivar values if they declared an ivar (private or public) above. The don't necessarily need to do this.
                 try self.iterateRoots { root in
-                    try context.generateCode(for: root, in: .initialization)
+                    try context.generateCode(for: root, in: .propertyDeclarations, scope: .public)
                 }
             }
+        } methods: {
+            try context.writeFunction(name: "initWith", type: .implementation, returnType: "instancetype") {
+                try context.writeArgument(name: "device", type: "MLCDevice *")
+            } body: {
+                try context.write("if ((self == [super init]))")
+                try context.block {
+                    try context.write("_device = device;\n")
+                    // Allow any nodes to initialize their ivar values if they declared an ivar (private or public) above. The don't necessarily need to do this.
+                    try self.iterateRoots { root in
+                        try context.generateCode(for: root, in: .initialization)
+                    }
+                }
+                try context.write("\n")
+                try context.write("return self;\n")
+            }
             try context.write("\n")
-            try context.write("return self;\n")
-        }
-        try context.write("\n")
 
-        try context.writeFunction(name: "buildGraph", type: .implementation, returnType: "MLCGraph *") {
-            // We don't have any arguments
-        } body: {
+            try context.writeFunction(name: "buildGraph", type: .implementation, returnType: "MLCGraph *") {
+                // We don't have any arguments
+            } body: {
+                try self.iterateRoots { root in
+                    try context.generateCode(for: root, in: .build)
+                }
+            }
+
             try self.iterateRoots { root in
-                try context.generateCode(for: root, in: .build)
+                try context.generateCode(for: root, in: .implementationMethods, scope: .public
+                )
             }
         }
-
-        try context.write("\n")
-        try context.write("@end\n")
         try context.write("\n")
     }
     
@@ -133,13 +138,13 @@ open class AIEMLComputeObjCGenerator: AIEMLComputeCodeGenerator {
         
         messages.append(contentsOf: context.messages)
         
-        // Add a message, just because we want a message to test with.
-        if let root = roots.first,
-           info[.extension] == "m" {
-            messages.append(AIEMessage(type: .info, message: "Test info. This is a really long message, because we want to make sure that the text is wrapping correctly, and also that it stops growing in height after wrapping three lines tall. To manage that, I need to write a whole bunch of text.", on: root))
-            messages.append(AIEMessage(type: .warning, message: "Test warning", on: root))
-            messages.append(AIEMessage(type: .error, message: "Test error", on: root))
-        }
+//        // Add a message, just because we want a message to test with.
+//        if let root = roots.first,
+//           info[.extension] == "m" {
+//            messages.append(AIEMessage(type: .info, message: "Test info. This is a really long message, because we want to make sure that the text is wrapping correctly, and also that it stops growing in height after wrapping three lines tall. To manage that, I need to write a whole bunch of text.", on: root))
+//            messages.append(AIEMessage(type: .warning, message: "Test warning", on: root))
+//            messages.append(AIEMessage(type: .error, message: "Test error", on: root))
+//        }
     }
 
 }

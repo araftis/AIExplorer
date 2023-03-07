@@ -42,7 +42,7 @@ extension AIEFullyConnected : AIETensorFlowCodeWriter {
             try appendStandardCode(context: context) {
                 try context.write("models.Sequential([layers.Flatten(), layers.Dense(\(node.outputFeatureChannels))], name='\(node.variableName)')")
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }

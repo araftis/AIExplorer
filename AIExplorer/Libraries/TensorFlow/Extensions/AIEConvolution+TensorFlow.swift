@@ -69,7 +69,7 @@ extension AIEConvolution : AIETensorFlowCodeWriter {
                 }
                 try context.output.write(", name='\(node.variableName)')")
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }

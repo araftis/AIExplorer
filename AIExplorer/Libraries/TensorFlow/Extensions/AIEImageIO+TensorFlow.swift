@@ -40,7 +40,7 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
         
         override func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
             try context.writeArgument(name: "dataSource", value: "None")
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             return true
         }
         
@@ -52,7 +52,7 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
             } else {
                 context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of: node.dataSource)) doesn't support generating code for TensorFlow.", on: object))
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             return context.generatedCode
         }
         
@@ -64,7 +64,7 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
             } else {
                 context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of: node.dataSource)) doesn't support generating code for TensorFlow.", on: object))
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             return context.generatedCode
         }
         
@@ -82,21 +82,25 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
                 }
             }
             try context.write("model.add(\(object.variableName))\n")
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }
 
-        override func license(context: AIECodeGeneratorContext) -> String? {
+        override open func generateLicenseCode(in context: AIECodeGeneratorContext) throws -> Bool {
             if let writer = context.codeWriter(for: node.dataSource) {
-                return writer.license(context: context)
+                try writer.generateLicenseCode(in: context)
             }
-            return nil
+            try progressToChild(in: context)
+            return context.generatedCode
         }
         
-        override func imports(context: AIECodeGeneratorContext) -> [String] {
-            guard let writer = context.codeWriter(for: node.dataSource) else { return [] }
-            return writer.imports(context: context)
+        open override func generateImplementationIncludeCode(in context: AIECodeGeneratorContext) throws -> Bool {
+            if let writer = context.codeWriter(for: node.dataSource) {
+                try writer.generateImplementationIncludeCode(in: context)
+            }
+            try progressToChild(in: context)
+            return context.generatedCode
         }
         
     }

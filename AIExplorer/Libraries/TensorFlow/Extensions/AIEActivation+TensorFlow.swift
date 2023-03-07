@@ -50,7 +50,7 @@ extension AIEActivation : AIETensorFlowCodeWriter {
                 }
                 try context.write(", name='\(object.variableName)')")
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }

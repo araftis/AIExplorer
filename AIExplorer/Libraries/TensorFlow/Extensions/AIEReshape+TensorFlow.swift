@@ -42,7 +42,7 @@ extension AIEReshape : AIETensorFlowCodeWriter {
             try self.appendStandardCode(context: context) {
                 try context.output.write("layers.Flatten(name='\(object.variableName)')")
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }

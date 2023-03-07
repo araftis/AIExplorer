@@ -46,7 +46,7 @@ extension AIESoftmax : AIETensorFlowCodeWriter {
                 try appendStandardCode(context: context) {
                     try context.write("layers.Softmax(name='\(object.variableName)')")
                 }
-                try progressToChild(context: context)
+                try progressToChild(in: context)
             }
             
             return true

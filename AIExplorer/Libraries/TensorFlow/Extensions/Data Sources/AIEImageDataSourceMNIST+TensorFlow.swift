@@ -111,17 +111,22 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
             try generatePropertyGetters(context: context)
             return true
         }
-        
-        override func license(context: AIECodeGeneratorContext) -> String? {
-            return """
+
+        override open func generateLicenseCode(in context: AIECodeGeneratorContext) throws -> Bool {
+            let license = """
                 MNIST License:
                 
                 Yann LeCun and Corinna Cortes hold the copyright of MNIST dataset, which is a derivative work from original NIST datasets. MNIST dataset is made available under the terms of the [Creative Commons Attribution-Share Alike 3.0 license.](https://creativecommons.org/licenses/by-sa/3.0/)
                 """
+            try context.writeLicense(license, prefix: "# ")
+
+            return true
         }
+
         
-        override func imports(context: AIECodeGeneratorContext) -> [String] {
-            return ["import tensorflow_datasets as tfds"]
+        open override func generateImplementationIncludeCode(in context: AIECodeGeneratorContext) throws -> Bool {
+            try context.writeImport("import tensorflow_datasets as tfds")
+            return true
         }
         
     }

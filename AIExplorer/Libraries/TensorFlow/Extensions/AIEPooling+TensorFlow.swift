@@ -42,7 +42,7 @@ extension AIEPooling : AIETensorFlowCodeWriter {
             try appendStandardCode(context: context) {
                 try context.write("layers.MaxPool2D((\(node.size.height), \(node.size.width)), \(node.stride.width), name='\(node.variableName)')")
             }
-            try progressToChild(context: context)
+            try progressToChild(in: context)
             
             return true
         }
