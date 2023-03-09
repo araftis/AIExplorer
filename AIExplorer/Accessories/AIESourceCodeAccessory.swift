@@ -62,7 +62,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     // MARK: - Properties
 
     @IBOutlet var sourceTextView : NSTextView!
-    @IBOutlet var nameLabel : NSTextField!
+    @IBOutlet var namePopUp : NSPopUpButton!
     @IBOutlet var libraryLabel : NSTextField!
     @IBOutlet var languageLabel : NSTextField!
     @IBOutlet var roleLabel : NSTextField!
@@ -111,7 +111,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         weak var weakSelf = self
         for codeDefinition in aiDocument.codeDefinitions {
             definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "name", options: [], block: { codeDefinition, key, change in
-                weakSelf?.updateNameLabel(for: codeDefinition as? AIECodeDefinition)
+                weakSelf?.updateNamePopUp()
             }))
             definitionObservationTokens.append(codeDefinition.addObserver(self, forKeyPath: "language", options: [], block: { codeDefinition, key, change in
                 weakSelf?.updateLanguageLabel(for: codeDefinition as? AIECodeDefinition)
@@ -181,8 +181,26 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         }
     }
     
-    open func updateNameLabel(for codeDefinition: AIECodeDefinition?) -> Void {
-        update(field: nameLabel, value: codeDefinition?.name, defaultValue: "No Name", for: codeDefinition)
+    open func updateNamePopUp() -> Void {
+        let menu = NSMenu(title: "Code Definition")
+        if aiDocument.codeDefinitions.count == 0 {
+            let menuItem = menu.addItem(withTitle: "No Definitions", action: nil, keyEquivalent: "")
+            menuItem.isEnabled = false
+            namePopUp.isEnabled = false
+        } else {
+            var selected : NSMenuItem? = nil
+            for codeDefinition in aiDocument.codeDefinitions {
+                let menuItem = menu.addItem(withTitle: codeDefinition.name ?? "No Name", action: #selector(selectName(_:)), keyEquivalent: "")
+                menuItem.representedObject = codeDefinition
+                menuItem.isEnabled = true
+                if codeDefinition === aiDocument.selectedCodeDefinition {
+                    selected = menuItem
+                }
+            }
+            namePopUp.menu = menu
+            namePopUp.select(selected)
+            namePopUp.isEnabled = true
+        }
     }
     
     open func updateLibraryLabel(for codeDefinition: AIECodeDefinition?) -> Void {
@@ -268,7 +286,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     }
     
     open func updateUI(for codeDefinition: AIECodeDefinition?) -> Void {
-        updateNameLabel(for: codeDefinition)
+        updateNamePopUp()
         updateLibraryLabel(for: codeDefinition)
         updateLanguageLabel(for: codeDefinition)
         updateRoleLabel(for: codeDefinition)
@@ -300,6 +318,13 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     open func selectFileName(_ sender: Any?) -> Void {
         if let ext = (fileNamePopUp.selectedItem?.representedObject as? NSString)?.pathExtension {
             aiDocument.selectedCodeDefinition?.selectedExtension = ext
+        }
+    }
+
+    @IBAction
+    open func selectName(_ sender: NSMenuItem?) -> Void {
+        if let selected = sender?.representedObject as? AIECodeDefinition {
+            aiDocument.selectedCodeDefinition = selected
         }
     }
 
