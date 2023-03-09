@@ -38,15 +38,15 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
     
     internal class AIETensorFlowImageIOWriter : AIETypedCodeWriter<AIEImageIO> {
         
-        override func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateInitArguments(in context: AIECodeGeneratorContext) throws -> Bool {
             try context.writeArgument(name: "dataSource", value: "None")
             try progressToChild(in: context)
             return true
         }
         
-        override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateInitializationCode(in context: AIECodeGeneratorContext) throws -> Bool {
             if let writer = context.codeWriter(for: node.dataSource) {
-                if try writer.generateInitializationCode(context: context) {
+                if try writer.generateInitializationCode(in: context) {
                     context.generatedCode = true
                 }
             } else {

@@ -39,7 +39,7 @@ extension AIEFullyConnected : AIETensorFlowCodeWriter {
     internal class AIETensorFlowFullyConnectedWriter : AIETypedCodeWriter<AIEFullyConnected> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try appendStandardCode(context: context) {
+            try appendStandardCode(in: context) {
                 try context.write("models.Sequential([layers.Flatten(), layers.Dense(\(node.outputFeatureChannels))], name='\(node.variableName)')")
             }
             try progressToChild(in: context)

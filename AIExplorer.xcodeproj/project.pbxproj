@@ -173,6 +173,7 @@
 		FA37E13729988FAD000DB105 /* AIEImageDataSourcePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA37E13629988FAD000DB105 /* AIEImageDataSourcePath.swift */; };
 		FA3C316B274D780E00B1A338 /* AIEProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C316A274D780E00B1A338 /* AIEProperties.swift */; };
 		FA444E4629B6D67A002DF0D4 /* TestAICodeGeneratorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA444E4529B6D67A002DF0D4 /* TestAICodeGeneratorContext.swift */; };
+		FA53FDB029B953BC00855EB3 /* AIEConvolution+TestAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA53FDAF29B953BC00855EB3 /* AIEConvolution+TestAI.swift */; };
 		FA88824725F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */; };
 		FA88824825F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */; };
 		FA88825025F5E8FC00DFE50B /* AIEDocumentTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */; };
@@ -405,6 +406,7 @@
 		FA37E13629988FAD000DB105 /* AIEImageDataSourcePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEImageDataSourcePath.swift; sourceTree = "<group>"; };
 		FA3C316A274D780E00B1A338 /* AIEProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEProperties.swift; sourceTree = "<group>"; };
 		FA444E4529B6D67A002DF0D4 /* TestAICodeGeneratorContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAICodeGeneratorContext.swift; sourceTree = "<group>"; };
+		FA53FDAF29B953BC00855EB3 /* AIEConvolution+TestAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AIEConvolution+TestAI.swift"; sourceTree = "<group>"; };
 		FA88824525F5D7C600DFE50B /* AIEDocumentTemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplateChooser.swift; sourceTree = "<group>"; };
 		FA88824625F5D7C600DFE50B /* AIEDocumentTemplateChooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AIEDocumentTemplateChooser.xib; sourceTree = "<group>"; };
 		FA88824F25F5E8FC00DFE50B /* AIEDocumentTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEDocumentTemplate.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 		2115E38629B4396000D512A0 /* TestAI */ = {
 			isa = PBXGroup;
 			children = (
+				FA7F8B1E29B951F70021FE9A /* Extensions */,
 				2115E38729B43A1500D512A0 /* TestAILibrary.swift */,
 				2115E38929B43BDC00D512A0 /* TestAICodeWriter.swift */,
 				2115E38D29B4434C00D512A0 /* TestAICodeGenerator.swift */,
@@ -859,6 +862,14 @@
 				FA3C316A274D780E00B1A338 /* AIEProperties.swift */,
 			);
 			path = Aspects;
+			sourceTree = "<group>";
+		};
+		FA7F8B1E29B951F70021FE9A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FA53FDAF29B953BC00855EB3 /* AIEConvolution+TestAI.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		FA88824425F5D76B00DFE50B /* User Interface */ = {
@@ -1260,6 +1271,7 @@
 				21FFE330298349C500A79F8F /* AIEReshape+TensorFlow.swift in Sources */,
 				215A9DC229A2E1FC004BEAB6 /* AIEImageDataSourcePath+TensorFlow.swift in Sources */,
 				FA02BF5925B78527001EFBBA /* AIESoftmax.swift in Sources */,
+				FA53FDB029B953BC00855EB3 /* AIEConvolution+TestAI.swift in Sources */,
 				FA37E13729988FAD000DB105 /* AIEImageDataSourcePath.swift in Sources */,
 				FA18B4DE25AEA305000DEF0C /* AIEIOTool.swift in Sources */,
 				FA18B4DB25AEA305000DEF0C /* AIEImageIO.swift in Sources */,

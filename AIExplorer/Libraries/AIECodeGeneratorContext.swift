@@ -8,24 +8,24 @@
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
- * Redistributions of source code must retain the above copyright notice, this
+ * Redistributions of source code must retain the above copyright notice, this 
    list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
+ * Redistributions in binary form must reproduce the above copyright notice, 
+   this list of conditions and the following disclaimer in the documentation 
    and/or other materials provided with the distribution.
- * Neither the name of AIExplorer nor the names of its contributors may be
-   used to endorse or promote products derived from this software without
+ * Neither the name of AIExplorer nor the names of its contributors may be 
+   used to endorse or promote products derived from this software without 
    specific prior written permission.
 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL AJ RAFTIS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+ DISCLAIMED. IN NO EVENT SHALL AJ RAFTIS BE LIABLE FOR ANY DIRECT, INDIRECT, 
  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
- OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -99,6 +99,7 @@ open class AIECodeGeneratorContext : NSObject {
      */
     init(outputStream: OutputStream, library: AIELibrary?, codeGenerator: AIECodeGenerator, indent: Int = 0) {
         self.library = library
+        self.codeGenerator = codeGenerator
         self.indent = indent
         self.outputStreams = [outputStream]
         self.path = [AIECodeWriter]()
@@ -316,6 +317,37 @@ open class AIECodeGeneratorContext : NSObject {
         }
     }
 
+    // MARK: - Write Headers
+
+    open func writeFileHeader(for stage: Stage, info: [String:Any], _ body: (() throws -> Void)? = nil) throws -> Void {
+        // Start
+        begin(stage: stage)
+
+        // Just writes a standard header
+        try writeComment("")
+        if let fileExtension = info[.extension] {
+            try writeComment("\(info[.codeName] ?? "Anonymous").\(fileExtension)")
+        } else {
+            try writeComment("\(info[.codeName] ?? "Anonymous")")
+        }
+        try writeComment("")
+        try writeComment("Created by \(NSFullUserName()) on \(AIECodeGenerator.simpleDateFormatter.string(from:Date()))")
+        try writeComment("Copyright © \(AIECodeGenerator.yearDateFormatter.string(from:Date())), All rights reserved.")
+        try writeComment("")
+
+        // Handle Licenses
+        try codeGenerator?.iterateRoots { root in
+            try generateCode(for: root, in: .licenses)
+        }
+        try write("\n")
+
+        // This is changed by generating the licenses. I'm thinking I should change the stage to a stack, but I don't want to do that just yet.
+        self.stage = stage
+        if let body {
+            try body()
+        }
+    }
+
     // MARK: - Writing Imports
 
     open func writeImport(_ importStatement: String) throws -> Void {
@@ -325,9 +357,17 @@ open class AIECodeGeneratorContext : NSObject {
 
     @discardableResult
     open func writeImports(for stage: Stage, _ statements: () throws -> Void) throws -> Bool {
+        // Start the stage
         begin(stage:stage)
+        // Push a new output stream
         pushOutput()
+        // Call to allow the caller to add any imports.
         try statements()
+        // Let any parts of the neural graph include additional imports.
+        try codeGenerator?.iterateRoots { root in
+            try generateCode(for: root, in: .implementationIncludes)
+        }
+        // Pop the output and get all the import statement lines.
         let string = popOutput()
         // Unique the lines written, since we only need to import once.
         var imports = OrderedSet<String>()
@@ -351,6 +391,10 @@ open class AIECodeGeneratorContext : NSObject {
     }
 
     // MARK: - Writing Arguments and Functions
+
+    open var defaultFunctionProtocolTerminal : String { return "\n" }
+    open var defaultFunctionImplementationTerminal : String { return "\n" }
+    open var defaultFunctionCallTerminal : String { return "\n" }
     
     /**
      Defines where the documentation for classes and methods are to appear.
@@ -390,7 +434,6 @@ open class AIECodeGeneratorContext : NSObject {
         var type: FunctionType
         var receiver: String?
         var separateArgumentsWithNewlines: Bool
-        var documentationPosition: DocumentationPosition
         var documentation: String?
         var returnType: String?
         
@@ -398,7 +441,6 @@ open class AIECodeGeneratorContext : NSObject {
              type: FunctionType = .call,
              receiver: String? = nil,
              separateArgumentsWithNewlines: Bool = false,
-             documentationPosition: DocumentationPosition = .beforeDeclaration,
              documentation: String? = nil,
              returnType: String? = nil) {
             self.argumentsWritten = 0
@@ -406,7 +448,6 @@ open class AIECodeGeneratorContext : NSObject {
             self.type = type
             self.receiver = receiver
             self.separateArgumentsWithNewlines = separateArgumentsWithNewlines
-            self.documentationPosition = documentationPosition
             self.documentation = documentation
             self.returnType = returnType
         }
@@ -514,15 +555,12 @@ open class AIECodeGeneratorContext : NSObject {
     open func writeFunctionArgumentsStop() throws -> Void {
         functionContext.argumentsWritten = 0
         try write(")")
-        if functionContext.type == .prototype {
-            try write(";\n")
-        }
     }
     
     /**
      The default position of documentation for the language. While overridable at the call site, that's usually not necessary, because languages tend to be self-consistent with this.
      */
-    open var defaultDocumentationPosition : DocumentationPosition {
+    open var documentationPosition : DocumentationPosition {
         return .beforeDeclaration
     }
     
@@ -551,7 +589,7 @@ open class AIECodeGeneratorContext : NSObject {
                             returnType: String? = nil,
                             receiver: String? = nil,
                             documentation: String? = nil,
-                            documentationPosition: DocumentationPosition? = nil,
+                            terminal: String? = nil,
                             argumentsIndented: Bool = false,
                             arguments argumentsBlock : () throws -> Void,
                             body: (() throws -> Void)? = nil) throws -> Void {
@@ -560,11 +598,10 @@ open class AIECodeGeneratorContext : NSObject {
                                                   type: type,
                                                   receiver: receiver,
                                                   separateArgumentsWithNewlines: argumentsIndented,
-                                                  documentationPosition: documentationPosition ?? defaultDocumentationPosition,
                                                   documentation: documentation,
                                                   returnType: returnType)
             functionStack.append(functionContext)
-            if functionContext.documentationPosition == .beforeDeclaration {
+            if documentationPosition == .beforeDeclaration {
                 try writeFunctionDocumentation()
             }
             try writingFunctionStart()
@@ -579,10 +616,19 @@ open class AIECodeGeneratorContext : NSObject {
             try writeFunctionArgumentsStop()
             if let body {
                 try block {
-                    if functionContext.documentationPosition == .afterDeclaration {
+                    if documentationPosition == .afterDeclaration {
                         try writeFunctionDocumentation()
                     }
                     try body()
+                }
+            }
+            if let terminal {
+                try write(terminal)
+            } else {
+                switch type {
+                case .call: try write(defaultFunctionCallTerminal)
+                case .prototype: try write(defaultFunctionProtocolTerminal)
+                case .implementation: try write(defaultFunctionImplementationTerminal)
                 }
             }
         } catch {
@@ -608,7 +654,27 @@ open class AIECodeGeneratorContext : NSObject {
         /// A multiilne comment.
         case multiline
     }
-    
+
+    open var singleLineCommentStart : String {
+        return "//"
+    }
+
+    open var multilineCommentStart : String {
+        return "/*"
+    }
+
+    open var multilineCommentEnd : String {
+        return "*/"
+    }
+
+    open var documentationCommentStart : String {
+        return "/**"
+    }
+
+    open var documentationCommentEnd : String {
+        return "*/"
+    }
+
     /**
      Writes a comment.
      */
@@ -619,21 +685,26 @@ open class AIECodeGeneratorContext : NSObject {
         case .classDocumentation:
             break
         case .methodDocumentation:
-            try write("\"\"\"\n")
+            try write("\(documentationCommentStart)\n")
             let prefix = String(indent: indent)
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
-            try write("\n\"\"\"\n\n")
+            try write("\n\(documentationCommentEnd)\n")
         case .singleLine:
-            let prefix = String(indent: indent) + "# "
-            let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
-            try output.write(wrapped)
+            if comment.isEmpty {
+                try output.write("\(singleLineCommentStart)\n")
+            } else {
+                let prefix = String(indent: indent) + "\(singleLineCommentStart) "
+                let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
+                try output.write(wrapped)
+                try output.write("\n")
+            }
         case .multiline:
-            try write("\"\"\"\n")
+            try write("\(multilineCommentStart)\n")
             let prefix = String(indent: indent)
             let wrapped = comment.byWrapping(to: 80 - prefix.count, prefix: prefix, lineSeparator: "\n")
             try output.write(wrapped)
-            try write("\n\"\"\"\n")
+            try write("\n\(multilineCommentEnd)\n")
         }
     }
 
@@ -673,11 +744,11 @@ open class AIECodeGeneratorContext : NSObject {
                                   documentation: String? = nil,
                                   properties: (() throws -> Void)? = nil,
                                   methods: (() throws -> Void)? = nil) throws -> Void {
-        if defaultDocumentationPosition == .beforeDeclaration, let documentation {
+        if documentationPosition == .beforeDeclaration, let documentation {
             try writeComment(documentation, type: .classDocumentation)
         }
         try writeClassInterfaceBegin(name: name, scope: scope, superclass: superclass, protocols: protocols)
-        if defaultDocumentationPosition == .afterDeclaration, let documentation {
+        if documentationPosition == .afterDeclaration, let documentation {
             try writeComment(documentation, type: .classDocumentation)
         }
         if let properties {
@@ -735,11 +806,11 @@ open class AIECodeGeneratorContext : NSObject {
                                        documentation: String? = nil,
                                        properties: (() throws -> Void)? = nil,
                                        methods: (() throws -> Void)? = nil) throws -> Void {
-        if defaultDocumentationPosition == .beforeDeclaration, let documentation {
+        if documentationPosition == .beforeDeclaration, let documentation {
             try writeComment(documentation, type: .classDocumentation)
         }
         try writeClassImplementationBegin(name: name, scope: scope, superclass: superclass, protocols: protocols)
-        if defaultDocumentationPosition == .afterDeclaration, let documentation {
+        if documentationPosition == .afterDeclaration, let documentation {
             try writeComment(documentation, type: .classDocumentation)
         }
         if let properties {

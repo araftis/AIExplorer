@@ -44,19 +44,19 @@ extension AIEBranch : AIETensorFlowCodeWriter {
             return node.exitLinks
         }
         
-        override func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateInitArguments(in context: AIECodeGeneratorContext) throws -> Bool {
             return try generateCode(for: exitLinks, context: context, using: { child in
                 if let writer = context.codeWriter(for: child) {
-                    return try writer.generateInitArguments(context: context)
+                    return try writer.generateInitArguments(in: context)
                 }
                 return false
             })
         }
         
-        override func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
+        override func generateInitializationCode(in context: AIECodeGeneratorContext) throws -> Bool {
             return try generateCode(for: exitLinks, context: context, using: { (child) in
                 if let writer = context.codeWriter(for: child) {
-                    return try writer.generateInitializationCode(context: context)
+                    return try writer.generateInitializationCode(in: context)
                 }
                 return false
             })

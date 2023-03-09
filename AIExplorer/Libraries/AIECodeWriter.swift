@@ -1,9 +1,33 @@
-//
-//  AIECodeWriter.swift
-//  AIExplorer
-//
-//  Created by AJ Raftis on 3/2/23.
-//
+/*
+ AIECodeWriter.swift
+ AIExplorer
+
+ Copyright © 2023, AJ Raftis and AIExplorer authors
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice, this 
+   list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice, 
+   this list of conditions and the following disclaimer in the documentation 
+   and/or other materials provided with the distribution.
+ * Neither the name of AIExplorer nor the names of its contributors may be 
+   used to endorse or promote products derived from this software without 
+   specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+ DISCLAIMED. IN NO EVENT SHALL AJ RAFTIS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 import Foundation
 
@@ -40,14 +64,14 @@ open class AIECodeWriter : NSObject {
      - returns `true` if code is written.
      */
     @discardableResult
-    func generateCode(in context: AIECodeGeneratorContext) throws -> Bool {
+    open func generateCode(in context: AIECodeGeneratorContext) throws -> Bool {
         var generatedCode : Bool = false
         
         switch context.stage {
         case .interfaceHeader:
             generatedCode = try generateInterfaceHeaderCode(in: context)
         case .implementationHeader:
-            generatedCode = try generateImplementatinoHeaderCode(in: context)
+            generatedCode = try generateImplementationHeaderCode(in: context)
         case .licenses:
             generatedCode = try generateLicenseCode(in: context)
         case .interfaceIncludes:
@@ -59,9 +83,9 @@ open class AIECodeWriter : NSObject {
         case .implementationIncludes:
             generatedCode = try generateImplementationIncludeCode(in: context)
         case .initArguments:
-            generatedCode = try generateInitArguments(context: context)
+            generatedCode = try generateInitArguments(in: context)
         case .initialization:
-            generatedCode = try generateInitializationCode(context: context)
+            generatedCode = try generateInitializationCode(in: context)
         case .implementationMethods:
             generatedCode = try generateImplementationMethodsCode(in: context)
         case .build:
@@ -108,7 +132,7 @@ open class AIECodeWriter : NSObject {
      - returns `true` if code is written.
      */
     @discardableResult
-    open func generateImplementatinoHeaderCode(in context: AIECodeGeneratorContext) throws -> Bool {
+    open func generateImplementationHeaderCode(in context: AIECodeGeneratorContext) throws -> Bool {
         try progressToChild(in: context)
         return context.generatedCode
     }
@@ -199,7 +223,7 @@ open class AIECodeWriter : NSObject {
      - returns If you write any code, you should return `true`.
      */
     @discardableResult
-    func generateInitializationCode(context: AIECodeGeneratorContext) throws -> Bool {
+    open func generateInitializationCode(in context: AIECodeGeneratorContext) throws -> Bool {
         try progressToChild(in: context)
         return context.generatedCode
     }
@@ -216,7 +240,7 @@ open class AIECodeWriter : NSObject {
      - returns If you actually write any code, you should return `true`.
      */
     @discardableResult
-    func generateInitArguments(context: AIECodeGeneratorContext) throws -> Bool {
+    open func generateInitArguments(in context: AIECodeGeneratorContext) throws -> Bool {
         return try progressToChild(in: context)
     }
     
@@ -230,7 +254,7 @@ open class AIECodeWriter : NSObject {
      - returns If you actually write any code, you should return `true`.
      */
     @discardableResult
-    func generateImplementationMethodsCode(in context: AIECodeGeneratorContext) throws -> Bool {
+    open func generateImplementationMethodsCode(in context: AIECodeGeneratorContext) throws -> Bool {
         return try progressToChild(in: context)
     }
     
@@ -244,7 +268,7 @@ open class AIECodeWriter : NSObject {
      - returns `true` if code is written.
      */
     @discardableResult
-    func progressToChild(in context: AIECodeGeneratorContext) throws -> Bool {
+    open func progressToChild(in context: AIECodeGeneratorContext) throws -> Bool {
         var generatedCode = false
         let children = object.destinationObjects
 
@@ -253,7 +277,7 @@ open class AIECodeWriter : NSObject {
             return context.generatedCode
         }
 
-        validateSingleChild(context: context)
+        validateSingleChild(in:context)
 
         if children.count == 1 {
             // We have one child, so let's do our thing.
@@ -275,24 +299,26 @@ open class AIECodeWriter : NSObject {
     /**
      Simply checks to see if `object` has more than one child, and if it does, this generates a warning.
      */
-    func validateSingleChild(context: AIECodeGeneratorContext) -> Void {
+    open func validateSingleChild(in context: AIECodeGeneratorContext) -> Void {
         if object.destinationObjects.count != 1 {
             context.add(message: AIEMessage(type:.warning, message: "The node \(type(of:self)) should only have one child.", on: object))
         }
     }
     
-    func appendShapes(context: AIECodeGeneratorContext) throws -> Void {
+    open func appendShapes(in context: AIECodeGeneratorContext) throws -> Void {
         if let inputShape = object.inputShape {
-            try context.output.indent(context.indent).write("# Input Shape: \(inputShape) -> \(object.outputShape)\n")
+            try context.writeComment("Shape: \(inputShape) -> \(object.outputShape)")
         }
     }
 
-    func appendStandardCode(context: AIECodeGeneratorContext, _ block: () throws -> Void) throws -> Void {
-        try self.appendShapes(context: context)
+    open func appendStandardCode(in context: AIECodeGeneratorContext, _ block: () throws -> Void) throws -> Void {
+        try self.appendShapes(in: context)
         try context.write("\(object.variableName) = ")
         try block()
         try context.write("\n")
-        try context.write("model.add(\(object.variableName))\n")
+        try context.writeFunction(name: "add", type: .call, receiver: "model") {
+            try context.writeArgument(value: object.variableName)
+        }
     }
 
 }

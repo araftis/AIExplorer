@@ -39,7 +39,7 @@ extension AIEBatchNormalization : AIETensorFlowCodeWriter {
     internal class AIETensorFlowBatchNormalizationWriter : AIETypedCodeWriter<AIEBatchNormalization> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try appendShapes(context: context)
+            try appendShapes(in: context)
             try context.output.write("layers.BatchNormalization(momentum = \(node.momentum), epsilon = \(node.epsilon), name='\(node.variableName)')")
             
             context.add(message: AIEMessage(type: .warning, message: "AIEBatchNormalization does not yet generate correct code for TensorFlow", on: object))

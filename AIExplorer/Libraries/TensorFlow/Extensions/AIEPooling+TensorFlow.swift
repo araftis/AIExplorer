@@ -39,7 +39,7 @@ extension AIEPooling : AIETensorFlowCodeWriter {
     internal class AIETensorFlowPoolingWriter : AIETypedCodeWriter<AIEPooling> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try appendStandardCode(context: context) {
+            try appendStandardCode(in: context) {
                 try context.write("layers.MaxPool2D((\(node.size.height), \(node.size.width)), \(node.stride.width), name='\(node.variableName)')")
             }
             try progressToChild(in: context)

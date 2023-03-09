@@ -39,7 +39,7 @@ extension AIEActivation : AIETensorFlowCodeWriter {
     internal class AIETensorFlowActivationWriter : AIETypedCodeWriter<AIEActivation> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try appendStandardCode(context: context) {
+            try appendStandardCode(in: context) {
                 try context.write("layers.Activation(")
                 if node.type == .relu {
                     try context.write("'relu'")

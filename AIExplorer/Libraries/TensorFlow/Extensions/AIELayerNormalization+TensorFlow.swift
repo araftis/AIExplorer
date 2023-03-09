@@ -39,7 +39,7 @@ extension AIELayerNormalization : AIETensorFlowCodeWriter {
     internal class AIETensorFlowLayerNormalizationWriter : AIETypedCodeWriter<AIELayerNormalization> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try appendShapes(context: context)
+            try appendShapes(in: context)
             try context.write("layers.LayerNormalization(epsilon = \(node.epsilon))")
             
             context.add(message: AIEMessage(type: .warning, message: "AIELayerNormalization does not yet generate correct code for TensorFlow", on: object))

@@ -54,7 +54,6 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             if let loss = node.loss as? AIETensorFlowLossCodeWriter {
                 try context.write("\(loss.variableName) = ")
                 _ = try loss.generateLossCode(context: context)
-                try context.write("\n")
                 lossName = loss.variableName
             } else {
                 context.add(message: AIEMessage(type: .error, message: "\(type(of:node.loss)) does not support code generation for TensorFlow.", on: object))
@@ -65,7 +64,6 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             if let optimizer = node.optimizer as? AIETensorFlowOptimizerCodeWriter {
                 try context.write("\(optimizer.variableName) = ")
                 _ = try optimizer.generateOptimizerCode(context: context)
-                try context.write("\n")
                 optimizerName = optimizer.variableName
             } else {
                 context.add(message: AIEMessage(type: .error, message: "\(type(of:node.optimizer)) does not support code generation for TensorFlow.", on: object))
@@ -76,8 +74,7 @@ extension AIETerminus : AIETensorFlowCodeWriter {
                 try context.writeArgument(lossName != nil, name: "loss", value: "\(lossName ?? "")")
                 try context.writeArgument(optimizerName != nil, name: "optimizer", value: "\(optimizerName ?? "")")
             }
-            try context.write("\n")
-            
+
             return true
         }
         

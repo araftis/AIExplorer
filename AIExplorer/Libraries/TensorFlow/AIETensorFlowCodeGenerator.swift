@@ -35,22 +35,8 @@ import Cocoa
 open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
     internal func generateHeader(using context: AIECodeGeneratorContext) throws -> Void {
-        context.begin(stage: .implementationHeader)
-        
-        try context.write("#\n")
-        try context.write("# \(info[.codeName] ?? "Anonymous").py\n")
-        try context.write("#\n")
-        try context.write("# Created by \(NSFullUserName()) on \(Self.simpleDateFormatter.string(from:Date()))\n")
-        try context.write("# Copyright © \(Self.yearDateFormatter.string(from:Date())), All rights reserved.\n")
-        try context.write("#\n")
-
-        // Handle Licenses
-        try iterateRoots { root in
-            try context.generateCode(for: root, in: .licenses)
-        }
-        if context.generatedCode {
-            try context.write("\n")
-        }
+        // Writes out the standard header
+        try context.writeFileHeader(for: .implementationHeader, info: info)
 
         // And then imports.
         try context.writeImports(for: .implementationIncludes) {
@@ -62,9 +48,6 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             try context.writeImport("from tensorflow.keras import models")
             try context.writeImport("from tensorflow.keras import losses")
             try context.writeImport("from tensorflow.keras import optimizers")
-            try iterateRoots { root in
-                try context.generateCode(for: root, in: .implementationIncludes)
-            }
         }
     }
     

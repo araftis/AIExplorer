@@ -39,7 +39,7 @@ extension AIEConvolution : AIETensorFlowCodeWriter {
     internal class AIETensorFlowConvolutionWriter : AIETypedCodeWriter<AIEConvolution> {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
-            try appendStandardCode(context: context) {
+            try appendStandardCode(in: context) {
                 try context.write("layers.Conv2D(\(node.outputFeatureChannels)")
                 if node.size.width == node.size.height {
                     try context.output.write(", \(node.size.height)")
