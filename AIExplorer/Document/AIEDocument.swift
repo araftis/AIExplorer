@@ -64,6 +64,21 @@ open class AIEDocument: DrawDocument {
         return aiStorage.codeDefinitions
     }
 
+    open override class var defaultPaper: AJRPaper {
+        if DrawMeasurementUnit.default.identifier == .inches {
+            return AJRPaper(forPaperId: .tabloid)!
+        }
+        return AJRPaper(forPaperId: .a3)!
+    }
+
+    open override class var defaultPaperOrientation: NSPrintInfo.PaperOrientation {
+        return .landscape
+    }
+
+    open override class var defaultMargins: AJRInset {
+        return AJRInset(top: 36.0, left: 36.0, bottom: 36.0, right: 36.0)
+    }
+
     // MARK: - DrawDocument
 
     open override class var storageClass: AnyClass {
