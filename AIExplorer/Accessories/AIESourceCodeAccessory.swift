@@ -193,6 +193,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
                 let menuItem = menu.addItem(withTitle: codeDefinition.name ?? "No Name", action: #selector(selectName(_:)), keyEquivalent: "")
                 menuItem.representedObject = codeDefinition
                 menuItem.isEnabled = true
+                menuItem.target = self
                 if codeDefinition === aiDocument.selectedCodeDefinition {
                     selected = menuItem
                 }
