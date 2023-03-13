@@ -139,8 +139,6 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             
             Parameters
             ----------
-            batch_size : integer
-                The batch size of the training.
             epochs : integer
                 The number of epochs to train.
             verbose : string or integer
@@ -149,11 +147,14 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             try context.writeFunction(name: "train", type: .implementation, documentation: documentation) {
                 try context.writeArgument(name: "self")
                 if let io = node as? AIEIO {
-                    try context.writeArgument(name: "batch_size", value: io.batchSize)
                     try context.writeArgument(name: "epochs", value: io.epochs)
                     try context.writeArgument(name: "verbose", value: "\"auto\"")
                 }
             } body: {
+                try context.writeComment("Make sure out data source's data is ready to go.")
+                try context.write("self.prepare_data_source()\n")
+                try context.write("\n")
+                try context.writeComment("Build our model for training.")
                 try context.write("model = self.build_model(is_training=True)\n")
                 try context.write("if self.dataset is not None:\n")
                 try context.indent {
@@ -165,9 +166,9 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                     try context.writeFunction(name: "fit", type: .call, receiver: "model", argumentsIndented: true) {
                         if let io = node as? AIEIO {
                             try context.writeArgument(value: "self.dataset_train")
-                            try context.writeArgument(name: "batch_size", value: io.batchSize)
+                            // We get the batch size from our data set, so don't need to pass it in here.
                             try context.writeArgument(name: "epochs", value: io.epochs)
-                            try context.writeArgument(name: "validate_data", value: "self.datasset_test")
+                            try context.writeArgument(name: "validation_data", value: "self.dataset_test")
                         }
                     }
                 }

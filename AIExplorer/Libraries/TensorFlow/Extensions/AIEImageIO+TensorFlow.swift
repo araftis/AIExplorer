@@ -39,16 +39,17 @@ extension AIEImageIO : AIETensorFlowCodeWriter {
     internal class AIETensorFlowImageIOWriter : AIETypedCodeWriter<AIEImageIO> {
         
         override func generateInitArguments(in context: AIECodeGeneratorContext) throws -> Bool {
-            try context.writeArgument(name: "dataSource", value: "None")
+            try context.writeArgument(name: "data_source", value: "None")
+            try context.writeArgument(name: "batch_size", value: node.batchSize);
             try progressToChild(in: context)
             return true
         }
         
         override func generateInitializationCode(in context: AIECodeGeneratorContext) throws -> Bool {
             if let writer = context.codeWriter(for: node.dataSource) {
-                if try writer.generateInitializationCode(in: context) {
-                    context.generatedCode = true
-                }
+                try context.write("self.batch_size = batch_size\n")
+                try writer.generateInitializationCode(in: context)
+                context.generatedCode = true
             } else {
                 context.add(message: AIEMessage(type: .warning, message: "\(Swift.type(of: node.dataSource)) doesn't support generating code for TensorFlow.", on: object))
             }

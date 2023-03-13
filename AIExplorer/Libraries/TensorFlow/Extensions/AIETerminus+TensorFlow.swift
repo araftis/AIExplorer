@@ -51,10 +51,18 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             // Work out the Loss function
             // Note: This will always generate code, so ignore.
             var lossName : String? = nil
+            var metricsName : String? = nil
             if let loss = node.loss as? AIETensorFlowLossCodeWriter {
                 try context.write("\(loss.variableName) = ")
-                _ = try loss.generateLossCode(context: context)
+                _ = try loss.generateLossCode(context: context, for: node)
                 lossName = loss.variableName
+                context.pushOutput()
+                _ = try loss.generateMetricsCode(context: context, for: node)
+                let string = context.popOutput()
+                if !string.isEmpty {
+                    try context.write("metrics = \(string.trimmingCharacters(in: .whitespaces))")
+                    metricsName = "metrics"
+                }
             } else {
                 context.add(message: AIEMessage(type: .error, message: "\(type(of:node.loss)) does not support code generation for TensorFlow.", on: object))
             }
@@ -73,6 +81,7 @@ extension AIETerminus : AIETensorFlowCodeWriter {
             try context.writeFunction(name: "model.compile") {
                 try context.writeArgument(lossName != nil, name: "loss", value: "\(lossName ?? "")")
                 try context.writeArgument(optimizerName != nil, name: "optimizer", value: "\(optimizerName ?? "")")
+                try context.writeArgument(metricsName != nil, name: "metrics", value: "\(metricsName ?? "")")
             }
 
             return true

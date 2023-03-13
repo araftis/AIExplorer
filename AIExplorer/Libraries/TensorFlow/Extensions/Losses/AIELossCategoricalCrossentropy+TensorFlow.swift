@@ -33,10 +33,39 @@ import Foundation
 
 extension AIELossCategoricalCrossentropy : AIETensorFlowLossCodeWriter {
 
-    internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
-        try context.writeFunction(name: "losses.CategoricalCrossentropy") {
-            try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
-            try context.writeArgument(labelSmoothing != 0.0, name: "label_smoothing", value: "\(labelSmoothing)")
+    internal func useSparse(for object: AIEGraphic) -> Bool {
+        if let inputShape = object.inputShape,
+           inputShape.count == 2,
+           inputShape[1] > 2 {
+            return true
+        }
+        return false
+    }
+    
+    internal func generateLossCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool {
+        if useSparse(for: object) {
+            // TensorFlow wants us to use SparseCategoricalCrossentropy when there's more than two label classes.
+            try context.writeFunction(name: "SparseCategoricalCrossentropy", receiver: "losses") {
+                try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
+                try context.writeArgument(name: "from_logits", value: "True")
+            }
+        } else {
+            try context.writeFunction(name: "CategoricalCrossentropy", receiver: "losses") {
+                try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
+                try context.writeArgument(labelSmoothing != 0.0, name: "label_smoothing", value: "\(labelSmoothing)")
+                try context.writeArgument(name: "from_logits", value: "True")
+            }
+        }
+        return true
+    }
+    
+    internal func generateMetricsCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool {
+        if useSparse(for: object) {
+            try context.writeFunction(name: "SparseCategoricalAccuracy", receiver: "tf.keras.metrics") {
+            }
+        } else {
+            try context.writeFunction(name: "CategoricalAccuracy", receiver: "tf.keras.metrics") {
+            }
         }
         return true
     }

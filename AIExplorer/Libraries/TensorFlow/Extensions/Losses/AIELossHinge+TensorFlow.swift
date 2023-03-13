@@ -33,7 +33,7 @@ import Foundation
 
 extension AIELossHinge : AIETensorFlowLossCodeWriter {
 
-    internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
+    internal func generateLossCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool {
         try context.writeFunction(name: "losses.Hinge") {
             try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
         }

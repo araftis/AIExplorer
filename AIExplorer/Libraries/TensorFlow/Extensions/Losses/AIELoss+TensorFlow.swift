@@ -32,14 +32,19 @@ import Foundation
 
 internal protocol AIETensorFlowLossCodeWriter : AIEMessageObject {
     
-    func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool
+    func generateLossCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool
+    func generateMetricsCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool
     var variableName : String { get }
     
 }
 
 extension AIETensorFlowLossCodeWriter {
     
-    func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
+    func generateLossCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool {
+        return false
+    }
+    
+    func generateMetricsCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool {
         return false
     }
     

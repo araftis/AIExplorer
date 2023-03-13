@@ -40,7 +40,13 @@ extension AIEFullyConnected : AIETensorFlowCodeWriter {
         
         override func generateBuildCode(in context: AIECodeGeneratorContext) throws -> Bool {
             try appendStandardCode(in: context) {
-                try context.write("models.Sequential([layers.Flatten(), layers.Dense(\(node.outputFeatureChannels))], name='\(node.variableName)')")
+                if let inputShape = node.inputShape,
+                   inputShape.count == 2 {
+                    // We're already been flattened, so we don't need to be flattened again.
+                    try context.write("layers.Dense(\(node.outputFeatureChannels), name='\(node.variableName)')")
+                } else {
+                    try context.write("models.Sequential([layers.Flatten(), layers.Dense(\(node.outputFeatureChannels))], name='\(node.variableName)')")
+                }
             }
             try progressToChild(in: context)
             

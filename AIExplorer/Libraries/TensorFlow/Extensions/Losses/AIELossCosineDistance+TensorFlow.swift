@@ -33,7 +33,7 @@ import Foundation
 
 extension AIELossCosineDistance : AIETensorFlowLossCodeWriter {
 
-    internal func generateLossCode(context: AIECodeGeneratorContext) throws -> Bool {
+    internal func generateLossCode(context: AIECodeGeneratorContext, for object: AIEGraphic) throws -> Bool {
         try context.writeFunction(name: "losses.CosineSimilarity") {
             try context.writeArgument(reductionType != .none, name: "reduction", value: "\(reductionType.tensorFlowDescription)")
         }
