@@ -49,7 +49,8 @@ open class AIEIO: AIEGraphic {
     }
     
     open var type : AIEIO.Kind { return .unknown }
-    open var batchSize : Int = 0
+    open var batchSize : Int = 128
+    open var epochs : Int = 16
 
     open class override var ajr_nameForXMLArchiving: String {
         return "aieIO" // Never used, but we need to avoid returning our superclass' name.
@@ -69,8 +70,11 @@ open class AIEIO: AIEGraphic {
 
     open override func encode(with coder: AJRXMLCoder) {
         super.encode(with: coder)
-        if batchSize != 0 {
+        if batchSize != 128 {
             coder.encode(batchSize, forKey: "batchSize")
+        }
+        if epochs != 16 {
+            coder.encode(batchSize, forKey: "epochs")
         }
     }
 
@@ -78,6 +82,9 @@ open class AIEIO: AIEGraphic {
         super.decode(with: coder)
         coder.decodeInteger(forKey: "batchSize") { value in
             self.batchSize = value
+        }
+        coder.decodeInteger(forKey: "epochs") { value in
+            self.epochs = value
         }
     }
 

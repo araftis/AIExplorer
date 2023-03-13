@@ -72,12 +72,12 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
             // Declare the build method. This actually builds and compiles.
             try context.write("\n")
-            let documentation = """
-            This method builds your model if it doesn't already exist. The more built is based on the model designed with AI Explorer. If `isTraining` is `False`, then the model is built ready for inference, otherwise it's built for training. As part of being built for training, the model will be compiled using the supplied loss and optimization options chosen in the modeler.
+            var documentation = """
+            This method builds your model if it doesn't already exist. The more built is based on the model designed with AI Explorer. If `is_training` is `False`, then the model is built ready for inference, otherwise it's built for training. As part of being built for training, the model will be compiled using the supplied loss and optimization options chosen in the modeler.
 
             Parameters
             ----------
-            isTraining : boolean
+            is_training : boolean
                 Determines whether the model is built for training or not.
 
             Returns
@@ -86,10 +86,10 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             """
             try context.writeFunction(name: "build_model", type: .implementation, documentation: documentation) {
                 try context.writeArgument(name: "self")
-                try context.writeArgument(name: "isTraining", value: "False")
+                try context.writeArgument(name: "is_training", value: "False")
             } body: {
                 try context.writeComment("Let's see if the model's already created, and just return it if it is.\n")
-                try context.write("if isTraining:\n")
+                try context.write("if is_training:\n")
                 try context.indent {
                     try context.write("if hasattr(self, 'model_training'):\n")
                     try context.indent {
@@ -118,7 +118,7 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
                 try context.generateCode(for: node, in: .build)
 
                 try context.write("\n")
-                try context.write("if isTraining:\n")
+                try context.write("if is_training:\n")
                 try context.indent {
                     try context.write("self.model_training = model\n")
                 }
@@ -133,18 +133,40 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             }
 
             try context.write("\n")
-            try context.writeFunction(name: "train", type: .implementation) {
+            
+            documentation = """
+            Calling this will train your model. This will call `build_model(is_training=True)` and then call fit on the model. If the datasource is accessible via `self.dataset` or `self.dataset_train` and `self.dataset_validate`. Which will depend on your datasource and how it was set up.
+            
+            Parameters
+            ----------
+            batch_size : integer
+                The batch size of the training.
+            epochs : integer
+                The number of epochs to train.
+            verbose : string or integer
+                "auto", 0, 1, or 2. "auto" is preffered, and is usually set to 1.
+            """
+            try context.writeFunction(name: "train", type: .implementation, documentation: documentation) {
                 try context.writeArgument(name: "self")
-                try context.writeArgument(name: "batch_size", value: "128")
+                if let io = node as? AIEIO {
+                    // This should always be true, because we require all root nodes to be I/O nodes, but just in case, since we don't want to "crash".
+                    try context.writeArgument(name: "batch_size", value: io.batchSize)
+                    try context.writeArgument(name: "epochs", value: io.epochs)
+                    try context.writeArgument(name: "verbose", value: "\"auto\"")
+                } else {
+                    try context.writeArgument(name: "batch_size", value: "128")
+                    try context.writeArgument(name: "epochs", value: "16")
+                    try context.writeArgument(name: "verbose", value: "\"auto\"")
+                }
             } body: {
-                try context.write("model = self.build_model(isTraining=True)\n")
+                try context.write("model = self.build_model(is_training=True)\n")
             }
 
             try context.write("\n")
             try context.writeFunction(name: "infer", type: .implementation) {
                 try context.writeArgument(name: "self")
             } body: {
-                try context.write("model = self.build_model(isTraining=False)\n")
+                try context.write("model = self.build_model(is_training=False)\n")
             }
         }
     }
@@ -161,7 +183,8 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
 
         // TODO: Make this smarter. If we're going to allow multiple roots, we need to make sure we generate a class for each root, but that also means we need to attach the name of the neural net to the root node, which is an I/O node? Need to think about that last thing.
         try iterateRoots { node in
-            if let node = node as? AIETensorFlowCodeWriter {
+            if let node = node as? AIEIO,
+               let node = node as? AIETensorFlowCodeWriter {
                 try generateClass(for: node, using: context)
             } else {
                 messages.append(AIEMessage(type: .error, message: "\(Swift.type(of:node)) is not supported with TensorFlow.", on: node))

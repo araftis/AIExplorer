@@ -2,5 +2,6 @@
 <inspector>
     <group title="I/O">
         <slice type="integer" label="Batch Size" valueKeyPath="controller.selection.batchSize" />
+        <slice type="integer" label="Epochs" valueKeyPath="controller.selection.epochs" />
     </group>
 </inspector>

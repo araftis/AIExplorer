@@ -50,7 +50,7 @@ open class AIEObjCCodeGeneratorContext: AIECodeGeneratorContext {
         }
     }
 
-    open override func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value valueIn: String? = nil, type: String? = nil) throws -> Void {
+    open override func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value valueIn: CustomStringConvertible? = nil, type: String? = nil) throws -> Void {
         if condition() {
             let value = valueIn ?? name
             if functionContext.argumentsWritten > 0 {
@@ -70,9 +70,9 @@ open class AIEObjCCodeGeneratorContext: AIECodeGeneratorContext {
                         try write("(id)")
                     }
                 }
-                try write(value)
+                try write(value.description)
             } else if let value {
-                try write(value)
+                try write(value.description)
             }
             functionContext.argumentsWritten += 1
         }

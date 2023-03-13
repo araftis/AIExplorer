@@ -521,7 +521,7 @@ open class AIECodeGeneratorContext : NSObject {
      - parameter value The value of the parameter. In the case of a call, this is just the value.
      - parameter type The type of the parameter. This may be `nil` if the language doesn't support parameters.
      */
-    open func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
+    open func writeArgument(_ condition : @autoclosure () -> Bool, name: String? = nil, value: CustomStringConvertible? = nil, type: String? = nil) throws -> Void {
         if condition() {
             if functionContext.argumentsWritten > 0 {
                 try write(", ")
@@ -532,11 +532,11 @@ open class AIECodeGeneratorContext : NSObject {
             if let name, let value {
                 try write(name)
                 try write("=")
-                try write(value)
+                try write(value.description)
             } else if let name {
                 try write(name)
             } else if let value {
-                try write(value)
+                try write(value.description)
             }
             functionContext.argumentsWritten += 1
         }
@@ -545,7 +545,7 @@ open class AIECodeGeneratorContext : NSObject {
     /**
      Just calls `writeArgument(_:name:value:type:)` where `condition` is always `true`.
      */
-    open func writeArgument(name: String? = nil, value: String? = nil, type: String? = nil) throws -> Void {
+    open func writeArgument(name: String? = nil, value: CustomStringConvertible? = nil, type: String? = nil) throws -> Void {
         try writeArgument(true, name: name, value: value, type: type)
     }
     

@@ -74,8 +74,7 @@ extension AIEImageDataSourceMNIST : AIETensorFlowCodeWriter {
                 try context.writeFunction(name: "normalize_img", type: .implementation) {
                     try context.writeArgument(name: "image")
                     try context.writeArgument(name: "label")
-                }
-                try context.indent {
+                } body: {
                     //try context.write("\"\"\"Normalizes images: `uint8` -> `float32`.\"\"\"\n")
                     try context.write("return tf.cast(image, tf.float32) / 255.0, label\n")
                 }
