@@ -100,10 +100,11 @@ extension AIEBranch : AIETensorFlowCodeWriter {
                     context.pushNode(self)
                     let condition = link.extendedProperties["condition"] as? AJREvaluation
                     if let condition {
+                        // NOTE: The AJRNameWithUnderscores only works here, because we know that condition is a DrawVariable. If that every changed, we'd have to make a change here.
                         if index == 0 {
-                            try context.write("if \(condition):\n")
+                            try context.write("if \(AJRNameWithUnderscores(condition.description)):\n")
                         } else {
-                            try context.write(" elif \(condition):\n")
+                            try context.write("elif \(AJRNameWithUnderscores(condition.description)):\n")
                         }
                     } else {
                         try context.write("else:\n")

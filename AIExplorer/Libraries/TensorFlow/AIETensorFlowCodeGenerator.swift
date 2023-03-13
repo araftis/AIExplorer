@@ -149,17 +149,28 @@ open class AIETensorFlowCodeGenerator: AIECodeGenerator {
             try context.writeFunction(name: "train", type: .implementation, documentation: documentation) {
                 try context.writeArgument(name: "self")
                 if let io = node as? AIEIO {
-                    // This should always be true, because we require all root nodes to be I/O nodes, but just in case, since we don't want to "crash".
                     try context.writeArgument(name: "batch_size", value: io.batchSize)
                     try context.writeArgument(name: "epochs", value: io.epochs)
-                    try context.writeArgument(name: "verbose", value: "\"auto\"")
-                } else {
-                    try context.writeArgument(name: "batch_size", value: "128")
-                    try context.writeArgument(name: "epochs", value: "16")
                     try context.writeArgument(name: "verbose", value: "\"auto\"")
                 }
             } body: {
                 try context.write("model = self.build_model(is_training=True)\n")
+                try context.write("if self.dataset is not None:\n")
+                try context.indent {
+                    try context.writeComment("We're not dealing with this yet. Soon.")
+                    try context.write("pass\n")
+                }
+                try context.write("elif self.dataset_train is not None:\n")
+                try context.indent {
+                    try context.writeFunction(name: "fit", type: .call, receiver: "model", argumentsIndented: true) {
+                        if let io = node as? AIEIO {
+                            try context.writeArgument(value: "self.dataset_train")
+                            try context.writeArgument(name: "batch_size", value: io.batchSize)
+                            try context.writeArgument(name: "epochs", value: io.epochs)
+                            try context.writeArgument(name: "validate_data", value: "self.datasset_test")
+                        }
+                    }
+                }
             }
 
             try context.write("\n")
