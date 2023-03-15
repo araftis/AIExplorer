@@ -66,14 +66,17 @@ open class AIEMessagesInspector: DrawStructureInspector, NSOutlineViewDataSource
     
     internal var messagesToken : AJRInvalidation?
     open func setupDocument() -> Void {
-        if let document = document as? AIEDocument {
-            weak var weakSelf = self
-            messagesToken = document.addObserver(self, forKeyPath: "messages", options: .initial, block: { document, KeyPath, change in
-                weakSelf?.messagesDidChange()
-            })
+        if isViewLoaded {
+            // Don't actually do setup until we've loaded out view.
+            if let document = document as? AIEDocument {
+                weak var weakSelf = self
+                messagesToken = document.addObserver(self, forKeyPath: "messages", options: .initial, block: { document, KeyPath, change in
+                    weakSelf?.messagesDidChange()
+                })
+            }
+            messagesTable.doubleAction = #selector(doubleSelect(_:))
+            messagesTable.target = self
         }
-        messagesTable.doubleAction = #selector(doubleSelect(_:))
-        messagesTable.target = self
     }
     
     open func messagesDidChange() -> Void {
