@@ -15,7 +15,6 @@
 		2115E38529B13F5C00D512A0 /* AIECodeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115E38429B13F5C00D512A0 /* AIECodeWriter.swift */; };
 		2115E38829B43A1500D512A0 /* TestAILibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115E38729B43A1500D512A0 /* TestAILibrary.swift */; };
 		2115E38A29B43BDC00D512A0 /* TestAICodeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115E38929B43BDC00D512A0 /* TestAICodeWriter.swift */; };
-		2115E38C29B43D3100D512A0 /* TestAI.ajrplugindata in Resources */ = {isa = PBXBuildFile; fileRef = 2115E38B29B43D3100D512A0 /* TestAI.ajrplugindata */; };
 		2115E38E29B4434C00D512A0 /* TestAICodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115E38D29B4434C00D512A0 /* TestAICodeGenerator.swift */; };
 		215A9DB829A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DB729A2BFA0004BEAB6 /* AIEInspectorSliceShape.swift */; };
 		215A9DBB29A2C304004BEAB6 /* AIEShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A9DBA29A2C304004BEAB6 /* AIEShapeTests.swift */; };
@@ -753,12 +752,12 @@
 		FA18B4C825AEA305000DEF0C /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				FA02BF4D25B784EC001EFBBA /* Activation */,
 				FA18B4CA25AEA305000DEF0C /* AIEFilter.swift */,
 				FA0F525E25D38F5900DD0F3D /* AIEGraphic.inspector */,
 				FA18B4D725AEA305000DEF0C /* AIEGraphic.swift */,
 				FA02BF6025B7973B001EFBBA /* AIETool.swift */,
 				FA18B4C925AEA305000DEF0C /* AIEToolSet.swift */,
+				FA02BF4D25B784EC001EFBBA /* Activation */,
 				FA18B4D025AEA305000DEF0C /* Convolution */,
 				FA18B4CB25AEA305000DEF0C /* IO */,
 				21FFE2F729130DB700A79F8F /* Logic */,
@@ -1111,7 +1110,6 @@
 				FABD166525C8E931000294E3 /* AIEValidationAccessory.xib in Resources */,
 				25EC03A725DE02E6008A4DE4 /* AIEActivation.inspector in Resources */,
 				21FFE301291320F200A79F8F /* AIELoop.inspector in Resources */,
-				2115E38C29B43D3100D512A0 /* TestAI.ajrplugindata in Resources */,
 				FA0F526325D392FD00DD0F3D /* AIEImageIO.inspector in Resources */,
 				25EC03BD25E26613008A4DE4 /* AIESoftmax.inspector in Resources */,
 				25EC038F25D659AD008A4DE4 /* AIEFullyConnected.inspector in Resources */,
