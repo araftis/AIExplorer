@@ -73,7 +73,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     internal var definitionObservationTokens = [AJRInvalidation]()
 
     open var aiDocument : AIEDocument {
-        // This is harsh, but if we ever belong to a plain document, the world is pretty muc borked anyways.
+        // This is harsh, but if we ever belong to a plain document, the world is pretty much borked anyways.
         return document as! AIEDocument
     }
 
@@ -95,6 +95,7 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     // MARK: - DrawViewController
 
     open override func documentDidLoad(_ document: DrawDocument) {
+        super.documentDidLoad(document)
         updateObservations()
         document.addGraphicObserver(self)
         updateUI(for: aiDocument.selectedCodeDefinition)
@@ -102,6 +103,10 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
         NotificationCenter.default.addObserver(forName: .sourceCodeNeedsUpdate, object: self, queue: nil) { notification in
             self.generateCode()
         }
+    }
+
+    open override func viewWillAppear() {
+        self.updateUI(for: aiDocument.selectedCodeDefinition)
     }
 
     open func updateDefinitionObservations() {
@@ -269,7 +274,8 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     }
     
     open func updateCode(for codeDefinition: AIECodeDefinition?) -> Void {
-        if let textStorage = sourceTextView.textStorage {
+        if isViewLoaded,
+           let textStorage = sourceTextView.textStorage {
             if codeDefinition == aiDocument.selectedCodeDefinition {
                 if let value = codeDefinition?.code, let fileName = fileNamePopUp.selectedItem?.representedObject as? String {
                     let pathExtension = (fileName as NSString).pathExtension
@@ -287,13 +293,16 @@ open class AIESourceCodeAccessory: DrawToolAccessory, DrawDocumentGraphicObserve
     }
     
     open func updateUI(for codeDefinition: AIECodeDefinition?) -> Void {
-        updateNamePopUp()
-        updateLibraryLabel(for: codeDefinition)
-        updateLanguageLabel(for: codeDefinition)
-        updateRoleLabel(for: codeDefinition)
-        updatePathLabel(for: codeDefinition)
-        updateFileNamePopUp(for: codeDefinition)
-        updateCode(for: codeDefinition)
+        if isViewLoaded {
+            // We only update the UI if our view has been loaded.
+            updateNamePopUp()
+            updateLibraryLabel(for: codeDefinition)
+            updateLanguageLabel(for: codeDefinition)
+            updateRoleLabel(for: codeDefinition)
+            updatePathLabel(for: codeDefinition)
+            updateFileNamePopUp(for: codeDefinition)
+            updateCode(for: codeDefinition)
+        }
     }
 
     // MARK: - DrawGraphicObserver
