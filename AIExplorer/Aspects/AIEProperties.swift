@@ -119,8 +119,7 @@ open class AIEProperties: DrawText, AJREditObserver {
             bounds = bounds.insetBy(dx: 2.0, dy: 2.0)
 
             displayString.draw(in: bounds)
-            //NSColor.red.set()
-            //AJRBezierPath(crossedRect: bounds).stroke()
+            //AJRBezierPath(crossedRect: bounds).stroke(color: NSColor.red)
         }
         return nil
     }
