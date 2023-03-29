@@ -202,7 +202,7 @@ open class AIELibrary: NSObject, AJRInspectorChoiceTitleProvider {
             let url = properties["url"] as? URL
             let library = libraryClass.init(id: identifier, name: name, url: url)
             librariesById[identifier] = library
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .debug, message: "Library: \(libraryClass)")
+            AJRLog.in(domain: .drawPlugIn, level: .debug, message: "Library: \(libraryClass)")
         }
     }
 

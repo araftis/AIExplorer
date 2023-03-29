@@ -98,7 +98,7 @@ open class AIETitle: DrawText {
             var rectBounds = bounds
             drawWithSavedGraphicsState() {
                 rectBounds.size.height = height
-                if let fill = graphic?.firstAspect(ofType: DrawFill.self, with: DrawFill.defaultPriority) as? DrawColorFill {
+                if let fill = graphic?.firstAspect(ofType: DrawFill.self, with: DrawFill.defaultPriority) as? DrawFillColor {
                     fill.color.set()
                 } else {
                     NSColor.red.set()

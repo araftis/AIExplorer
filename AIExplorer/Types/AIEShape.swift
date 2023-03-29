@@ -147,28 +147,18 @@ public class AIEShape : NSObject, AJRInspectorValue, AJRInspectorValueAsValue, A
     
     // MARK: - AJREquatable
     
-    public func isEqual(toShape shape: AIEShape) -> Bool {
-        if count == shape.count {
+    public override func isEqual(_ object: Any?) -> Bool {
+        if let object = object as? AIEShape,
+           count == object.count {
             for x in 0 ..< count {
-                if values[x] != shape.values[x]
-                    || labels[x] != shape.labels[x] {
+                if values[x] != object.values[x]
+                    || labels[x] != object.labels[x] {
                     return false
                 }
             }
             return true
         }
         return false
-    }
-    
-    public override func isEqual(_ object: Any?) -> Bool {
-        if let object = object as? AIEShape {
-            return object .isEqual(toShape: object)
-        }
-        return false
-    }
-    
-    public override class func isEqual(to object: Any?) -> Bool {
-        return isEqual(object)
     }
     
 }

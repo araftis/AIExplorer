@@ -104,9 +104,9 @@ open class AIEDataSource: AJREditableObject {
             sources![identifier] = placeholder
             dataSources[key] = sources!
 
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .debug, message: "Data Source: \(name) (\(dataSourceClass))")
+            AJRLog.in(domain: .drawPlugIn, level: .debug, message: "Data Source: \(name) (\(dataSourceClass))")
         } else {
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .error, message: "Received nonsense properties: \(properties)")
+            AJRLog.in(domain: .drawPlugIn, level: .error, message: "Received nonsense properties: \(properties)")
         }
     }
 

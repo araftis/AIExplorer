@@ -91,9 +91,9 @@ open class AIELoss: AJREditableObject, AJRXMLCoding, AIEMessageObject {
             let identifier = AIELossIndentifier(rawValue: rawId)
             let placeholder = LossPlaceholder(lossClass: lossClass, name: name, id: identifier)
             lossesById[identifier] = placeholder
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .debug, message: "Loss: \(name) (\(lossClass))")
+            AJRLog.in(domain: .drawPlugIn, level: .debug, message: "Loss: \(name) (\(lossClass))")
         } else {
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .error, message: "Received nonsense properties: \(properties)")
+            AJRLog.in(domain: .drawPlugIn, level: .error, message: "Received nonsense properties: \(properties)")
         }
     }
 

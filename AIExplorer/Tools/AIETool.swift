@@ -47,7 +47,7 @@ open class AIETool: DrawTool {
             stroke.color = strokeColor(for: graphic)
             graphic.addAspect(stroke, with: DrawStroke.defaultPriority)
 
-            let fill = DrawColorFill(graphic: graphic)
+            let fill = DrawFillColor(graphic: graphic)
             fill.color = fillColor(for: graphic)
             graphic.addAspect(fill, with: DrawFill.defaultPriority)
 
@@ -62,7 +62,7 @@ open class AIETool: DrawTool {
             stroke.color = strokeColor(for: graphic)
             graphic.addAspect(stroke, with: DrawStroke.defaultPriority)
 
-            let fill = DrawColorFill(graphic: graphic)
+            let fill = DrawFillColor(graphic: graphic)
             fill.color = NSColor.red
             graphic.addAspect(fill, with: DrawFill.defaultPriority)
 

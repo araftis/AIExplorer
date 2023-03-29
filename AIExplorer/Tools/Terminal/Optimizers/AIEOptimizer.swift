@@ -89,9 +89,9 @@ open class AIEOptimizer: AJREditableObject, AJRXMLCoding, AIEMessageObject {
             let identifier = AIEOptimizerIndentifier(rawValue: rawId)
             let placeholder = OptimizerPlaceholder(optimizerClass: optimizerClass, name: name, id: identifier)
             optimizersById[identifier] = placeholder
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .debug, message: "Optimizer: \(name) (\(optimizerClass))")
+            AJRLog.in(domain: .drawPlugIn, level: .debug, message: "Optimizer: \(name) (\(optimizerClass))")
         } else {
-            AJRLog.in(domain: DrawPlugInLogDomain, level: .error, message: "Received nonsense properties: \(properties)")
+            AJRLog.in(domain: .drawPlugIn, level: .error, message: "Received nonsense properties: \(properties)")
         }
     }
     
